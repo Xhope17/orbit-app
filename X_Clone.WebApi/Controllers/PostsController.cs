@@ -2,6 +2,7 @@
 using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.Requets.Post;
+using XClone.Shared.Constants;
 
 namespace XClone.WebApi.Controllers
 {
@@ -14,48 +15,51 @@ namespace XClone.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest model)
         {
-
-            //return Ok($"Post subido: autor: {model.AutorId}, contenido: {model.Texto}");
             var rsp = postService.Create(model);
-            return Ok(rsp);
 
+            return Ok(rsp);
         }
 
         //obtener todos los post
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] GetAllPostRequest model)
         {
-            //return Ok($"Todos los usuarios: limit: {model.Limit}, outset: {model.Offset}, gitlabprofile: {model.GitlabProfile}");
             var rsp = postService.Get(model.Limit ?? 0, model.Offset ?? 0);
-
 
             return Ok(rsp);
         }
 
-        //obtener un post
+        //obtener un post por id
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            //return Ok($"{id}");
             var rsp = postService.Get(id);
-
-
-            return Ok(ResponseHelper.Create(id));
-
+            //valida si el post existe
+            if (rsp is null)
+            {
+                return NotFound(ResponseHelper.Create<string>(null, ValidationConstants.POST_NOT_FOUND));
+            }
+            return Ok(ResponseHelper.Create(rsp));
         }
 
         //Actualizar falta
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromBody] UpdatePostRequest model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePostRequest model)
         {
-            return Ok($"usuario actualizado: Contenido: {model.Texto}");
+            var rsp = postService.Update(id, model);
+
+            return Ok(ResponseHelper.Create(rsp, "Post actualizado"));
         }
 
 
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid postId)
+        public async Task<IActionResult> Delete(Guid id)
         {
-            var rsp = postService.Delete(postId);
+            var rsp = postService.Delete(id);
+            if (rsp is null)
+            {
+                return NotFound(ResponseHelper.Create<string>(null, ValidationConstants.POST_NOT_FOUND));
+            }
 
             return Ok("usuario eliminado");
         }

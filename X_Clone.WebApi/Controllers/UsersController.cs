@@ -13,13 +13,10 @@ namespace XClone.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserRequest model)
         {
-
-            //return Ok($"Post subido: autor: {model.AutorId}, contenido: {model.Texto}");
             var rsp = userService.Create(model);
             return Ok(rsp);
 
         }
-
 
         //obtener todos los post
         [HttpGet]
@@ -28,7 +25,7 @@ namespace XClone.WebApi.Controllers
             var rsp = userService.Get(model.Limit ?? 0, model.Offset ?? 0);
 
 
-            return Ok(rsp);
+            return Ok(ResponseHelper.Create(rsp));
         }
 
         //obtener un post
@@ -37,19 +34,19 @@ namespace XClone.WebApi.Controllers
         {
             var rsp = userService.Get(id);
 
-
-            return Ok(ResponseHelper.Create(id));
-
+            return Ok(ResponseHelper.Create(rsp));
         }
 
-        //Actualizar falta
+        //Actualizar
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update([FromBody] UpdateUserRequest model)
+        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserRequest model)
         {
-            return Ok($"usuario actualizado: {model.UserName}");
+            var rsp = userService.Update(id, model);
+
+            return Ok(ResponseHelper.Create(rsp, "Usuario actualizado"));
         }
 
-
+        //eliminar un usuario
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {

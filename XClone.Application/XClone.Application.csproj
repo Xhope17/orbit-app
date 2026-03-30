@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\XClone.Domain\XClone.Domain.csproj" />
     <ProjectReference Include="..\XClone.Shared\XClone.Shared.csproj" />
   </ItemGroup>
 

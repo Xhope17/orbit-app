@@ -4,32 +4,29 @@ using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Requets.User;
 using XClone.Application.Models.Responses;
 using XClone.Shared;
+using XClone.Shared.Constants;
 using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
     public class UserService(Cache<UserDto> cache) : IUserService
     {
+
+        //crear un usuario
         public GenericResponse<UserDto> Create(CreateUserRequest model)
         {
-            //si es mayor de edad, se puede crear el usuario
 
-            if (int.TryParse(model.Edad, out int edad))
+            //si es mayor de edad, se puede crear el usuario
+            if (model.Edad < 18)
             {
-                if (edad < 18)
-                {
-                    return ResponseHelper.Create<UserDto>(null, "El usuario debe ser mayor de edad");
-                }
-            }
-            else
-            {
-                return ResponseHelper.Create<UserDto>(null, "La edad debe ser un número válido");
+                return ResponseHelper.Create<UserDto>(null, ValidationConstants.INVALID_AGE);
             }
 
             var user = new UserDto
             {
                 UserId = Guid.NewGuid(),
                 UserName = model.UserName,
+                DisplayName = model.DisplayName,
                 Edad = model.Edad,
                 Email = model.Email,
                 PhoneNumber = model.PhoneNumber,
@@ -42,6 +39,7 @@ namespace XClone.Application.Services
             return ResponseHelper.Create(user, "Usuario creado");
         }
 
+        //borrar
         public GenericResponse<bool> Delete(Guid userId)
         {
             var isDeleted = cache.Get(userId.ToString());
@@ -66,12 +64,27 @@ namespace XClone.Application.Services
         {
             var user = cache.Get(userId.ToString());
 
-            return ResponseHelper.Create(user);
+            return ResponseHelper.Create(user, "Usuario encontrado");
         }
 
-        public GenericResponse<UserDto> Update(Guid postId, UpdateUserRequest model)
+        public GenericResponse<UserDto> Update(Guid userId, UpdateUserRequest model)
         {
-            throw new NotImplementedException();
+            var exist = cache.Get(userId.ToString());
+
+            if (exist is null)
+            {
+                return ResponseHelper.Create<UserDto>(null!, ValidationConstants.USER_NOT_FOUND);
+            }
+
+            exist.UserName = model.UserName;
+            exist.DisplayName = model.UserName;
+            exist.Edad = model.Edad;
+            exist.Email = model.Email;
+            exist.PhoneNumber = model.PhoneNumber;
+
+            cache.Update(userId.ToString(), exist);
+
+            return ResponseHelper.Create(exist, "Usuario actualizado");
         }
     }
 }

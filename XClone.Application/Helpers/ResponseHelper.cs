@@ -17,8 +17,5 @@ namespace XClone.Application.Helpers
 
             return response;
         }
-
-        //
-
     }
 }

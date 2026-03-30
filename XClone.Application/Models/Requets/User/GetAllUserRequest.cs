@@ -6,6 +6,6 @@
 
         public int? Offset { get; set; }
 
-        public string? GitlabProfile { get; set; }
+        public string? Search { get; set; }
     }
 }

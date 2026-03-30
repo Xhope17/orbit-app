@@ -13,7 +13,7 @@ namespace XClone.Application.Models.Requets.User
         [Required(ErrorMessage = ValidationConstants.REQUIRED)]
         [MaxLength(3, ErrorMessage = ValidationConstants.MAX_LENGTH)]
         [MinLength(1, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public string Edad { get; set; } = null!;
+        public int Edad { get; set; }
 
         [Required(ErrorMessage = ValidationConstants.REQUIRED)]
         [MaxLength(250, ErrorMessage = ValidationConstants.MAX_LENGTH)]
@@ -23,6 +23,6 @@ namespace XClone.Application.Models.Requets.User
         //[Required(ErrorMessage = ValidationConstants.REQUIRED)]
         [MaxLength(15, ErrorMessage = ValidationConstants.MAX_LENGTH)]
         [MinLength(0, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public string PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = null!;
     }
 }

@@ -30,3 +30,5 @@ C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Applica
 C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Application\obj\Debug\net9.0\refint\XClone.Application.dll
 C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Application\obj\Debug\net9.0\XClone.Application.pdb
 C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Application\obj\Debug\net9.0\ref\XClone.Application.dll
+C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Application\bin\Debug\net9.0\XClone.Domain.dll
+C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\XClone.Application\bin\Debug\net9.0\XClone.Domain.pdb

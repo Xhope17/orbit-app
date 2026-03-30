@@ -1,6 +1,7 @@
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.DTOs;
 using XClone.Application.Services;
+using XClone.Domain.Database.SqlServer.Context;
 using XClone.Shared;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,9 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddSingleton<Cache<PostDto>>();
 builder.Services.AddSingleton<Cache<UserDto>>();
+
+//Database
+builder.Services.AddSqlServer<XcloneContext>(builder.Configuration.GetConnectionString("Database"));
 
 
 
