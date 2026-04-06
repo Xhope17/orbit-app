@@ -5,24 +5,21 @@ namespace XClone.Application.Models.Requets.User
 {
     public class UpdateUserRequest
     {
-        [Required(ErrorMessage = ValidationConstants.REQUIRED)]
         [MaxLength(250, ErrorMessage = ValidationConstants.MAX_LENGTH)]
         [MinLength(1, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public required string UserName { get; set; } = null!;
+        public string? UserName { get; set; }
 
-        [Required(ErrorMessage = ValidationConstants.REQUIRED)]
-        [MaxLength(3, ErrorMessage = ValidationConstants.MAX_LENGTH)]
-        [MinLength(1, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public int Edad { get; set; }
+        [MaxLength(100, ErrorMessage = ValidationConstants.MAX_LENGTH)]
+        public string? DisplayName { get; set; }
 
-        [Required(ErrorMessage = ValidationConstants.REQUIRED)]
+        [Range(18, 120, ErrorMessage = ValidationConstants.INVALID_AGE)]
+        public int? Age { get; set; }
+
         [MaxLength(250, ErrorMessage = ValidationConstants.MAX_LENGTH)]
-        [MinLength(1, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public string Email { get; set; } = null!;
+        [EmailAddress]
+        public string? Email { get; set; }
 
-        //[Required(ErrorMessage = ValidationConstants.REQUIRED)]
-        [MaxLength(15, ErrorMessage = ValidationConstants.MAX_LENGTH)]
-        [MinLength(0, ErrorMessage = ValidationConstants.MIN_LENGTH)]
-        public string PhoneNumber { get; set; } = null!;
+        [MaxLength(20, ErrorMessage = ValidationConstants.MAX_LENGTH)]
+        public string? PhoneNumber { get; set; }
     }
 }

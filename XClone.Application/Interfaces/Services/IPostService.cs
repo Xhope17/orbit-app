@@ -10,7 +10,7 @@ namespace XClone.Application.Interfaces.Services
         public Task<GenericResponse<PostDto>> Update(Guid postId, UpdatePostRequest model);
 
         //public Task<GenericResponse<List<PostDto>>> Get(int limit, int offset);
-        public Task<GenericResponse<List<PostDto>>> Get(FilterPostRequest model);
+        public GenericResponse<List<PostDto>> Get(FilterPostRequest model);
 
 
         public Task<GenericResponse<PostDto>> Get(Guid postId);

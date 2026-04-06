@@ -5,11 +5,11 @@ namespace XClone.Domain.Interfaces.Repositories
     public interface IPostRepository
     {
         Task<Post> Create(Post post);
-        Task<Post> Get(Guid postId);
+        Task<Post?> Get(Guid postId);
         IQueryable<Post> Queryable();
         Task<bool> IfExists(Guid postId);
-        Task<Post> Update(Post postId);
-        Task<bool> Delete(Post post);
+        Task<Post> Update(Post post);
+        //Task<bool> Delete(Post post);
 
     }
 }

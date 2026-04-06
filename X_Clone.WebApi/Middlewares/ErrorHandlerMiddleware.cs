@@ -1,4 +1,6 @@
-﻿namespace XClone.WebApi.Middlewares
+﻿using XClone.Domain.Exceptions;
+
+namespace XClone.WebApi.Middlewares
 {
     public class ErrorHandlerMiddleware : IMiddleware
     {
@@ -6,12 +8,13 @@
         {
             try
             {
+                await next(context);
 
 
             }
-            catch
+            catch (NotFoundException exception)
             {
-
+                throw;
             }
         }
     }

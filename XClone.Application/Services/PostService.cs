@@ -6,6 +6,8 @@ using XClone.Application.Models.Responses;
 using XClone.Domain.Database.SqlServer.Entities;
 using XClone.Domain.Exceptions;
 using XClone.Domain.Interfaces.Repositories;
+using XClone.Shared.Constants;
+using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
@@ -15,8 +17,10 @@ namespace XClone.Application.Services
 
     {
         //Crear post
-        public Task<GenericResponse<PostDto>> Create(CreatePostRequest model)
+        public async Task<GenericResponse<PostDto>> Create(CreatePostRequest model)
         {
+
+            /*Guardado cache
             //var post = new PostDto
             //{
             //    PostId = Guid.NewGuid(),
@@ -27,14 +31,16 @@ namespace XClone.Application.Services
             //    JoinedAt = DateTimeHelper.UtcNow()
             //};
             //cache.Add(post.PostId.ToString(), post);
+            */
 
-            var create = repository.Create(new Post
+            var create = await repository.Create(new Post
             {
                 //PostId = Guid.NewGuid(),
                 //AuthorId = Guid.Parse(model.AutorId),
-                //Community = model.Comunidad.ToString(),
+                AuthorId = model.AuthorId,
+                CommunityId = model.CommunityId,
                 Texto = model.Texto,
-                //FechaCreacion = DateTimeHelper.UtcNow()
+                IsSensitive = model.IsSensitive
 
                 //CommunityId = post.CommunityId,
 
@@ -64,8 +70,8 @@ namespace XClone.Application.Services
             //var fPost = repository.Get(post) ?? throw new Exception("Post no encontrado");
             var post = await GetPost(postId);
 
-            post.IsDeleted = true;
-
+            post.DeletedAt = DateTimeHelper.UtcNow();
+            post.IsActive = false;
             await repository.Update(post);
 
             return ResponseHelper.Create(true);
@@ -73,14 +79,17 @@ namespace XClone.Application.Services
 
         //obtener todos los post
         //public GenericResponse<List<PostDto>> Get(int limit, int offset)
-        public Task<GenericResponse<List<PostDto>>> Get(FilterPostRequest model)
+        public GenericResponse<List<PostDto>> Get(FilterPostRequest model)
         {
+            /*por cache
             //var posts = cache.Get();
             //return ResponseHelper.Create(posts);
+            */
 
+            // Filtrado de texto
             var queryble = repository.Queryable();
 
-            if (string.IsNullOrWhiteSpace(model.Texto))
+            if (!string.IsNullOrWhiteSpace(model.Texto))
             {
                 //queryble = queryble.Where(x => x.Author == model.Author);
                 queryble = queryble.Where(x => x.Texto != null && x.Texto.Contains(model.Texto ?? ""));
@@ -88,7 +97,7 @@ namespace XClone.Application.Services
             }
 
             //realizar paginacion y consulta
-            var posts = queryble.Take(model.Limit).Skip(model.Offset).ToList();
+            var posts = queryble.Skip(model.Offset).Take(model.Limit).ToList();
 
             //Mapper psot
             List<PostDto> mapped = [];
@@ -114,6 +123,7 @@ namespace XClone.Application.Services
         //editar un post
         public async Task<GenericResponse<PostDto>> Update(Guid postId, UpdatePostRequest model)
         {
+            /*por cache
             //var exist = cache.Get(postId.ToString());
 
             //if (exist is null)
@@ -128,12 +138,12 @@ namespace XClone.Application.Services
             //cache.Update(postId.ToString(), exist);
 
             //return ResponseHelper.Create(exist, "Post actualizado");
-
+            */
             var post = await GetPost(postId);
 
             post.Texto = model.Texto ?? post.Texto;
-            post.AuthorId = model.AutorId != null ? Guid.Parse(model.AutorId) : post.AuthorId;
-            post.Community = model.Comunidad != null ? new Community { Id = Guid.Parse(model.Comunidad) } : post.Community;
+            post.IsSensitive = model.IsSensitive ?? post.IsSensitive;
+
             var update = await repository.Update(post);
 
             return ResponseHelper.Create(Map(update));
@@ -144,9 +154,7 @@ namespace XClone.Application.Services
         {
             return await repository.Get(postId)
                 //?? throw new Exception("Post no encontrado");
-                ?? throw new NotFoundException("Post no encontrado");
-
-
+                ?? throw new NotFoundException(ResponseConstans.POST_NOT_EXIST);
         }
 
         private PostDto Map(Post post)
@@ -154,7 +162,15 @@ namespace XClone.Application.Services
             return new PostDto
             {
 
+                Id = post.Id,
+                AuthorId = post.AuthorId,
                 Texto = post.Texto,
+                IsSensitive = post.IsSensitive,
+                CommunityId = post.CommunityId,
+                JoinedAt = post.JoinedAt,
+                IsActive = post.IsActive,
+                CreateAt = post.CreateAt,
+                UpdatedAt = post.UpdatedAt
 
             };
         }

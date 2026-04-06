@@ -17,7 +17,7 @@ public partial class User
 
     public int Age { get; set; }
 
-    public int? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
 
     public bool IsVerified { get; set; }
 
@@ -27,7 +27,15 @@ public partial class User
 
     public Guid? CityId { get; set; }
 
+    public DateTime JoinedAt { get; set; }
+
+    public bool IsActive { get; set; }
+
     public DateTime CreateAt { get; set; }
+
+    public DateTime UpdatedAt { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
 
     public virtual ICollection<Block> BlockBlockeds { get; set; } = new List<Block>();
 

@@ -7,13 +7,15 @@ namespace XClone.Application.Interfaces.Services
     public interface IUserService
     {
 
-        public GenericResponse<UserDto> Create(CreateUserRequest model);
-        public GenericResponse<UserDto> Update(Guid postId, UpdateUserRequest model);
+        public Task<GenericResponse<UserDto>> Create(CreateUserRequest model);
+        public Task<GenericResponse<UserDto>> Update(Guid userId, UpdateUserRequest model);
 
-        public GenericResponse<List<UserDto>> Get(int limit, int offset);
+        //public Task<GenericResponse<List<PostDto>>> Get(int limit, int offset);
+        public GenericResponse<List<UserDto>> Get(FilterUserRequest model);
 
-        public GenericResponse<UserDto?> Get(Guid userId);
 
-        public GenericResponse<bool> Delete(Guid userId);
+        public Task<GenericResponse<UserDto>> Get(Guid userId);
+
+        public Task<GenericResponse<bool>> Delete(Guid userId);
     }
 }

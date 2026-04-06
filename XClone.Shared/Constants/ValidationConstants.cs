@@ -15,6 +15,8 @@
         public const string INVALID_NUMBER = "El valor debe ser un número válido";
         public const string DUPLICATE = "El recurso ya existe";
 
+        public const string AUTHOR_ID_REQUIRED = "El campo AuthorId es requerido";
+
 
     }
 }

@@ -6,11 +6,10 @@
 
         //public int? Offset { get; set; }
 
-        public string? Author { get; set; }
+        public string? PostId { get; set; }
+        public string? AuthorId { get; set; }
         public string? Texto { get; set; }
 
-
-
-        public string? GitlabProfile { get; set; }
+        //public string? GitlabProfile { get; set; }
     }
 }

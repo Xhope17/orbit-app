@@ -15,7 +15,12 @@ namespace XClone.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest model)
         {
-            var rsp = postService.Create(model);
+            if (model.AuthorId == Guid.Empty)
+            {
+                return BadRequest(ResponseHelper.Create<string>(null, ValidationConstants.AUTHOR_ID_REQUIRED));
+            }
+
+            var rsp = await postService.Create(model);
 
             return Ok(rsp);
         }
@@ -33,20 +38,21 @@ namespace XClone.WebApi.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var rsp = postService.Get(id);
+            var rsp = await postService.Get(id);
             //valida si el post existe
             if (rsp is null)
             {
                 return NotFound(ResponseHelper.Create<string>(null, ValidationConstants.POST_NOT_FOUND));
             }
-            return Ok(ResponseHelper.Create(rsp));
+            //return Ok(ResponseHelper.Create(rsp));
+            return Ok(rsp);
         }
 
         //Actualizar falta
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdatePostRequest model)
+        public async Task<IActionResult> Update([FromBody] UpdatePostRequest model, Guid id)
         {
-            var rsp = postService.Update(id, model);
+            var rsp = await postService.Update(id, model);
 
             return Ok(ResponseHelper.Create(rsp, "Post actualizado"));
         }
@@ -55,13 +61,13 @@ namespace XClone.WebApi.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var rsp = postService.Delete(id);
+            var rsp = await postService.Delete(id);
             if (rsp is null)
             {
                 return NotFound(ResponseHelper.Create<string>(null, ValidationConstants.POST_NOT_FOUND));
             }
 
-            return Ok("usuario eliminado");
+            return Ok(rsp);
         }
     }
 }

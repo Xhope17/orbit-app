@@ -13,16 +13,16 @@ namespace XClone.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateUserRequest model)
         {
-            var rsp = userService.Create(model);
+            var rsp = await userService.Create(model);
             return Ok(rsp);
 
         }
 
         //obtener todos los post
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] GetAllUserRequest model)
+        public async Task<IActionResult> GetAll([FromQuery] FilterUserRequest model)
         {
-            var rsp = userService.Get(model.Limit ?? 0, model.Offset ?? 0);
+            var rsp = userService.Get(model);
 
 
             return Ok(ResponseHelper.Create(rsp));
@@ -32,14 +32,14 @@ namespace XClone.WebApi.Controllers
         [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var rsp = userService.Get(id);
+            var rsp = await userService.Get(id);
 
             return Ok(ResponseHelper.Create(rsp));
         }
 
         //Actualizar
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] UpdateUserRequest model)
+        public async Task<IActionResult> Update([FromBody] UpdateUserRequest model, Guid id)
         {
             var rsp = userService.Update(id, model);
 
@@ -50,8 +50,8 @@ namespace XClone.WebApi.Controllers
         [HttpDelete("{id:guid}")]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var rsp = userService.Delete(id);
-            return Ok("usuario eliminado");
+            var rsp = await userService.Delete(id);
+            return Ok(ResponseHelper.Create(rsp, "usuario eliminado"));
         }
     }
 }

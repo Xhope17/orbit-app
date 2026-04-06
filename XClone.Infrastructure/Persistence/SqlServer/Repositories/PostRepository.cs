@@ -14,42 +14,48 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
                 //insert
                 await context.Posts.AddAsync(post);
 
+                // execution // commit
+                await context.SaveChangesAsync();
+
                 return post;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
         }
 
-        public async Task<bool> Delete(Post post)
-        {
-            try
-            {
-                context.Posts.Remove(post);
-                //await context.SaveChangesAsync();
+        //public async Task<bool> Delete(Post post)
+        //{
+        //    try
+        //    {
+        //        context.Posts.Remove(post);
+        //        //await context.SaveChangesAsync();
 
-                var result = await context.SaveChangesAsync();
+        //        var result = await context.SaveChangesAsync();
 
-                return result > 0;
+        //        return result > 0;
 
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return false;
+        //    }
+        //}
 
         public async Task<Post?> Get(Guid postId)
         {
             try
             {
                 //return await context.Posts.FirstOrDefaultAsync(x => x.Id == postId);
-                return await context.Posts.FirstOrDefaultAsync(x => x.Id == postId);
+                //return await context.Posts.FirstOrDefaultAsync(x => x.Id == postId && x.IsDeleted == false);
+                return await context.Posts.FirstOrDefaultAsync(x => x.Id == postId && x.IsActive == false);
+
+                //deleateAt = null
 
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -60,7 +66,7 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
             {
                 return await context.Posts.AnyAsync(x => x.Id == postId);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
@@ -70,7 +76,9 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
         {
             try
             {
-                return context.Posts.AsQueryable();
+                //return context.Posts.AsQueryable();
+                return context.Posts.Where(x => x.IsActive == false).AsQueryable();
+
             }
             catch (Exception)
             {
@@ -88,9 +96,9 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
 
                 return post;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return null;
+                throw;
             }
         }
     }

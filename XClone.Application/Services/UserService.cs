@@ -3,25 +3,26 @@ using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Requets.User;
 using XClone.Application.Models.Responses;
-using XClone.Shared;
+using XClone.Domain.Database.SqlServer.Entities;
+using XClone.Domain.Exceptions;
+using XClone.Domain.Interfaces.Repositories;
 using XClone.Shared.Constants;
 using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
-    public class UserService(Cache<UserDto> cache) : IUserService
+    public class UserService(IUserRepository repository) : IUserService
     {
 
         //crear un usuario
-        public GenericResponse<UserDto> Create(CreateUserRequest model)
+        public async Task<GenericResponse<UserDto>> Create(CreateUserRequest model)
         {
-
+            /*
             //si es mayor de edad, se puede crear el usuario
             if (model.Edad < 18)
             {
                 return ResponseHelper.Create<UserDto>(null, ValidationConstants.INVALID_AGE);
             }
-
             var user = new UserDto
             {
                 UserId = Guid.NewGuid(),
@@ -37,11 +38,33 @@ namespace XClone.Application.Services
 
             cache.Add(user.UserId.ToString(), user);
             return ResponseHelper.Create(user, "Usuario creado");
+            */
+            if (model.Edad < 18)
+            {
+                // Asegúrate de que el método devuelva el tipo correcto en caso de error
+                return ResponseHelper.Create<UserDto>(null!, ValidationConstants.INVALID_AGE);
+            }
+
+            var create = await repository.Create(new User
+            {
+                UserName = model.UserName,
+                DisplayName = model.DisplayName,
+                Email = model.Email,
+                Age = model.Edad,
+                PhoneNumber = model.PhoneNumber,
+
+                // encriptar luego la contraseña antes de guardarla en la base de datos
+                PasswordHash = model.Password
+            });
+
+            return ResponseHelper.Create(Map(create));
         }
 
         //borrar
-        public GenericResponse<bool> Delete(Guid userId)
+        public async Task<GenericResponse<bool>> Delete(Guid userId)
         {
+            /*cache
+             * 
             var isDeleted = cache.Get(userId.ToString());
 
             if (isDeleted is null)
@@ -51,24 +74,64 @@ namespace XClone.Application.Services
             cache.Delete(userId.ToString());
 
             return ResponseHelper.Create(true, "Usuario eliminado");
+            */
+
+            var user = await GetUser(userId);
+
+            user.DeletedAt = DateTimeHelper.UtcNow();
+            user.IsActive = false;
+
+            await repository.Update(user);
+
+            return ResponseHelper.Create(true);
         }
 
-        public GenericResponse<List<UserDto>> Get(int limit, int offset)
+        //Get all users
+        public GenericResponse<List<UserDto>> Get(FilterUserRequest model)
         {
-            var users = cache.Get();
+            var queryable = repository.Queryable();
 
-            return ResponseHelper.Create(users);
+            // Solo traer usuarios que NO estén eliminados
+            queryable = queryable.Where(x => x.IsActive == true);
+
+            // Filtrado por UserName (ejemplo de búsqueda)
+            if (!string.IsNullOrWhiteSpace(model.UserName))
+            {
+                queryable = queryable.Where(x => x.UserName.Contains(model.UserName ?? ""));
+            }
+
+            // Realizar paginación y consulta
+            var users = queryable.Skip(model.Offset).Take(model.Limit).ToList();
+
+            // Mapear a DTOs
+            List<UserDto> mapped = [];
+            foreach (var user in users)
+            {
+                mapped.Add(Map(user));
+            }
+
+            return ResponseHelper.Create(mapped);
         }
 
-        public GenericResponse<UserDto?> Get(Guid userId)
+        //get user por id
+        public async Task<GenericResponse<UserDto>> Get(Guid userId)
         {
+            /* cache
+             * 
             var user = cache.Get(userId.ToString());
 
             return ResponseHelper.Create(user, "Usuario encontrado");
+            */
+            var user = await GetUser(userId);
+
+            return ResponseHelper.Create(Map(user));
         }
 
-        public GenericResponse<UserDto> Update(Guid userId, UpdateUserRequest model)
+
+        public async Task<GenericResponse<UserDto>> Update(Guid userId, UpdateUserRequest model)
         {
+            /* cache
+             * 
             var exist = cache.Get(userId.ToString());
 
             if (exist is null)
@@ -85,6 +148,51 @@ namespace XClone.Application.Services
             cache.Update(userId.ToString(), exist);
 
             return ResponseHelper.Create(exist, "Usuario actualizado");
+            */
+            var user = await GetUser(userId);
+
+            // Solo actualizamos los campos que el request envía. 
+            // Si viene null, conservamos el valor actual de la BD.
+            user.UserName = model.UserName ?? user.UserName;
+            user.DisplayName = model.DisplayName ?? user.DisplayName;
+            user.Age = model.Age ?? user.Age;
+            user.Email = model.Email ?? user.Email;
+            user.PhoneNumber = model.PhoneNumber ?? user.PhoneNumber;
+
+            user.UpdatedAt = DateTimeHelper.UtcNow();
+
+            var update = await repository.Update(user);
+
+            return ResponseHelper.Create(Map(update));
+        }
+
+        private async Task<User> GetUser(Guid userId)
+        {
+            return await repository.Get(userId)
+                ?? throw new NotFoundException(ResponseConstans.USER_NOT_EXIST); // Asegúrate de tener esta constante
+        }
+
+        //map
+        private UserDto Map(User user)
+        {
+            return new UserDto
+            {
+                Id = user.Id,
+                UserName = user.UserName,
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Age = user.Age,
+                PhoneNumber = user.PhoneNumber,
+                IsVerified = user.IsVerified,
+                PinnedPostId = user.PinnedPostId,
+                TimezoneId = user.TimezoneId,
+                CityId = user.CityId,
+                JoinedAt = user.JoinedAt,
+                IsActive = user.IsActive,
+                CreateAt = user.CreateAt,
+                UpdatedAt = user.UpdatedAt,
+                DeletedAt = user.DeletedAt
+            };
         }
     }
 }
