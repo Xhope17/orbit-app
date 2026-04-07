@@ -11,10 +11,17 @@
         // Projects
         public const string PROJECT_NOT_EXISTS = "El proyecto no existe";
 
+        //Token not found
+        public const string AUTH_TOKEN_NOT_FOUND = "Token de autenticación no es correcto o expiró";
 
-        public static string ERROR_UNEXPECTED(string traceId)
+        public static string ErrorUnexpected(string traceId)
         {
             return $"Ha ocurrido un error inesperado: contacte con soporte, mencionando el siguiente código: {traceId}";
+        }
+
+        public static string ConfigurationPropertyNotFound(string property)
+        {
+            return $"La propiedad de configuración '{property}' no se encontró. Por favor, revise su configuración.";
         }
     }
 }

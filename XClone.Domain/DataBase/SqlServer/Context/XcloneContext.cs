@@ -58,7 +58,7 @@ public partial class XcloneContext : DbContext
     {
         modelBuilder.Entity<Block>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Block__3214EC071699E476");
+            entity.HasKey(e => e.Id).HasName("PK__Block__3214EC077926F318");
 
             entity.ToTable("Block");
 
@@ -80,7 +80,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<City>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__City__3214EC072A918D10");
+            entity.HasKey(e => e.Id).HasName("PK__City__3214EC07CCE0759C");
 
             entity.ToTable("City");
 
@@ -95,7 +95,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Community>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Communit__3214EC07C1D07999");
+            entity.HasKey(e => e.Id).HasName("PK__Communit__3214EC07805C5266");
 
             entity.ToTable("Community");
 
@@ -111,7 +111,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<CommunityMember>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Communit__3214EC078C36731B");
+            entity.HasKey(e => e.Id).HasName("PK__Communit__3214EC0729106FC6");
 
             entity.ToTable("CommunityMember");
 
@@ -132,7 +132,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Country>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Country__3214EC07C4373446");
+            entity.HasKey(e => e.Id).HasName("PK__Country__3214EC07DBEAAA6E");
 
             entity.ToTable("Country");
 
@@ -142,7 +142,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Following>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Followin__3214EC0781992B41");
+            entity.HasKey(e => e.Id).HasName("PK__Followin__3214EC077A61AA4F");
 
             entity.ToTable("Following");
 
@@ -163,11 +163,11 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Hashtag>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Hashtag__3214EC07B62747E0");
+            entity.HasKey(e => e.Id).HasName("PK__Hashtag__3214EC07A18EF532");
 
             entity.ToTable("Hashtag");
 
-            entity.HasIndex(e => e.Texto, "UQ__Hashtag__5176E4546B7533A9").IsUnique();
+            entity.HasIndex(e => e.Texto, "UQ__Hashtag__5176E454F9771751").IsUnique();
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Texto).HasMaxLength(100);
@@ -175,7 +175,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Like>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Like__3214EC07467AF88B");
+            entity.HasKey(e => e.Id).HasName("PK__Like__3214EC073420533B");
 
             entity.ToTable("Like");
 
@@ -197,7 +197,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Mention>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Mention__3214EC07E5228362");
+            entity.HasKey(e => e.Id).HasName("PK__Mention__3214EC078AB0BE74");
 
             entity.ToTable("Mention");
 
@@ -218,7 +218,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Message>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Message__3214EC075BA81EFD");
+            entity.HasKey(e => e.Id).HasName("PK__Message__3214EC07D93C0206");
 
             entity.ToTable("Message");
 
@@ -236,7 +236,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Post>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC070C336196");
+            entity.HasKey(e => e.Id).HasName("PK__Post__3214EC073A787B01");
 
             entity.ToTable("Post");
 
@@ -260,7 +260,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<PostHashtag>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__PostHash__3214EC07CEE3BFD3");
+            entity.HasKey(e => e.Id).HasName("PK__PostHash__3214EC0787BDC4C9");
 
             entity.ToTable("PostHashtag");
 
@@ -281,7 +281,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Quote>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Quote__3214EC07562201B8");
+            entity.HasKey(e => e.Id).HasName("PK__Quote__3214EC07C4273B09");
 
             entity.ToTable("Quote");
 
@@ -301,7 +301,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Reply>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Reply__3214EC07F487C7BC");
+            entity.HasKey(e => e.Id).HasName("PK__Reply__3214EC074599DECF");
 
             entity.ToTable("Reply");
 
@@ -321,7 +321,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Repost>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Repost__3214EC07FC4B3736");
+            entity.HasKey(e => e.Id).HasName("PK__Repost__3214EC072D2D65FD");
 
             entity.ToTable("Repost");
 
@@ -343,7 +343,7 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<Timezone>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Timezone__3214EC07856BFFB6");
+            entity.HasKey(e => e.Id).HasName("PK__Timezone__3214EC077EF49337");
 
             entity.ToTable("Timezone");
 
@@ -357,13 +357,13 @@ public partial class XcloneContext : DbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07FFCBC558");
+            entity.HasKey(e => e.Id).HasName("PK__User__3214EC07316A9D2F");
 
             entity.ToTable("User");
 
-            entity.HasIndex(e => e.Email, "UQ__User__A9D105344BCF049D").IsUnique();
+            entity.HasIndex(e => e.Email, "UQ__User__A9D105345008329A").IsUnique();
 
-            entity.HasIndex(e => e.UserName, "UQ__User__C9F28456C2C3B05A").IsUnique();
+            entity.HasIndex(e => e.UserName, "UQ__User__C9F284567122C8A9").IsUnique();
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.CreateAt).HasDefaultValueSql("(sysutcdatetime())");
@@ -371,8 +371,9 @@ public partial class XcloneContext : DbContext
             entity.Property(e => e.Email).HasMaxLength(255);
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.JoinedAt).HasDefaultValueSql("(sysutcdatetime())");
-            entity.Property(e => e.PasswordHash).HasMaxLength(255);
+            entity.Property(e => e.Password).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(20);
+            entity.Property(e => e.Position).HasMaxLength(100);
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysutcdatetime())");
             entity.Property(e => e.UserName).HasMaxLength(50);
 

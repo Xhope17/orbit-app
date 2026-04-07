@@ -1,4 +1,5 @@
-﻿using XClone.Application.Helpers;
+﻿using Microsoft.Extensions.Configuration;
+using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Requets.User;
@@ -6,12 +7,13 @@ using XClone.Application.Models.Responses;
 using XClone.Domain.Database.SqlServer.Entities;
 using XClone.Domain.Exceptions;
 using XClone.Domain.Interfaces.Repositories;
+using XClone.Shared;
 using XClone.Shared.Constants;
 using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
-    public class UserService(IUserRepository repository) : IUserService
+    public class UserService(IUserRepository repository, IConfiguration configuration) : IUserService
     {
 
         //crear un usuario
@@ -65,10 +67,44 @@ namespace XClone.Application.Services
                 PhoneNumber = model.PhoneNumber,
 
                 // encriptar luego la contraseña antes de guardarla en la base de datos
-                PasswordHash = model.Password
+                Password = model.Password
             });
 
             return ResponseHelper.Create(Map(create));
+        }
+
+        public async Task CreateFristUser()
+        {
+            var hasCreated = await repository.HasCreated();
+            if (hasCreated) return;
+
+            var userName = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_USERNAME]
+                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_USERNAME));
+
+            var position = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_POSITION]
+                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_POSITION));
+
+
+            var email = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_EMAIL]
+                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_EMAIL));
+
+            var password = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD]
+                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD));
+
+            //var user = new User
+            //{
+            //    UserName = userName,
+            //    Email = email,
+            //    Position = position,
+            //    Password = Hasher.HashPassword(password),
+            //};
+            await repository.Create(new User
+            {
+                UserName = userName,
+                Email = email,
+                Position = position,
+                Password = Hasher.HashPassword(password),
+            });
         }
 
         //borrar

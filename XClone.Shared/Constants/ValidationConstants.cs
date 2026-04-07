@@ -9,7 +9,8 @@
 
 
 
-        //
+        //email
+        public const string INVALID_EMAIL = "Ingrese un email valido";
 
         public const string USER_NOT_FOUND = "Usuario no encontrado";
         public const string POST_NOT_FOUND = "Post no encontrado";

@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using System.Text;
 using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Services;
@@ -24,6 +27,7 @@ namespace XClone.WebApi.Extensions
         {
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
 
 
 
@@ -45,7 +49,7 @@ namespace XClone.WebApi.Extensions
 		/// Método que añade lo esencial que necesita nuestra aplicación para funcionar
 		/// </summary>
 		/// <param name="services"></param>
-        public static void AddCore(this IServiceCollection services, IConfiguration configuration)
+        public async static void AddCore(this IServiceCollection services, IConfiguration configuration)
         {
             //ConfigureApiBehaviorOptions sirve para configurar el comportamiento de la API, como por ejemplo, el formato de los errores, etc.
             services.AddControllers().ConfigureApiBehaviorOptions(options =>
@@ -64,7 +68,11 @@ namespace XClone.WebApi.Extensions
 
             services.AddOpenApi();
 
-            services.AddSqlServer<XcloneContext>(configuration.GetConnectionString("Database")); AddRepositories(services);
+            //services.AddSqlServer<XcloneContext>(configuration.GetConnectionString("Database"));
+            var databaseConnetingString = Environment.GetEnvironmentVariable("ConnectionStrings:DataBase")
+                ?? configuration.GetConnectionString("Database");
+            services.AddSqlServer<XcloneContext>(databaseConnetingString);
+
 
             services.AddServices();
 
@@ -72,7 +80,9 @@ namespace XClone.WebApi.Extensions
 
             services.AddMiddlleWares();
 
-            services.AddLogging();
+            AddLogging(services);
+            services.AddAuth(configuration);
+            await Initialize(services);
 
         }
 
@@ -85,6 +95,10 @@ namespace XClone.WebApi.Extensions
             services.AddScoped<ErrorHandlerMiddleware>();
         }
 
+        /// <summary>
+        /// Método para añadir todo lo relacionado con log
+        /// </summary>
+        /// <param name="services"></param>
         public static void AddLogging(this IServiceCollection services)
         {
             // Aquí puedes configurar el logging, por ejemplo, usando Serilog, NLog, etc.
@@ -105,6 +119,67 @@ namespace XClone.WebApi.Extensions
                 connectionString: "Server=localhost,1433;User=sa,Password=Admin1234@;Database=XClone;TrustServerCertificate=True;",
                 sinkOptions: new MSSqlServerSinkOptions { TableName = "LogEvents" })
                 .CreateLogger();
+        }
+
+        public async static Task Initialize(this IServiceCollection services)
+        {
+            var provider = services.BuildServiceProvider();
+            var scope = provider.CreateAsyncScope();
+
+            var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+            await userService.CreateFristUser();
+        }
+
+
+        public static void AddAuth(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(builder =>
+            {
+                builder.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                builder.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+
+            }).AddJwtBearer(builder =>
+            {
+                var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER) //produccion y desarrollo
+                    ?? configuration[ConfigurationConstants.JWT_ISSUER]
+                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
+
+                var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE) //produccion y desarrollo
+                    ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
+                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
+
+                var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY) //produccion y desarrollo
+                    ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
+                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
+
+                var expirationInMutes = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_EXPIRATION_MIN) //produccion y desarrollo
+                    ?? configuration[ConfigurationConstants.JWT_EXPIRATION_MIN]
+                    ?? "10";
+
+                builder.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                {
+
+                    ValidateIssuer = true,
+                    ValidIssuer = issuer,
+                    ValidateAudience = true,
+                    ValidAudience = audience,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateKey)),
+                    ClockSkew = TimeSpan.Zero
+                };
+
+                builder.Events = new JwtBearerEvents
+                {
+                    OnChallenge = async context =>
+                    {
+                        var response = ResponseHelper.Create(ResponseConstans.AUTH_TOKEN_NOT_FOUND);
+                    }
+                };
+            });
+            services.AddAuthorization();
+
         }
     }
 }

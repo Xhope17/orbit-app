@@ -33,7 +33,7 @@ namespace XClone.WebApi.Middlewares
 
                 //context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 var traceId = Guid.NewGuid();
-                var message = ResponseConstans.ERROR_UNEXPECTED(traceId.ToString());
+                var message = ResponseConstans.ErrorUnexpected(traceId.ToString());
 
                 logger.LogCritical("Se generó una excepcion no controlada: con el traceId: {traceId}. Excepción: {exception}", traceId, exception);
                 await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status500InternalServerError, message));

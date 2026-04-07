@@ -53,6 +53,19 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
             }
         }
 
+        public async Task<bool> HasCreated()
+        {
+            try
+            {
+
+                return await context.Users.AnyAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<bool> IfExists(Guid userId)
         {
             try

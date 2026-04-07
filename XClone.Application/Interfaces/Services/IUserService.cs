@@ -17,5 +17,8 @@ namespace XClone.Application.Interfaces.Services
         public Task<GenericResponse<UserDto>> Get(Guid userId);
 
         public Task<GenericResponse<bool>> Delete(Guid userId);
+
+        //CreateFristUser
+        public Task CreateFristUser();
     }
 }

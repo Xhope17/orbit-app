@@ -13,7 +13,7 @@ public partial class User
 
     public string Email { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
     public int Age { get; set; }
 
@@ -26,6 +26,8 @@ public partial class User
     public Guid? TimezoneId { get; set; }
 
     public Guid? CityId { get; set; }
+
+    public string Position { get; set; } = null!;
 
     public DateTime JoinedAt { get; set; }
 

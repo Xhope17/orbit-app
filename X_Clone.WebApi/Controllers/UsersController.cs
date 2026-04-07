@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.Requets.User;
@@ -11,6 +12,7 @@ namespace XClone.WebApi.Controllers
     {
         //Crear
         [HttpPost]
+        [Authorize(Roles = "Administrador")]
         public async Task<IActionResult> Create([FromBody] CreateUserRequest model)
         {
             var rsp = await userService.Create(model);
