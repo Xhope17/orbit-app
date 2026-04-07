@@ -1,0 +1,44 @@
+2026-04-07 08:33:09.773 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-07 08:33:09.915 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-07 08:33:09.920 -05:00 [INF] Hosting environment: Development
+2026-04-07 08:33:09.925 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-07 08:33:21.753 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 189
+2026-04-07 08:33:21.979 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-07 08:33:22.013 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi)'
+2026-04-07 08:33:22.237 -05:00 [INF] Route matched with {action = "Create", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Create(XClone.Application.Models.Requets.User.CreateUserRequest) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-07 08:33:23.096 -05:00 [INF] Executing BadRequestObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-07 08:33:23.143 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi) in 881.4782ms
+2026-04-07 08:33:23.153 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi)'
+2026-04-07 08:33:23.162 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 400 null application/json; charset=utf-8 1440.5022ms
+2026-04-07 08:33:35.024 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 194
+2026-04-07 08:33:35.055 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi)'
+2026-04-07 08:33:35.095 -05:00 [INF] Route matched with {action = "Create", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Create(XClone.Application.Models.Requets.User.CreateUserRequest) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-07 08:33:39.735 -05:00 [INF] Executed DbCommand (197ms) [Parameters=[@__userName_0='?' (Size = 50), @__email_1='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[PasswordHash], [u].[PhoneNumber], [u].[PinnedPostId], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[UserName] = @__userName_0 AND [u].[Email] = @__email_1 AND [u].[IsActive] = CAST(1 AS bit)
+2026-04-07 08:33:40.619 -05:00 [INF] Executed DbCommand (60ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime2), @p3='?' (Size = 100), @p4='?' (Size = 255), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (Size = 255), @p8='?' (Size = 20), @p9='?' (DbType = Guid), @p10='?' (DbType = Guid), @p11='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [User] ([Age], [CityId], [DeletedAt], [DisplayName], [Email], [IsActive], [IsVerified], [PasswordHash], [PhoneNumber], [PinnedPostId], [TimezoneId], [UserName])
+OUTPUT INSERTED.[Id], INSERTED.[CreateAt], INSERTED.[JoinedAt], INSERTED.[UpdatedAt]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11);
+2026-04-07 08:33:40.745 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.DTOs.UserDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-07 08:33:40.797 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi) in 5692.2042ms
+2026-04-07 08:33:40.806 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.Create (XClone.WebApi)'
+2026-04-07 08:33:40.834 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 200 null application/json; charset=utf-8 5812.0474ms
+2026-04-07 08:33:55.426 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/posts?limit=5&offset=2&Texto=22 - null null
+2026-04-07 08:33:55.470 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.PostsController.GetAll (XClone.WebApi)'
+2026-04-07 08:33:55.504 -05:00 [INF] Route matched with {action = "GetAll", controller = "Posts"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(XClone.Application.Models.Requets.Post.FilterPostRequest) on controller XClone.WebApi.Controllers.PostsController (XClone.WebApi).
+2026-04-07 08:33:55.836 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-07 08:33:55.842 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-07 08:33:55.983 -05:00 [INF] Executed DbCommand (49ms) [Parameters=[@__model_Texto_0_contains='?' (Size = 4000), @__p_1='?' (DbType = Int32), @__p_2='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [p].[Id], [p].[AuthorId], [p].[CommunityId], [p].[CreateAT], [p].[DeletedAt], [p].[IsActive], [p].[IsSensitive], [p].[JoinedAt], [p].[Texto], [p].[UpdatedAt]
+FROM [Post] AS [p]
+WHERE [p].[IsActive] = CAST(0 AS bit) AND [p].[Texto] LIKE @__model_Texto_0_contains ESCAPE N'\'
+ORDER BY (SELECT 1)
+OFFSET @__p_1 ROWS FETCH NEXT @__p_2 ROWS ONLY
+2026-04-07 08:33:56.202 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[System.Collections.Generic.List`1[[XClone.Application.Models.DTOs.PostDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-07 08:33:56.226 -05:00 [INF] Executed action XClone.WebApi.Controllers.PostsController.GetAll (XClone.WebApi) in 705.2019ms
+2026-04-07 08:33:56.237 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.PostsController.GetAll (XClone.WebApi)'
+2026-04-07 08:33:56.244 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/posts?limit=5&offset=2&Texto=22 - 200 null application/json; charset=utf-8 817.7395ms

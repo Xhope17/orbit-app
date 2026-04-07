@@ -1,9 +1,10 @@
+using Serilog;
 using XClone.WebApi.Extensions;
 using XClone.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.Host.UseSerilog();
+builder.Host.UseSerilog();
 
 builder.Services.AddCore(builder.Configuration);
 
@@ -28,8 +29,8 @@ builder.Services.AddCore(builder.Configuration);
 //builder.Services.AddTransient<IPostRepository, PostRepository>();
 
 //Extensiones
-builder.Services.AddServices();
-builder.Services.AddRepositories();
+//builder.Services.AddServices();
+//builder.Services.AddRepositories();
 
 
 //

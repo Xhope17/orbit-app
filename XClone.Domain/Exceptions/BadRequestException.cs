@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace XClone.Domain.Exceptions
+﻿namespace XClone.Domain.Exceptions
 {
-    internal class BadRequestException
+    public class BadRequestException : Exception
     {
+        public BadRequestException(string message) : base(message) { }
     }
 }

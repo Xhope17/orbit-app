@@ -17,15 +17,15 @@ namespace XClone.WebApi.Middlewares
             }
             catch (NotFoundException exception)
             {
-                var response = ResponseHelper.Create(exception.Message);
-                context.Response.StatusCode = StatusCodes.Status404NotFound;
-                await context.Response.WriteAsJsonAsync(response);
+                //var response = ResponseHelper.Create(exception.Message);
+                //context.Response.StatusCode = StatusCodes.Status404NotFound;
+                await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status404NotFound));
             }
             catch (BadHttpRequestException exception)
             {
-                var response = ResponseHelper.Create(exception.Message);
-                context.Response.StatusCode = StatusCodes.Status400BadRequest;
-                await context.Response.WriteAsJsonAsync(response);
+                //var response = ResponseHelper.Create(exception.Message);
+                //context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status400BadRequest));
             }
             catch (Exception exception)
             {
@@ -35,20 +35,20 @@ namespace XClone.WebApi.Middlewares
                 var traceId = Guid.NewGuid();
                 var message = ResponseConstans.ERROR_UNEXPECTED(traceId.ToString());
 
-                logger.LogCritical("Se generó una excepcion no controlada: {traceId}. Excepción: {exception}", traceId, exception);
-                await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status500InternalServerError));
+                logger.LogCritical("Se generó una excepcion no controlada: con el traceId: {traceId}. Excepción: {exception}", traceId, exception);
+                await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status500InternalServerError, message));
             }
         }
 
-        public GenericResponse<string> ManageException(HttpContext context, Exception exception, int statusCode)
+        public GenericResponse<string> ManageException(HttpContext context, Exception exception, int statusCode, string? message = null)
         {
             var response = ResponseHelper.Create(
-                data: exception.Message,
-                message: exception.Message,
-                errors: [exception.Message]
+                data: message ?? exception.Message,
+                message: message ?? exception.Message,
+                errors: [message ?? exception.Message]
                 );
-            context.Response.StatusCode = statusCode;
 
+            context.Response.StatusCode = statusCode;
             return response;
         }
     }

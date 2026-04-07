@@ -52,23 +52,23 @@ namespace XClone.WebApi.Extensions
             {
                 options.InvalidModelStateResponseFactory = (errorContext) =>
                 {
-                    //var response = ResponseHelper.Create(string.Join(", ", errorContext.ModelState.Values.SelectMany(x => x.Errors.Select(x => x.ErrorMessage))));
                     var errors = errorContext.ModelState.Values.SelectMany(value => value.Errors.Select(error => error.ErrorMessage).ToList()).ToList();
                     var response = ResponseHelper.Create(
-                        data: ValidationConstants.VALIDATION_MESSAGE, errors);
-                    //falta
-
-
+                        data: ValidationConstants.VALIDATION_MESSAGE,
+                        errors: errors,
+                        message: ValidationConstants.VALIDATION_MESSAGE
+                        );
                     return new BadRequestObjectResult(response);
                 };
             });
+
             services.AddOpenApi();
 
             services.AddSqlServer<XcloneContext>(configuration.GetConnectionString("Database")); AddRepositories(services);
 
-            services.AddRepositories();
-
             services.AddServices();
+
+            services.AddRepositories();
 
             services.AddMiddlleWares();
 
