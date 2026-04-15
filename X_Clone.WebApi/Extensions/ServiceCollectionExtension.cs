@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
-using System.Text;
 using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Services;
 using XClone.Domain.Database.SqlServer.Context;
+using XClone.Domain.Exceptions;
 using XClone.Domain.Interfaces.Repositories;
 using XClone.Infrastructure.Persistence.SqlServer.Repositories;
 using XClone.Shared.Constants;
@@ -49,7 +49,7 @@ namespace XClone.WebApi.Extensions
 		/// Método que añade lo esencial que necesita nuestra aplicación para funcionar
 		/// </summary>
 		/// <param name="services"></param>
-        public async static void AddCore(this IServiceCollection services, IConfiguration configuration)
+        public async static Task AddCore(this IServiceCollection services, IConfiguration configuration)
         {
             //ConfigureApiBehaviorOptions sirve para configurar el comportamiento de la API, como por ejemplo, el formato de los errores, etc.
             services.AddControllers().ConfigureApiBehaviorOptions(options =>
@@ -91,6 +91,7 @@ namespace XClone.WebApi.Extensions
 
         }
 
+
         /// <summary>
 		/// Método que añade los middlewares de la aplicación
 		/// </summary>
@@ -107,8 +108,6 @@ namespace XClone.WebApi.Extensions
         public static void AddLogging(this IServiceCollection services)
         {
             // Aquí puedes configurar el logging, por ejemplo, usando Serilog, NLog, etc.
-            // services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog());
-
             services.AddSerilog();
 
             Log.Logger = new LoggerConfiguration()
@@ -146,33 +145,34 @@ namespace XClone.WebApi.Extensions
 
             }).AddJwtBearer(builder =>
             {
-                var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER) //produccion y desarrollo
-                    ?? configuration[ConfigurationConstants.JWT_ISSUER]
-                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
+                //var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER) //produccion y desarrollo
+                //    ?? configuration[ConfigurationConstants.JWT_ISSUER]
+                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
 
-                var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE) //produccion y desarrollo
-                    ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
-                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
+                //var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE) //produccion y desarrollo
+                //    ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
+                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
 
-                var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY) //produccion y desarrollo
-                    ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
-                    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
+                //var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY) //produccion y desarrollo
+                //    ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
+                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
 
                 //var expirationInMutes = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_EXPIRATION_MIN) //produccion y desarrollo
                 //    ?? configuration[ConfigurationConstants.JWT_EXPIRATION_MIN]
                 //    ?? "10";
 
-                //builder.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                var tokenConfiguration = TokenHelper.Configuration(configuration);
+
                 builder.TokenValidationParameters = new TokenValidationParameters
                 {
 
                     ValidateIssuer = true,
-                    ValidIssuer = issuer,
+                    ValidIssuer = tokenConfiguration.Issuer,
                     ValidateAudience = true,
-                    ValidAudience = audience,
+                    ValidAudience = tokenConfiguration.Audience,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(privateKey)),
+                    IssuerSigningKey = tokenConfiguration.SecurityKey,
                     ClockSkew = TimeSpan.Zero
                 };
 
@@ -180,7 +180,8 @@ namespace XClone.WebApi.Extensions
                 {
                     OnChallenge = async context =>
                     {
-                        var response = ResponseHelper.Create(ResponseConstans.AUTH_TOKEN_NOT_FOUND);
+                        var response = ResponseHelper.Create(ResponseConstants.AUTH_TOKEN_NOT_FOUND);
+                        throw new UnauthorizedException(ResponseConstants.AUTH_TOKEN_NOT_FOUND);
                     }
                 };
             });

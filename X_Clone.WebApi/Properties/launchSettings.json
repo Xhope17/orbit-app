@@ -3,13 +3,13 @@
   "profiles": {
     "http": {
       "commandName": "Project",
+      "launchBrowser": true,
       "launchUrl": "scalar",
       "dotnetRunMessages": true,
-      "launchBrowser": false,
       "applicationUrl": "http://localhost:5230",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        //""
+        "DATABASE_CONNECTION": ""
       }
     },
     "https": {

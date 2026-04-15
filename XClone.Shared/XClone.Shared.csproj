@@ -10,8 +10,4 @@
     <ProjectReference Include="..\XClone.Domain\XClone.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
 </Project>

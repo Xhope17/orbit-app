@@ -6,6 +6,6 @@
 
         public T? Get<T>(string key);
 
-        public bool Delete<T>(string key);
+        public bool Delete(string key);
     }
 }

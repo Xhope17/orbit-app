@@ -1,18 +1,25 @@
 ﻿namespace XClone.Shared.Constants
 {
-    public static class ResponseConstans
+    public static class ResponseConstants
     {
-        public const string POST_NOT_EXIST = "Post no existe";
+        //Pots
+        public const string POST_NOT_EXIST = "El post no existe";
+        public const string POST_NOT_FOUND = "El post no se encontró";
 
-        public const string POST_NOT_FOUND = "Post no encontrado";
 
-        public const string USER_NOT_EXIST = "Usuario no encontrado";
+        //Users
+        public const string USER_NOT_EXIST = "El usuario no existe";
+
+
 
         // Projects
         public const string PROJECT_NOT_EXISTS = "El proyecto no existe";
 
-        //Token not found
+        //Auth
         public const string AUTH_TOKEN_NOT_FOUND = "El token no es correcto, expiró o no se argumentó";
+        public const string AUTH_USER_OR_PASSWORD_NOT_FOUND = "El usuario o la contraseña son incorrectos";
+        public const string AUTH_REFRESH_TOKEN_NOT_FOUND = "El token para refrescar la sesión expiró, no existe o es incorrecto";
+
 
         public static string ErrorUnexpected(string traceId)
         {

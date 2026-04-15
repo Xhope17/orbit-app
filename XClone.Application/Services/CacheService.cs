@@ -23,7 +23,7 @@ namespace XClone.Application.Services
             }
         }
 
-        public bool Delete<T>(string key)
+        public bool Delete(string key)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace XClone.Application.Services
             }
             catch
             {
-                throw;
+                return false;
             }
         }
 

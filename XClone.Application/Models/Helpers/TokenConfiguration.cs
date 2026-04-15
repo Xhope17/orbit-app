@@ -1,9 +1,13 @@
-﻿namespace XClone.Application.Models.Helpers
+﻿using Microsoft.IdentityModel.Tokens;
+
+namespace XClone.Application.Models.Helpers
 {
     public class TokenConfiguration
     {
         public required string Issuer { get; set; }
         public required string Audience { get; set; }
-        //public string symmetric
+        public required SymmetricSecurityKey SecurityKey { get; set; }
+        public required DateTime Expiration { get; set; }
+        public required TimeSpan ExpirationTimeSpan { get; set; }
     }
 }

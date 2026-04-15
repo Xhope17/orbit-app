@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-builder.Services.AddCore(builder.Configuration);
+await builder.Services.AddCore(builder.Configuration);
 
 // Add services to the container.
 

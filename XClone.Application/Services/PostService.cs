@@ -154,7 +154,7 @@ namespace XClone.Application.Services
         {
             return await repository.Get(postId)
                 //?? throw new Exception("Post no encontrado");
-                ?? throw new NotFoundException(ResponseConstans.POST_NOT_EXIST);
+                ?? throw new NotFoundException(ResponseConstants.POST_NOT_EXIST);
         }
 
         private PostDto Map(Post post)

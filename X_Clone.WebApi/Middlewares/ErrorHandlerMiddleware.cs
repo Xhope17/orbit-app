@@ -22,7 +22,7 @@ namespace XClone.WebApi.Middlewares
                 */
                 await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status404NotFound));
             }
-            catch (BadHttpRequestException exception)
+            catch (BadRequestException exception)
             {
                 await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status400BadRequest));
             }
@@ -36,7 +36,7 @@ namespace XClone.WebApi.Middlewares
 
                 //context.Response.StatusCode = StatusCodes.Status500InternalServerError;
                 var traceId = Guid.NewGuid();
-                var message = ResponseConstans.ErrorUnexpected(traceId.ToString());
+                var message = ResponseConstants.ErrorUnexpected(traceId.ToString());
 
                 logger.LogCritical("Se generó una excepcion no controlada: con el traceId: {traceId}. Excepción: {exception}", traceId, exception);
                 await context.Response.WriteAsJsonAsync(ManageException(context, exception, StatusCodes.Status500InternalServerError, message));

@@ -8,27 +8,29 @@ namespace XClone.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController(IUserService userService) : ControllerBase
     {
         //Crear
         [HttpPost]
-        [Authorize(Roles = "Administrador")]
+        //[Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Create([FromBody] CreateUserRequest model)
         {
             var rsp = await userService.Create(model);
-            return Ok(rsp);
+            return Ok(ResponseHelper.Create(rsp));
 
         }
 
         //obtener todos los post
         [HttpGet]
-        public async Task<IActionResult> GetAll([FromQuery] FilterUserRequest model)
+        //[Authorize(Roles = "Administrator")]
+        public async Task<IActionResult> GetAll([FromQuery] FilterUserRequest model, [FromHeader] string authorization)
         {
-            var userId = User.FindFirst("id")?.Value;
+            //var userId = User.FindFirst("id")?.Value;
             var rsp = userService.Get(model);
 
 
-            return Ok(rsp);
+            return Ok(ResponseHelper.Create(rsp));
         }
 
         //obtener un post

@@ -79,20 +79,20 @@ namespace XClone.Application.Services
             if (hasCreated) return;
 
             var userName = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_USERNAME]
-                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_USERNAME));
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_USERNAME));
 
             var position = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_POSITION]
-                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_POSITION));
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_POSITION));
 
             var displayName = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_DISPLAYNAME]
-                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_POSITION));
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_POSITION));
 
 
             var email = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_EMAIL]
-                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_EMAIL));
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_EMAIL));
 
             var password = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD]
-                ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD));
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD));
 
             //var user = new User
             //{
@@ -226,7 +226,7 @@ namespace XClone.Application.Services
         private async Task<User> GetUser(Guid userId)
         {
             return await repository.Get(userId)
-                ?? throw new NotFoundException(ResponseConstans.USER_NOT_EXIST); // Asegúrate de tener esta constante
+                ?? throw new NotFoundException(ResponseConstants.USER_NOT_EXIST); // Asegúrate de tener esta constante
         }
 
         //obtener por username

@@ -1,0 +1,461 @@
+2026-04-15 00:15:39.627 -05:00 [INF] Executed DbCommand (127ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-15 00:15:40.427 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 00:15:41.186 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-15 00:15:41.317 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 00:15:41.322 -05:00 [INF] Hosting environment: Development
+2026-04-15 00:15:41.327 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-15 00:15:43.317 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-15 00:15:45.327 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-15 00:15:45.588 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:15:45.634 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 00:15:45.640 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:15:45.688 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 2398.4181ms
+2026-04-15 00:15:45.725 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-15 00:15:45.745 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:15:45.986 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 00:15:46.064 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:15:46.078 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 356.5218ms
+2026-04-15 00:15:46.140 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-15 00:15:46.145 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 00:15:46.145 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-15 00:15:46.204 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:15:46.225 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 80.7431ms
+2026-04-15 00:15:46.248 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:15:46.275 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:15:46.279 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:15:46.288 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:15:46.298 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 152.7881ms
+2026-04-15 00:15:46.329 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-15 00:15:46.343 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:15:46.358 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 218.5497ms
+2026-04-15 00:15:46.428 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 99.7687ms
+2026-04-15 00:15:47.888 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-15 00:15:47.900 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:15:48.301 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:15:48.309 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 421.5344ms
+2026-04-15 00:19:17.388 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:19:17.403 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:19:17.464 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:19:17.999 -05:00 [INF] Executed DbCommand (145ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:19:18.479 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:19:18.501 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 1027.188ms
+2026-04-15 00:19:18.508 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:19:18.525 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 1138.0197ms
+2026-04-15 00:19:52.052 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 194
+2026-04-15 00:19:52.125 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:19:52.711 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 401 null application/json; charset=utf-8 667.2677ms
+2026-04-15 00:20:22.406 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 194
+2026-04-15 00:20:22.582 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:20:22.590 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:20:22.598 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 194.887ms
+2026-04-15 00:20:30.905 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:20:30.925 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:20:30.932 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:20:31.163 -05:00 [INF] Executed DbCommand (5ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:20:31.177 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:20:31.181 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 231.6599ms
+2026-04-15 00:20:31.186 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:20:31.190 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 285.4483ms
+2026-04-15 00:20:35.396 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 194
+2026-04-15 00:20:35.420 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:20:35.430 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:20:35.445 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 49.1808ms
+2026-04-15 00:20:43.650 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 195
+2026-04-15 00:20:43.667 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:20:43.679 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:20:43.691 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 40.8496ms
+2026-04-15 00:20:47.320 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 196
+2026-04-15 00:20:47.350 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:20:47.363 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:20:47.378 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 57.2099ms
+2026-04-15 00:22:06.786 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:22:06.801 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:22:06.804 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:22:06.834 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:22:06.854 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:22:06.866 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 54.2046ms
+2026-04-15 00:22:06.877 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:22:06.890 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 148.8541ms
+2026-04-15 00:22:09.401 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 196
+2026-04-15 00:22:09.456 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:22:09.464 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:22:09.476 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 75.6279ms
+2026-04-15 00:22:49.820 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:22:49.854 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:22:49.910 -05:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(XClone.Application.Models.Requets.User.FilterUserRequest, System.String) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-15 00:22:49.967 -05:00 [INF] Executing BadRequestObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[System.String, System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-15 00:22:49.984 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi) in 62.6722ms
+2026-04-15 00:22:50.001 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:22:50.011 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 400 null application/json; charset=utf-8 191.5185ms
+2026-04-15 00:23:07.937 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:23:07.954 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:23:07.960 -05:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(XClone.Application.Models.Requets.User.FilterUserRequest, System.String) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-15 00:23:08.015 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-15 00:23:08.022 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-15 00:23:08.086 -05:00 [INF] Executed DbCommand (41ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[DeletedAt] IS NULL AND [u].[IsActive] = CAST(1 AS bit)
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2026-04-15 00:23:08.109 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[System.Collections.Generic.List`1[[XClone.Application.Models.DTOs.UserDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]'.
+2026-04-15 00:23:08.138 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi) in 166.2036ms
+2026-04-15 00:23:08.145 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:23:08.154 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 200 null application/json; charset=utf-8 217.8283ms
+2026-04-15 00:23:59.797 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:23:59.809 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:23:59.813 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:23:59.838 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:23:59.868 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:23:59.879 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 56.0297ms
+2026-04-15 00:23:59.896 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:23:59.907 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 110.012ms
+2026-04-15 00:24:43.994 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/users - application/json 196
+2026-04-15 00:24:44.016 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:24:44.021 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:24:44.025 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/users - 403 0 null 30.9169ms
+2026-04-15 00:24:47.159 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:24:47.167 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:24:47.172 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:24:47.187 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:24:47.199 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:24:47.207 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 28.6076ms
+2026-04-15 00:24:47.213 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:24:47.221 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 61.4253ms
+2026-04-15 00:26:05.926 -05:00 [INF] Executed DbCommand (134ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-15 00:26:06.622 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 00:26:07.311 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-15 00:26:07.602 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 00:26:07.606 -05:00 [INF] Hosting environment: Development
+2026-04-15 00:26:07.609 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-15 00:26:08.039 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-15 00:26:08.488 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-15 00:26:08.655 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:26:08.705 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 00:26:08.711 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:26:08.768 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-15 00:26:08.770 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 748.5209ms
+2026-04-15 00:26:08.840 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:26:09.227 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 00:26:09.317 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:26:09.327 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 565.8221ms
+2026-04-15 00:26:09.382 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-15 00:26:09.382 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-15 00:26:09.405 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:26:09.410 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:26:09.460 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:26:09.460 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:26:09.476 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:26:09.479 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-15 00:26:09.525 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 143.4554ms
+2026-04-15 00:26:09.659 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:26:09.694 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 00:26:09.703 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 321.2133ms
+2026-04-15 00:26:09.739 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 44.67ms
+2026-04-15 00:26:09.769 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 290.3461ms
+2026-04-15 00:26:10.824 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-15 00:26:10.856 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:26:11.472 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:26:11.487 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 663.6531ms
+2026-04-15 00:26:21.160 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:26:21.173 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:21.236 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:26:21.960 -05:00 [INF] Executed DbCommand (69ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:26:22.712 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:26:22.749 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 1486.0573ms
+2026-04-15 00:26:22.756 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:22.776 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 1616.0643ms
+2026-04-15 00:26:32.563 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:26:32.589 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:32.594 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:26:32.832 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:26:32.846 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:26:32.852 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 244.1963ms
+2026-04-15 00:26:32.855 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:32.859 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 296.2358ms
+2026-04-15 00:26:36.075 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:26:36.095 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:36.104 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:26:36.159 -05:00 [INF] Executed DbCommand (11ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:26:36.192 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:26:36.212 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 92.0533ms
+2026-04-15 00:26:36.233 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:26:36.248 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 171.7184ms
+2026-04-15 00:26:46.609 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:26:46.792 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrador)
+2026-04-15 00:26:46.815 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:26:46.822 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 212.5193ms
+2026-04-15 00:30:00.366 -05:00 [INF] Executed DbCommand (207ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-15 00:30:01.549 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 00:30:02.323 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-15 00:30:02.853 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 00:30:02.861 -05:00 [INF] Hosting environment: Development
+2026-04-15 00:30:02.877 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-15 00:30:03.236 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-15 00:30:03.656 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-15 00:30:03.858 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:30:03.904 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 00:30:03.910 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:30:03.975 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 754.1246ms
+2026-04-15 00:30:04.052 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-15 00:30:04.126 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:30:04.168 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:30:04.257 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:30:04.342 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:30:04.717 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 00:30:04.831 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:30:04.881 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 836.1347ms
+2026-04-15 00:30:04.933 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-15 00:30:04.946 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-15 00:30:04.968 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:30:04.982 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:30:05.008 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:30:05.008 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:30:05.030 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:30:05.034 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 100.8542ms
+2026-04-15 00:30:05.103 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-15 00:30:05.122 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:30:05.129 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 00:30:05.141 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 194.9531ms
+2026-04-15 00:30:05.184 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 55.1313ms
+2026-04-15 00:30:05.235 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 131.8233ms
+2026-04-15 00:30:05.241 -05:00 [INF] Executed DbCommand (99ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:30:05.858 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:30:05.910 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 1549.2209ms
+2026-04-15 00:30:05.916 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:30:05.948 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 1820.2745ms
+2026-04-15 00:30:06.633 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-15 00:30:06.695 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:30:07.192 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:30:07.201 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 569.2962ms
+2026-04-15 00:30:11.505 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users/EB46E95A-EA5D-447C-92E2-E4280FE90237 - null null
+2026-04-15 00:30:11.521 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.GetById (XClone.WebApi)'
+2026-04-15 00:30:11.546 -05:00 [INF] Route matched with {action = "GetById", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetById(System.Guid) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-15 00:30:11.870 -05:00 [INF] Executed DbCommand (47ms) [Parameters=[@__userId_0='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Id] = @__userId_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:30:11.916 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.DTOs.UserDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:30:12.032 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.GetById (XClone.WebApi) in 473.9291ms
+2026-04-15 00:30:12.054 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.GetById (XClone.WebApi)'
+2026-04-15 00:30:12.066 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users/EB46E95A-EA5D-447C-92E2-E4280FE90237 - 200 null application/json; charset=utf-8 560.9393ms
+2026-04-15 00:30:25.747 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:30:25.968 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrator)
+2026-04-15 00:30:25.983 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:30:25.990 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 243.0528ms
+2026-04-15 00:30:54.181 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:30:54.202 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrator)
+2026-04-15 00:30:54.229 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:30:54.242 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 60.8729ms
+2026-04-15 00:31:09.180 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:31:09.203 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrator)
+2026-04-15 00:31:09.214 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:31:09.226 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 46.4112ms
+2026-04-15 00:31:21.904 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:31:21.934 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrator)
+2026-04-15 00:31:21.946 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:31:21.958 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 54.1189ms
+2026-04-15 00:33:32.413 -05:00 [INF] Executed DbCommand (82ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-15 00:33:33.398 -05:00 [INF] Executed DbCommand (79ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime2), @p3='?' (Size = 100), @p4='?' (Size = 255), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (Size = 255), @p8='?' (Size = 20), @p9='?' (DbType = Guid), @p10='?' (Size = 100), @p11='?' (DbType = Guid), @p12='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [User] ([Age], [CityId], [DeletedAt], [DisplayName], [Email], [IsActive], [IsVerified], [Password], [PhoneNumber], [PinnedPostId], [Position], [TimezoneId], [UserName])
+OUTPUT INSERTED.[Id], INSERTED.[CreateAt], INSERTED.[JoinedAt], INSERTED.[UpdatedAt]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12);
+2026-04-15 00:33:33.926 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 00:33:34.535 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-15 00:33:34.847 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 00:33:34.854 -05:00 [INF] Hosting environment: Development
+2026-04-15 00:33:34.859 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-15 00:33:35.855 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-15 00:33:36.290 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-15 00:33:36.489 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:33:36.542 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 00:33:36.546 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:33:36.598 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 758.1434ms
+2026-04-15 00:33:36.627 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-15 00:33:36.653 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:33:36.967 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 00:33:37.040 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:33:37.054 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 426.4955ms
+2026-04-15 00:33:37.102 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-15 00:33:37.104 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-15 00:33:37.154 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:33:37.159 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:33:37.197 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:33:37.197 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:33:37.217 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:33:37.223 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 118.8776ms
+2026-04-15 00:33:37.330 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-15 00:33:37.366 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:33:37.369 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 00:33:37.384 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 281.5351ms
+2026-04-15 00:33:37.417 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 48.332ms
+2026-04-15 00:33:37.489 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 158.8658ms
+2026-04-15 00:33:38.391 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-15 00:33:38.401 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:33:38.936 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:33:38.943 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 551.6379ms
+2026-04-15 00:34:18.998 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:34:19.029 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:34:19.135 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:34:19.576 -05:00 [INF] Executed DbCommand (7ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:34:19.700 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:34:19.728 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 566.855ms
+2026-04-15 00:34:19.734 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:34:19.756 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 758.8182ms
+2026-04-15 00:34:23.946 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:34:24.189 -05:00 [INF] Authorization failed. These requirements were not met:
+RolesAuthorizationRequirement:User.IsInRole must be true for one of the following roles: (Administrator)
+2026-04-15 00:34:24.202 -05:00 [INF] AuthenticationScheme: Bearer was forbidden.
+2026-04-15 00:34:24.206 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 403 0 null 259.2164ms
+2026-04-15 00:35:15.130 -05:00 [INF] Executed DbCommand (150ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-15 00:35:15.773 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-15 00:35:16.278 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-15 00:35:16.651 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-15 00:35:16.654 -05:00 [INF] Hosting environment: Development
+2026-04-15 00:35:16.657 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-15 00:35:17.079 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-15 00:35:17.489 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-15 00:35:17.660 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:35:17.702 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-15 00:35:17.711 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:35:17.752 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 693.7535ms
+2026-04-15 00:35:17.771 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-15 00:35:17.796 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:35:18.090 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-15 00:35:18.165 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-15 00:35:18.177 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 407.7582ms
+2026-04-15 00:35:18.204 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-15 00:35:18.205 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-15 00:35:18.227 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:35:18.231 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:35:18.257 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:35:18.257 -05:00 [INF] Sending file with download name ''.
+2026-04-15 00:35:18.269 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-15 00:35:18.272 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 67.1121ms
+2026-04-15 00:35:18.303 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-15 00:35:18.316 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 112.3365ms
+2026-04-15 00:35:18.331 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-15 00:35:18.331 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-15 00:35:18.351 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 19.7718ms
+2026-04-15 00:35:18.484 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 152.9559ms
+2026-04-15 00:35:19.188 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-15 00:35:19.199 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:35:19.820 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-15 00:35:19.828 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 640.5026ms
+2026-04-15 00:35:27.032 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-15 00:35:27.048 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:35:27.106 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-15 00:35:27.599 -05:00 [INF] Executed DbCommand (55ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+2026-04-15 00:35:28.177 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:35:28.216 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 1088.6059ms
+2026-04-15 00:35:28.223 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-15 00:35:28.251 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 1219.0923ms
+2026-04-15 00:35:32.735 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:35:32.906 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:35:32.932 -05:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(XClone.Application.Models.Requets.User.FilterUserRequest, System.String) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-15 00:35:33.283 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-15 00:35:33.291 -05:00 [WRN] The query uses a row limiting operator ('Skip'/'Take') without an 'OrderBy' operator. This may lead to unpredictable results. If the 'Distinct' operator is used after 'OrderBy', then make sure to use the 'OrderBy' operator after 'Distinct' as the ordering would otherwise get erased.
+2026-04-15 00:35:33.356 -05:00 [INF] Executed DbCommand (16ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[DeletedAt] IS NULL AND [u].[IsActive] = CAST(1 AS bit)
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2026-04-15 00:35:33.376 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.GenericResponse`1[[System.Collections.Generic.List`1[[XClone.Application.Models.DTOs.UserDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:35:33.409 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi) in 467.2848ms
+2026-04-15 00:35:33.418 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:35:33.424 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 200 null application/json; charset=utf-8 688.9699ms
+2026-04-15 00:35:41.442 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:35:41.461 -05:00 [INF] Authorization failed. These requirements were not met:
+DenyAnonymousAuthorizationRequirement: Requires an authenticated user.
+2026-04-15 00:35:41.909 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 401 null application/json; charset=utf-8 467.1592ms
+2026-04-15 00:35:47.037 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - null null
+2026-04-15 00:35:47.054 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:35:47.060 -05:00 [INF] Route matched with {action = "GetAll", controller = "Users"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] GetAll(XClone.Application.Models.Requets.User.FilterUserRequest, System.String) on controller XClone.WebApi.Controllers.UsersController (XClone.WebApi).
+2026-04-15 00:35:47.101 -05:00 [INF] Executed DbCommand (6ms) [Parameters=[@__p_0='?' (DbType = Int32), @__p_1='?' (DbType = Int32)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+FROM [User] AS [u]
+WHERE [u].[DeletedAt] IS NULL AND [u].[IsActive] = CAST(1 AS bit)
+ORDER BY (SELECT 1)
+OFFSET @__p_0 ROWS FETCH NEXT @__p_1 ROWS ONLY
+2026-04-15 00:35:47.139 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.GenericResponse`1[[System.Collections.Generic.List`1[[XClone.Application.Models.DTOs.UserDto, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]], System.Private.CoreLib, Version=9.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]], XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-15 00:35:47.148 -05:00 [INF] Executed action XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi) in 71.7479ms
+2026-04-15 00:35:47.153 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.UsersController.GetAll (XClone.WebApi)'
+2026-04-15 00:35:47.159 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/api/users?limit=5&offset=2&DisplayName= - 200 null application/json; charset=utf-8 121.7895ms

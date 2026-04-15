@@ -95,7 +95,7 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
             try
             {
                 // Retornamos un Queryable que por defecto excluya a los usuarios borrados
-                return context.Users.Where(x => x.IsActive == true).AsQueryable();
+                return context.Users.Where(x => x.DeletedAt == null).AsQueryable();
             }
             catch (Exception)
             {
