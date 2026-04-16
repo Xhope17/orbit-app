@@ -15,9 +15,10 @@ namespace XClone.Application.Models.Requets.User
         [Range(18, 120, ErrorMessage = ValidationConstants.INVALID_AGE)]
         public int? Age { get; set; }
 
-        [MaxLength(250, ErrorMessage = ValidationConstants.MAX_LENGTH)]
-        [EmailAddress]
-        public string? Email { get; set; }
+        [EmailAddress(ErrorMessage = ValidationConstants.EMAIL_ADDRESS)]
+        [MaxLength(255, ErrorMessage = ValidationConstants.MAX_LENGTH)]
+        [MinLength(10, ErrorMessage = ValidationConstants.MIN_LENGTH)]
+        public string? Email { get; set; } = null!;
 
         [MaxLength(20, ErrorMessage = ValidationConstants.MAX_LENGTH)]
         public string? PhoneNumber { get; set; }

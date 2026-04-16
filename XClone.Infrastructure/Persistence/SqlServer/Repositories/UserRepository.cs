@@ -16,7 +16,7 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
                 await context.Users.AddAsync(user);
 
                 // execution // commit
-                await context.SaveChangesAsync();
+                //await context.SaveChangesAsync();
 
                 return user;
             }
@@ -127,7 +127,7 @@ namespace XClone.Infrastructure.Persistence.SqlServer.Repositories
             try
             {
                 context.Users.Update(user);
-                await context.SaveChangesAsync();
+                //await context.SaveChangesAsync();
 
                 return user;
             }

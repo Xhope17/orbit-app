@@ -1,0 +1,136 @@
+2026-04-16 08:53:38.888 -05:00 [ERR] An error occurred using the connection to database 'XClone' on server 'localhost,1433'.
+2026-04-16 08:53:39.098 -05:00 [ERR] An exception occurred while iterating over the results of a query for context type 'XClone.Domain.Database.SqlServer.Context.XcloneContext'.
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa,Password=Admin1234@'.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:da7a843b-17d3-4604-94ba-4eafce731368
+Error Number:18456,State:1,Class:14
+Microsoft.Data.SqlClient.SqlException (0x80131904): Login failed for user 'sa,Password=Admin1234@'.
+   at Microsoft.Data.SqlClient.SqlInternalConnection.OnError(SqlException exception, Boolean breakConnection, Action`1 wrapCloseInAction)
+   at Microsoft.Data.SqlClient.TdsParser.ThrowExceptionAndWarning(TdsParserStateObject stateObj, SqlCommand command, Boolean callerHasConnectionLock, Boolean asyncClose)
+   at Microsoft.Data.SqlClient.TdsParser.TryRun(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj, Boolean& dataReady)
+   at Microsoft.Data.SqlClient.TdsParser.Run(RunBehavior runBehavior, SqlCommand cmdHandler, SqlDataReader dataStream, BulkCopySimpleResultSet bulkCopyHandler, TdsParserStateObject stateObj)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.CompleteLogin(Boolean enlistOK)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.AttemptOneLogin(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, TimeoutTimer timeout, Boolean withFailover)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.LoginNoFailover(ServerInfo serverInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString connectionOptions, SqlCredential credential, TimeoutTimer timeout)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds.OpenLoginEnlist(TimeoutTimer timeout, SqlConnectionString connectionOptions, SqlCredential credential, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance)
+   at Microsoft.Data.SqlClient.SqlInternalConnectionTds..ctor(DbConnectionPoolIdentity identity, SqlConnectionString connectionOptions, SqlCredential credential, Object providerInfo, String newPassword, SecureString newSecurePassword, Boolean redirectedUserInstance, SqlConnectionString userConnectionOptions, SessionData reconnectSessionData, Boolean applyTransientFaultHandling, String accessToken, IDbConnectionPool pool, Func`3 accessTokenCallback)
+   at Microsoft.Data.SqlClient.SqlConnectionFactory.CreateConnection(DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionPoolGroupProviderInfo poolGroupProviderInfo, IDbConnectionPool pool, DbConnection owningConnection, DbConnectionOptions userOptions)
+   at Microsoft.Data.ProviderBase.DbConnectionFactory.CreatePooledConnection(IDbConnectionPool pool, DbConnection owningObject, DbConnectionOptions options, DbConnectionPoolKey poolKey, DbConnectionOptions userOptions)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.CreateObject(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.UserCreateRequest(DbConnection owningObject, DbConnectionOptions userOptions, DbConnectionInternal oldConnection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.TryGetConnection(DbConnection owningObject, UInt32 waitForMultipleObjectsTimeout, Boolean allowCreate, Boolean onlyOneCheckConnection, DbConnectionOptions userOptions, DbConnectionInternal& connection)
+   at Microsoft.Data.SqlClient.ConnectionPool.WaitHandleDbConnectionPool.WaitForPendingOpen()
+--- End of stack trace from previous location ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenInternalAsync(Boolean errorsExpected, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalConnection.OpenAsync(CancellationToken cancellationToken, Boolean errorsExpected)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.InitializeReaderAsync(AsyncEnumerator enumerator, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.SingleQueryingEnumerable`1.AsyncEnumerator.MoveNextAsync()
+ClientConnectionId:da7a843b-17d3-4604-94ba-4eafce731368
+Error Number:18456,State:1,Class:14
+2026-04-16 08:56:05.983 -05:00 [INF] Executed DbCommand (35ms) [Parameters=[], CommandType='"Text"', CommandTimeout='30']
+SELECT CASE
+    WHEN EXISTS (
+        SELECT 1
+        FROM [User] AS [u]) THEN CAST(1 AS bit)
+    ELSE CAST(0 AS bit)
+END
+2026-04-16 08:56:06.136 -05:00 [INF] Executed DbCommand (31ms) [Parameters=[@__name_0='?' (Size = 100)], CommandType='"Text"', CommandTimeout='30']
+SELECT TOP(1) [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsActive], [r].[Name], [r].[UpdatedAt]
+FROM [Roles] AS [r]
+WHERE [r].[Name] = @__name_0
+2026-04-16 08:56:06.336 -05:00 [INF] Executed DbCommand (9ms) [Parameters=[@p0='?' (DbType = Int32), @p1='?' (DbType = Guid), @p2='?' (DbType = DateTime2), @p3='?' (Size = 100), @p4='?' (Size = 255), @p5='?' (DbType = Boolean), @p6='?' (DbType = Boolean), @p7='?' (Size = 255), @p8='?' (Size = 20), @p9='?' (DbType = Guid), @p10='?' (Size = 100), @p11='?' (DbType = Guid), @p12='?' (Size = 50)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [User] ([Age], [CityId], [DeletedAt], [DisplayName], [Email], [IsActive], [IsVerified], [Password], [PhoneNumber], [PinnedPostId], [Position], [TimezoneId], [UserName])
+OUTPUT INSERTED.[Id], INSERTED.[CreateAt], INSERTED.[JoinedAt], INSERTED.[UpdatedAt]
+VALUES (@p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7, @p8, @p9, @p10, @p11, @p12);
+2026-04-16 08:56:06.359 -05:00 [INF] Executed DbCommand (4ms) [Parameters=[@p13='?' (DbType = Guid), @p14='?' (DbType = Guid), @p15='?' (DbType = Guid)], CommandType='"Text"', CommandTimeout='30']
+SET IMPLICIT_TRANSACTIONS OFF;
+SET NOCOUNT ON;
+INSERT INTO [UserRoles] ([RoleId], [UserId], [AssignedBy])
+OUTPUT INSERTED.[AssignedAt]
+VALUES (@p13, @p14, @p15);
+2026-04-16 08:56:06.671 -05:00 [INF] User profile is available. Using 'C:\Users\Xhope\AppData\Local\ASP.NET\DataProtection-Keys' as key repository and Windows DPAPI to encrypt keys at rest.
+2026-04-16 08:56:07.100 -05:00 [INF] Now listening on: http://localhost:5230
+2026-04-16 08:56:07.275 -05:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-16 08:56:07.278 -05:00 [INF] Hosting environment: Development
+2026-04-16 08:56:07.280 -05:00 [INF] Content root path: C:\Users\Xhope\Desktop\clases\github\vmt-bootcamp\backend\x_clone\X_Clone.WebApi
+2026-04-16 08:56:07.732 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar - null null
+2026-04-16 08:56:08.185 -05:00 [WRN] Failed to determine the https port for redirect.
+2026-04-16 08:56:08.326 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 08:56:08.350 -05:00 [INF] Executing RedirectResult, redirecting to scalar/.
+2026-04-16 08:56:08.352 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 08:56:08.391 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar - 302 null null 672.9941ms
+2026-04-16 08:56:08.408 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/ - null null
+2026-04-16 08:56:08.421 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 08:56:08.720 -05:00 [INF] Write content with HTTP Response ContentType of text/html
+2026-04-16 08:56:08.760 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/{documentName?}'
+2026-04-16 08:56:08.769 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/ - 200 null text/html 360.9545ms
+2026-04-16 08:56:08.795 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - null null
+2026-04-16 08:56:08.795 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - null null
+2026-04-16 08:56:08.810 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-16 08:56:08.811 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-16 08:56:08.838 -05:00 [INF] Sending file with download name ''.
+2026-04-16 08:56:08.838 -05:00 [INF] Sending file with download name ''.
+2026-04-16 08:56:08.849 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.aspnetcore.js'
+2026-04-16 08:56:08.851 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - null null
+2026-04-16 08:56:08.851 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/_vs/browserLink - null null
+2026-04-16 08:56:08.855 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.aspnetcore.js - 200 1111 text/javascript 60.1548ms
+2026-04-16 08:56:08.915 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_framework/aspnetcore-browser-refresh.js - 200 14931 application/javascript; charset=utf-8 64.271ms
+2026-04-16 08:56:09.004 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/scalar.js'
+2026-04-16 08:56:09.042 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/scalar.js - 200 1110236 text/javascript 247.0979ms
+2026-04-16 08:56:09.141 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/_vs/browserLink - 200 null text/javascript; charset=UTF-8 289.7203ms
+2026-04-16 08:56:09.412 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/openapi/v1.json - null null
+2026-04-16 08:56:09.419 -05:00 [INF] Executing endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-16 08:56:09.813 -05:00 [INF] Executed endpoint 'HTTP: GET /openapi/{documentName}.json'
+2026-04-16 08:56:09.815 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/openapi/v1.json - 200 null application/json;charset=utf-8 403.0558ms
+2026-04-16 08:56:10.290 -05:00 [INF] Request starting HTTP/1.1 GET http://localhost:5230/scalar/favicon.svg - null null
+2026-04-16 08:56:10.298 -05:00 [INF] Executing endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-16 08:56:10.301 -05:00 [INF] Sending file with download name ''.
+2026-04-16 08:56:10.309 -05:00 [INF] Executed endpoint 'HTTP: GET /scalar/favicon.svg'
+2026-04-16 08:56:10.314 -05:00 [INF] Request finished HTTP/1.1 GET http://localhost:5230/scalar/favicon.svg - 200 533 image/svg+xml 23.8346ms
+2026-04-16 09:03:24.211 -05:00 [INF] Request starting HTTP/1.1 POST http://localhost:5230/api/auth/login - application/json 71
+2026-04-16 09:03:24.220 -05:00 [INF] Executing endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-16 09:03:24.274 -05:00 [INF] Route matched with {action = "Login", controller = "Auth"}. Executing controller action with signature System.Threading.Tasks.Task`1[Microsoft.AspNetCore.Mvc.IActionResult] Login(XClone.Application.Models.Requets.Auth.LoginAuthRequest) on controller XClone.WebApi.Controllers.AuthController (XClone.WebApi).
+2026-04-16 09:03:24.889 -05:00 [INF] Executed DbCommand (45ms) [Parameters=[@__email_0='?' (Size = 255)], CommandType='"Text"', CommandTimeout='30']
+SELECT [u1].[Id], [u1].[Age], [u1].[CityId], [u1].[CreateAt], [u1].[DeletedAt], [u1].[DisplayName], [u1].[Email], [u1].[IsActive], [u1].[IsVerified], [u1].[JoinedAt], [u1].[Password], [u1].[PhoneNumber], [u1].[PinnedPostId], [u1].[Position], [u1].[TimezoneId], [u1].[UpdatedAt], [u1].[UserName], [s].[UserId], [s].[RoleId], [s].[AssignedAt], [s].[AssignedBy], [s].[Id], [s].[CreatedAt], [s].[Description], [s].[IsActive], [s].[Name], [s].[UpdatedAt]
+FROM (
+    SELECT TOP(1) [u].[Id], [u].[Age], [u].[CityId], [u].[CreateAt], [u].[DeletedAt], [u].[DisplayName], [u].[Email], [u].[IsActive], [u].[IsVerified], [u].[JoinedAt], [u].[Password], [u].[PhoneNumber], [u].[PinnedPostId], [u].[Position], [u].[TimezoneId], [u].[UpdatedAt], [u].[UserName]
+    FROM [User] AS [u]
+    WHERE [u].[Email] = @__email_0 AND [u].[DeletedAt] IS NULL
+) AS [u1]
+LEFT JOIN (
+    SELECT [u0].[UserId], [u0].[RoleId], [u0].[AssignedAt], [u0].[AssignedBy], [r].[Id], [r].[CreatedAt], [r].[Description], [r].[IsActive], [r].[Name], [r].[UpdatedAt]
+    FROM [UserRoles] AS [u0]
+    INNER JOIN [Roles] AS [r] ON [u0].[RoleId] = [r].[Id]
+) AS [s] ON [u1].[Id] = [s].[UserId]
+ORDER BY [u1].[Id], [s].[UserId], [s].[RoleId]
+2026-04-16 09:03:25.068 -05:00 [INF] Executing OkObjectResult, writing value of type 'XClone.Application.Models.Responses.GenericResponse`1[[XClone.Application.Models.Responses.Auth.LoginAuthResponse, XClone.Application, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]'.
+2026-04-16 09:03:25.092 -05:00 [INF] Executed action XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi) in 800.6779ms
+2026-04-16 09:03:25.093 -05:00 [INF] Executed endpoint 'XClone.WebApi.Controllers.AuthController.Login (XClone.WebApi)'
+2026-04-16 09:03:25.107 -05:00 [INF] Request finished HTTP/1.1 POST http://localhost:5230/api/auth/login - 200 null application/json; charset=utf-8 896.5686ms

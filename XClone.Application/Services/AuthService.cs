@@ -5,18 +5,19 @@ using XClone.Application.Models.Helpers;
 using XClone.Application.Models.Requets.Auth;
 using XClone.Application.Models.Responses;
 using XClone.Application.Models.Responses.Auth;
+using XClone.Domain.DataBase.SqlServer;
 using XClone.Domain.Exceptions;
-using XClone.Domain.Interfaces.Repositories;
 using XClone.Shared;
 using XClone.Shared.Constants;
 
 namespace XClone.Application.Services
 {
-    public class AuthService(IUserRepository userRepository, IConfiguration configuration, ICacheService cacheService) : IAuthService
+    //public class AuthService(IUserRepository userRepository, IConfiguration configuration, ICacheService cacheService) : IAuthService
+    public class AuthService(IUnitOfWork uow, IConfiguration configuration, ICacheService cacheService) : IAuthService
     {
         public async Task<GenericResponse<LoginAuthResponse>> Login(LoginAuthRequest model)
         {
-            var user = await userRepository.Get(model.Email)
+            var user = await uow.userRepository.Get(model.Email)
                 ?? throw new BadRequestException(ResponseConstants.AUTH_USER_OR_PASSWORD_NOT_FOUND);
 
             var validatePassword = Hasher.ComparePassword(model.Password, user.Password);
@@ -42,7 +43,7 @@ namespace XClone.Application.Services
                 ?? throw new NotFoundException(ResponseConstants.AUTH_REFRESH_TOKEN_NOT_FOUND);
 
             //var token = TokenHelper.Create(findRefreshToken.UserId, configuration, cacheService);
-            var user = await userRepository.Get(findRefreshToken.UserId)
+            var user = await uow.userRepository.Get(findRefreshToken.UserId)
                 ?? throw new NotFoundException(ResponseConstants.USER_NOT_EXIST);
 
             var token = TokenHelper.Create(findRefreshToken.UserId, [.. user.UserRoleUsers.Select(x => x.Role.Name)], configuration, cacheService);

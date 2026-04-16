@@ -7,9 +7,12 @@ using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Services;
 using XClone.Domain.Database.SqlServer.Context;
+using XClone.Domain.DataBase.SqlServer;
 using XClone.Domain.Exceptions;
 using XClone.Domain.Interfaces.Repositories;
+using XClone.Infrastructure.Persistence.SqlServer;
 using XClone.Infrastructure.Persistence.SqlServer.Repositories;
+using XClone.Shared;
 using XClone.Shared.Constants;
 using XClone.WebApi.Middlewares;
 
@@ -42,7 +45,28 @@ namespace XClone.WebApi.Extensions
         {
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<IUserRepository, UserRepository>();
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
 
+        }
+
+        public async static Task AddSMTP(this IServiceCollection services, IConfiguration configuration)
+        {
+            var host = configuration[ConfigurationConstants.SMTP_HOST]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_HOST));
+
+            var from = configuration[ConfigurationConstants.SMTP_FROM]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_FROM));
+
+            var port = Convert.ToInt32(configuration[ConfigurationConstants.SMTP_PORT] ?? "587");
+
+            var user = configuration[ConfigurationConstants.SMTP_USER]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_USER));
+
+            var password = configuration[ConfigurationConstants.SMTP_PASSWORD]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_PASSWORD));
+
+            var smtp = new SMTP(host, from, port, user, password);
+            services.AddSingleton(smtp);
         }
 
         /// <summary>
@@ -51,6 +75,7 @@ namespace XClone.WebApi.Extensions
 		/// <param name="services"></param>
         public async static Task AddCore(this IServiceCollection services, IConfiguration configuration)
         {
+            await services.AddSMTP(configuration);
             //ConfigureApiBehaviorOptions sirve para configurar el comportamiento de la API, como por ejemplo, el formato de los errores, etc.
             services.AddControllers().ConfigureApiBehaviorOptions(options =>
             {

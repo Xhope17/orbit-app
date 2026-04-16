@@ -29,7 +29,7 @@ namespace XClone.WebApi.Controllers
         [EndpointDescription("Esto le permite renovar la sesión en el aplicativo. Genera dos tokens, uno que es el JWT para la autenticación con el aplicativo, y otro, que es, el que le permite realizar la renovación.")]
         [ProducesResponseType<GenericResponse<string>>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<GenericResponse<LoginAuthResponse>>(StatusCodes.Status200OK)]
-        [Tags("auth", "collaborators", "jwt", "refresh_token")]
+        [Tags("auth", "users", "jwt", "refresh_token")]
         public async Task<IActionResult> Renew([FromBody] RenewAuthRequest model)
         {
             var srv = await service.Renew(model);
