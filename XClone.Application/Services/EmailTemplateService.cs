@@ -1,11 +1,13 @@
 ﻿using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Services;
-using XClone.Domain.Interfaces.Repositories;
+using XClone.Domain.DataBase.SqlServer;
 
 namespace XClone.Application.Services
 {
-    public class EmailTemplateService(EmailTemplateData data, IEmailTemplateRepository repository) : IEmailTemplateService
+    //public class EmailTemplateService(EmailTemplateData data, IEmailTemplateRepository repository) : IEmailTemplateService
+    public class EmailTemplateService(EmailTemplateData data, IUnitOfWork uow) : IEmailTemplateService
+
     {
         public async Task<EmailTemplateDto> Get(string name, Dictionary<string, string> variables)
         {
@@ -25,7 +27,8 @@ namespace XClone.Application.Services
 
         public async Task Init()
         {
-            var templates = await repository.Get();
+            //var templates = await repository.Get();
+            var templates = await uow.emailTemplateRepository.Get();
             data.Data = templates;
         }
     }
