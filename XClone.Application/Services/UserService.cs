@@ -372,5 +372,11 @@ namespace XClone.Application.Services
 
             return roleToAssign;
         }
+
+        public async Task<GenericResponse<UserDto>> Me(Claim claim)
+        {
+            var executor = await GetExecutor(claim.Value);
+            return ResponseHelper.Create(Map(executor));
+        }
     }
 }

@@ -14,8 +14,9 @@ namespace XClone.Application.Interfaces.Services
         //public Task<GenericResponse<List<PostDto>>> Get(int limit, int offset);
         public GenericResponse<List<UserDto>> Get(FilterUserRequest model);
 
-
         public Task<GenericResponse<UserDto>> Get(Guid userId);
+
+        public Task<GenericResponse<UserDto>> Me(Claim claim);
 
         public Task<GenericResponse<bool>> Delete(Guid userId);
 

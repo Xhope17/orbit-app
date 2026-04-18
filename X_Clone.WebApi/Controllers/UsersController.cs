@@ -48,6 +48,14 @@ namespace XClone.WebApi.Controllers
             return Ok(ResponseHelper.Create(rsp));
         }
 
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            var srv = await userService.Me(UserClaim());
+            return Ok(srv);
+        }
+
         //Actualizar
         [HttpPut("{id:guid}")]
         [Authorize(Roles = "Admin")]
