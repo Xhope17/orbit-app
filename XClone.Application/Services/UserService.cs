@@ -39,12 +39,12 @@ namespace XClone.Application.Services
             Role? roleToAssign = null;
             User? executor = null;
 
-            var userExist = await uow.userRepository.GetUserName(model.UserName, model.Email);
+            //var userExist = await uow.userRepository.GetUserName(model.UserName, model.Email);
 
-            if (userExist != null)
-            {
-                return ResponseHelper.Create<UserDto>(null!, null, null, ValidationConstants.DUPLICATE);
-            }
+            //if (userExist != null)
+            //{
+            //    return ResponseHelper.Create<UserDto>(null!, null, null, ValidationConstants.DUPLICATE);
+            //}
 
             //
             // Normal use
@@ -89,10 +89,10 @@ namespace XClone.Application.Services
             {
                 UserName = model.UserName,
                 DisplayName = model.DisplayName,
-                Email = model.Email,
                 Age = model.Edad,
                 PhoneNumber = model.PhoneNumber,
-                Position = "",
+                Position = model.Position,
+                Email = model.Email,
                 // encriptar luego la contraseña antes de guardarla en la base de datos
                 Password = Hasher.HashPassword(password),
                 UserRoleUsers = [
@@ -285,7 +285,7 @@ namespace XClone.Application.Services
         //map
         private static UserDto Map(User user)
         {
-            var role = user.UserRoleUsers.FirstOrDefault()?.Role;
+            var role = user.UserRoleUsers?.FirstOrDefault()?.Role;
             return new UserDto
             {
                 Id = user.Id,
@@ -301,7 +301,7 @@ namespace XClone.Application.Services
                 JoinedAt = user.JoinedAt,
                 IsActive = user.IsActive,
                 CreateAt = user.CreateAt,
-                UpdatedAt = user.UpdatedAt,
+                UpdatedAt = user.UpdatedAt ?? DateTime.MinValue,
                 DeletedAt = user.DeletedAt,
                 Role = role != null ? new RoleDto
                 {

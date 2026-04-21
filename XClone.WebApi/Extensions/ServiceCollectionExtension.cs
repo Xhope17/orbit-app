@@ -54,18 +54,27 @@ namespace XClone.WebApi.Extensions
 
         public async static Task AddSMTP(this IServiceCollection services, IConfiguration configuration)
         {
-            var host = configuration[ConfigurationConstants.SMTP_HOST]
-                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_HOST));
+            //var host = configuration[ConfigurationConstants.SMTP_HOST]
+            var host = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_HOST) //entonrno de producción
+                ?? configuration[ConfigurationConstants.SMTP_HOST]//entorno de desarrollo
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_HOST)); //si no se encuentra la configuración, se lanza una excepción
 
-            var from = configuration[ConfigurationConstants.SMTP_FROM]
+            var from = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_FROM)
+                ?? configuration[ConfigurationConstants.SMTP_FROM]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_FROM));
 
-            var port = Convert.ToInt32(configuration[ConfigurationConstants.SMTP_PORT] ?? "587");
+            //var port = Convert.ToInt32(configuration[ConfigurationConstants.SMTP_PORT] ?? "587");
+            var portValue = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_PORT) ??
+                configuration[ConfigurationConstants.SMTP_PORT];
 
-            var user = configuration[ConfigurationConstants.SMTP_USER]
+            var port = Convert.ToInt32(portValue ?? "587");
+
+            var user = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_USER)
+                ?? configuration[ConfigurationConstants.SMTP_USER]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_USER));
 
-            var password = configuration[ConfigurationConstants.SMTP_PASSWORD]
+            var password = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_PASSWORD)
+                ?? configuration[ConfigurationConstants.SMTP_PASSWORD]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_PASSWORD));
 
             var smtp = new SMTP(host, from, port, user, password);
@@ -98,7 +107,7 @@ namespace XClone.WebApi.Extensions
             services.AddOpenApi();
 
             //services.AddSqlServer<XcloneContext>(configuration.GetConnectionString("Database"));
-            var databaseConnetingString = Environment.GetEnvironmentVariable(ConfigurationConstants.CONNECTION_STRING_DATABASE)
+            var databaseConnetingString = Environment.GetEnvironmentVariable(EnvironmentConstants.CONNECTION_STRING_DATABASE)
                 ?? configuration[ConfigurationConstants.CONNECTION_STRING_DATABASE];
 
             services.AddSqlServer<XcloneContext>(databaseConnetingString);

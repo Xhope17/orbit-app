@@ -35,7 +35,7 @@ public partial class User
 
     public DateTime CreateAt { get; set; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 
     public DateTime? DeletedAt { get; set; }
 

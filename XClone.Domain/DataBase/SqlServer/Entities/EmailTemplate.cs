@@ -13,5 +13,5 @@ public partial class EmailTemplate
 
     public string Body { get; set; } = null!;
 
-    public DateTime CreateAt { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
