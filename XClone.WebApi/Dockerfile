@@ -7,18 +7,14 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
+
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-
-# Copiamos todo el código fuente primero (Ver Nota Abajo)
-COPY . .
-
-# Restauramos dependencias
+COPY ["XClone.WebApi/XClone.WebApi.csproj", "XClone.WebApi/"]
 RUN dotnet restore "./XClone.WebApi/XClone.WebApi.csproj"
-
-# Compilamos
+COPY . .
 WORKDIR "/src/XClone.WebApi"
 RUN dotnet build "./XClone.WebApi.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
