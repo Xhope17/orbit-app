@@ -21,7 +21,7 @@ namespace XClone.Application.Services
     {
 
         //crear un usuario
-        public async Task<GenericResponse<UserDto>> Create(CreateUserRequest model, Claim claim)
+        public async Task<GenericResponse<UserDto>> Create(CreateUserRequest model, Claim? claim)
         {
             /*
             //si es mayor de edad, se puede crear el usuario
@@ -36,7 +36,8 @@ namespace XClone.Application.Services
 
             //throw new Exception("La base de datos, no e pudo conectar con el servicio");
 
-            var executor = await GetExecutor(claim.Value);
+            Role? roleToAssign = null;
+            User? executor = null;
 
             var userExist = await uow.userRepository.GetUserName(model.UserName, model.Email);
 
@@ -46,9 +47,24 @@ namespace XClone.Application.Services
             }
 
             //
-            if (model.RoleId == Guid.Empty)
+            // Normal use
+            if (claim is not null)
             {
-                throw new NotFoundException(ValidationConstants.IsEmpty("RoleId"));
+                executor = await GetExecutor(claim.Value);
+
+                if (!model.RoleId.HasValue || model.RoleId.HasValue && model.RoleId.Value == Guid.Empty)
+                {
+                    throw new NotFoundException(ValidationConstants.IsEmpty("RoleId"));
+                }
+
+                await ValidateEmailIfExists(model.Email);
+
+                roleToAssign = await ValidateRole(executor, model.RoleId.Value);
+            }
+            // Without authentication for register
+            else
+            {
+                roleToAssign = await uow.roleRepository.Get(x => x.Name == RoleConstants.User);
             }
 
             /*Para validar
@@ -58,14 +74,16 @@ namespace XClone.Application.Services
             }
             */
 
-            await ValidateEmailIfExists(model.Email); //Validar si el email ya está registrado
+            //await ValidateEmailIfExists(model.Email); //Validar si el email ya está registrado
 
-            // Asegúrate de que el método devuelva el tipo correcto en caso de error
-            //return ResponseHelper.Create<UserDto>(null!, null, ValidationConstants.INVALID_AGE);
+            if (roleToAssign is null)
+            {
+                throw new BadRequestException("Imposible obtener el rol para asignarle al usuario");
+            }
 
             var password = Generate.RandomText(32);
 
-            var roleToAssign = await ValidateRole(executor, model.RoleId); //Validar que el rol existe y que el executor tiene permisos para asignarlo
+            //var roleToAssign = await ValidateRole(executor, model.RoleId); //Validar que el rol existe y que el executor tiene permisos para asignarlo
 
             var create = await uow.userRepository.Create(new User
             {
@@ -80,7 +98,7 @@ namespace XClone.Application.Services
                 UserRoleUsers = [
                     new UserRole {
                         RoleId = roleToAssign.Id,
-                        AssignedBy = executor.Id
+                        AssignedBy = executor?.Id
                     }
                 ]
             });
@@ -345,7 +363,7 @@ namespace XClone.Application.Services
             await uow.SaveChangesAsync();
         }
 
-        private async Task<User> GetExecutor(string value)
+        public async Task<User> GetExecutor(string value)
         {
             var uuid = Guid.Parse(value);
             return await uow.userRepository.Get(uuid)
@@ -365,7 +383,11 @@ namespace XClone.Application.Services
             var roleToAssign = await uow.roleRepository.Get(roleId)
                 ?? throw new NotFoundException(ResponseConstants.RoleNotFound(roleId));
 
-            if (executor.UserRoleUsers.First().Role.Name == RoleConstants.HR && roleToAssign.Name == RoleConstants.Admin)
+            //if (executor.UserRoleUsers.First().Role.Name == RoleConstants.HR && roleToAssign.Name == RoleConstants.Admin)
+
+            //si un moderador intenta asignar el rol de admin, se lanza una excepción porque no tiene permisos para asignar ese rol
+            if (executor.UserRoleUsers.First().Role.Name == RoleConstants.Moderator && roleToAssign.Name == RoleConstants.Admin)
+
             {
                 throw new BadRequestException(ResponseConstants.CANNOT_ASSIGN_THE_ROLE);
             }

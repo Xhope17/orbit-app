@@ -35,6 +35,6 @@ namespace XClone.Application.Models.Requets.User
         public string? PhoneNumber { get; set; }
 
         [Required]
-        public Guid RoleId { get; set; }
+        public Guid? RoleId { get; set; }
     }
 }

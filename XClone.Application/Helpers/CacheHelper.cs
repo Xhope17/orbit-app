@@ -57,5 +57,38 @@ namespace XClone.Application.Helpers
         //        Expiration = TimeSpan.FromDays(Convert.ToInt32(configuration[ConfigurationConstants.JWT_EXPIRATION_IN_MINUTES_MAX]))
         //    };
         //}
+
+
+
+
+        public static string AuthRegisterTokenKey(string value)
+        {
+            return $"auth:register:tokens:{value}";
+        }
+
+        //crea un token y le asigna una expiracion, para luego ser almacenado en cache
+        public static CacheKey AuthRegisterTokenCreation(string value, TimeSpan expiration)
+        {
+            return new CacheKey
+            {
+                Key = AuthRegisterTokenKey(value),
+                Expiration = expiration
+            };
+        }
+
+        public static string AuthRecoverPasswordOTPKey(string value)
+        {
+            return $"auth:recover_password:otps:{value}";
+        }
+
+        //crea un otp y le asigna una expiracion, para luego ser almacenado en cache
+        public static CacheKey AuthRecoverPasswordOTPCreation(string value, TimeSpan expiration)
+        {
+            return new CacheKey
+            {
+                Key = AuthRecoverPasswordOTPKey(value),
+                Expiration = expiration
+            };
+        }
     }
 }

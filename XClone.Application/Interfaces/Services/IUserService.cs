@@ -2,13 +2,14 @@
 using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Requets.User;
 using XClone.Application.Models.Responses;
+using XClone.Domain.Database.SqlServer.Entities;
 
 namespace XClone.Application.Interfaces.Services
 {
     public interface IUserService
     {
 
-        public Task<GenericResponse<UserDto>> Create(CreateUserRequest model, Claim claim);
+        public Task<GenericResponse<UserDto>> Create(CreateUserRequest model, Claim? claim);
         public Task<GenericResponse<UserDto>> Update(Guid userId, UpdateUserRequest model, Claim claim);
 
         //public Task<GenericResponse<List<PostDto>>> Get(int limit, int offset);
@@ -19,6 +20,8 @@ namespace XClone.Application.Interfaces.Services
         public Task<GenericResponse<UserDto>> Me(Claim claim);
 
         public Task<GenericResponse<bool>> Delete(Guid userId);
+
+        Task<User> GetExecutor(string value);
 
         //CreateFristUser
         public Task CreateFristUser();

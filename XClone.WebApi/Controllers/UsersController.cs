@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.DTOs;
 using XClone.Application.Models.Requets.User;
@@ -85,10 +84,14 @@ namespace XClone.WebApi.Controllers
 
         //eliminar un usuario
         [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
+        [Authorize(Roles = "Admin")]
+        [EndpointSummary("Eliminar un usuario")]
+        [EndpointDescription("Este endpoint permite eliminar un usuario del sistema. Requiere que el solicitante tenga el rol de 'Admin'.")]
+        [ProducesResponseType<GenericResponse<bool>>(StatusCodes.Status200OK)]
+        public async Task<GenericResponse<bool>> Delete(Guid id)
         {
             var rsp = await userService.Delete(id);
-            return Ok(ResponseHelper.Create(rsp, null, null, "usuario eliminado"));
+            return ResponseStatus.Ok(HttpContext, rsp);
         }
 
 

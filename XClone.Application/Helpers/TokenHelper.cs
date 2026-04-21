@@ -16,22 +16,6 @@ namespace XClone.Application.Helpers
         public static readonly Random rnd = new();
         public static string Create(Guid UserId, List<string> roles, IConfiguration configuration, ICacheService cache)
         {
-            //var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER) //produccion y desarrollo
-            //    ?? configuration[ConfigurationConstants.JWT_ISSUER]
-            //    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
-
-            //var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE) //produccion y desarrollo
-            //    ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
-            //    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
-
-            //var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY) //produccion y desarrollo
-            //    ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
-            //    ?? throw new Exception(ResponseConstans.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
-
-            //var expirationInMinutes = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_EXPIRATION_IN_MINUTES_MIN) //produccion y desarrollo
-            //    ?? configuration[ConfigurationConstants.JWT_EXPIRATION_IN_MINUTES_MIN]
-            //    ?? "10";
-
             var tokenConfiguration = Configuration(configuration);
             var signingCredentials = new SigningCredentials(tokenConfiguration.SecurityKey, SecurityAlgorithms.HmacSha256);
 
@@ -83,15 +67,16 @@ namespace XClone.Application.Helpers
 
         public static TokenConfiguration Configuration(IConfiguration configuration)
         {
-            var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER)
-                ?? configuration[ConfigurationConstants.JWT_ISSUER]
+            //var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER)
+            var issuer = Environment.GetEnvironmentVariable(EnvironmentConstants.JWT_ISSUER) //entorno de producción
+                ?? configuration[ConfigurationConstants.JWT_ISSUER] //entonrno de desarrollo
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
 
-            var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE)
+            var audience = Environment.GetEnvironmentVariable(EnvironmentConstants.JWT_AUDIENCE)
                 ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
 
-            var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY)
+            var privateKey = Environment.GetEnvironmentVariable(EnvironmentConstants.JWT_PRIVATE_KEY)
                 ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
 
