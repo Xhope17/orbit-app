@@ -3,6 +3,7 @@ using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.Requets.Auth;
 using XClone.Application.Models.Responses;
 using XClone.Application.Models.Responses.Auth;
+using XClone.WebApi.Helpers;
 
 namespace XClone.WebApi.Controllers
 {
@@ -17,23 +18,23 @@ namespace XClone.WebApi.Controllers
         [ProducesResponseType<GenericResponse<string>>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<GenericResponse<LoginAuthResponse>>(StatusCodes.Status200OK)]
         //[]
-        [Tags("auth", "user", "JWT")]
-        public async Task<IActionResult> Login([FromBody] LoginAuthRequest model)
+        [Tags("auth", "user", "JWT", "Refresh_Token")]
+        public async Task<GenericResponse<LoginAuthResponse>> Login([FromBody] LoginAuthRequest model)
         {
             var rsp = await service.Login(model);
-            return Ok(rsp);
+            return ResponseStatus.Created(HttpContext, rsp);
         }
 
         [HttpPost("renew")]
-        [EndpointSummary("Renovar sesión como colaborador")]
+        [EndpointSummary("Renovar sesión")]
         [EndpointDescription("Esto le permite renovar la sesión en el aplicativo. Genera dos tokens, uno que es el JWT para la autenticación con el aplicativo, y otro, que es, el que le permite realizar la renovación.")]
         [ProducesResponseType<GenericResponse<string>>(StatusCodes.Status400BadRequest)]
         [ProducesResponseType<GenericResponse<LoginAuthResponse>>(StatusCodes.Status200OK)]
         [Tags("auth", "users", "jwt", "refresh_token")]
-        public async Task<IActionResult> Renew([FromBody] RenewAuthRequest model)
+        public async Task<GenericResponse<LoginAuthResponse>> Renew([FromBody] RenewAuthRequest model)
         {
             var srv = await service.Renew(model);
-            return Ok(srv);
+            return ResponseStatus.Created.Ok(HttpContext, srv);
         }
     }
 }
