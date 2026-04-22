@@ -19,5 +19,6 @@ namespace XClone.Domain.Interfaces.Repositories
         //Task<Role?> GetRole(string name);
         //Task<Role?> GetRole(Guid id);
         Task<bool> ClearRoles(List<UserRole> roles);
+        Task<List<Menu>> GetMenu(Guid userId);
     }
 }
