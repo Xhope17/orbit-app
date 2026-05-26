@@ -18,6 +18,9 @@
 # Environments de Angular
 src/environments/environment.ts
 src/environments/environment.development.ts
+**/src/environments/environment.ts
+**/src/environments/environment.development.ts
+**/src/environments/environment.*.ts
 
 
 # Created by https://www.toptal.com/developers/gitignore/api/dotnetcore,aspnetcore,angular
