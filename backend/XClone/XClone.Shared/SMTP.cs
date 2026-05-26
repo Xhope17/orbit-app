@@ -7,21 +7,20 @@ namespace XClone.Shared
     {
         public async Task Send(string to, string subject, string body)
         {
-            var smtpClient = new SmtpClient
+            using var smtpClient = new SmtpClient
             {
                 Host = host,
                 Credentials = new NetworkCredential(user, password),
                 Port = port,
-                EnableSsl = false
+                EnableSsl = true
             };
 
-            var message = new MailMessage(from, to, subject, body)
+            using var message = new MailMessage(from, to, subject, body)
             {
                 IsBodyHtml = true
             };
 
-            //await smtpClient.SendMailAsync(message);
-            smtpClient.Send(message);
+            await smtpClient.SendMailAsync(message);
         }
     }
 }

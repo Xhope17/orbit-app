@@ -13,6 +13,10 @@ public partial class Post
 
     public bool IsSensitive { get; set; }
 
+    public string? MediaUrl { get; set; }
+
+    public string Visibility { get; set; } = "Public";
+
     public Guid? CommunityId { get; set; }
 
     public DateTime JoinedAt { get; set; }
@@ -31,9 +35,9 @@ public partial class Post
 
     public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
 
-    public virtual ICollection<Mention> Mentions { get; set; } = new List<Mention>();
+    public virtual ICollection<MediaFile> MediaFiles { get; set; } = new List<MediaFile>();
 
-    public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
+    public virtual ICollection<Mention> Mentions { get; set; } = new List<Mention>();
 
     public virtual ICollection<PostHashtag> PostHashtags { get; set; } = new List<PostHashtag>();
 

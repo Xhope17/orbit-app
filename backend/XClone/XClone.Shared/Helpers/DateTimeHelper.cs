@@ -9,10 +9,5 @@
             return DateTimeOffset.UtcNow.DateTime;
         }
 
-        //AddMinutes
-        //public static DateTime AddMinutes()
-        //{
-        //    return default(DateTime);
-        //}
     }
 }

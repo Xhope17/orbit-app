@@ -18,7 +18,6 @@ using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
-    //public class AuthService(IUserRepository userRepository, IConfiguration configuration, ICacheService cacheService) : IAuthService
     public class AuthService(IUnitOfWork uow, IConfiguration configuration, ICacheService cacheService,
         IEmailTemplateService emailTemplateService, SMTP smtp, IUserService userService) : IAuthService
     {
@@ -36,7 +35,6 @@ namespace XClone.Application.Services
                 throw new BadRequestException(ResponseConstants.AUTH_USER_OR_PASSWORD_NOT_FOUND);
             }
 
-            //var token = TokenHelper.Create(user.Id, configuration, cacheService);
             var token = TokenHelper.Create(user.Id, [.. user.UserRoleUsers.Select(x => x.Role.Name)], configuration, cacheService);
             var refreshToken = TokenHelper.CreateRefresh(user.Id, configuration, cacheService);
 
@@ -59,7 +57,6 @@ namespace XClone.Application.Services
             var findRefreshToken = cacheService.Get<RefreshToken>(CacheHelper.AuthRefreshTokenKey(model.RefreshToken))
                 ?? throw new NotFoundException(ResponseConstants.AUTH_REFRESH_TOKEN_NOT_FOUND);
 
-            //var token = TokenHelper.Create(findRefreshToken.UserId, configuration, cacheService);
             var user = await uow.userRepository.Get(findRefreshToken.UserId)
                 ?? throw new NotFoundException(ResponseConstants.USER_NOT_EXIST);
 

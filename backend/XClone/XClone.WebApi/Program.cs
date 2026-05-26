@@ -6,38 +6,22 @@ using XClone.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Cargar variables de entorno desde .env (busca desde el directorio actual hacia arriba)
+var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
+if (!File.Exists(envPath))
+{
+    envPath = Path.Combine(Directory.GetCurrentDirectory(), "..", ".env");
+}
+if (File.Exists(envPath))
+{
+    DotNetEnv.Env.Load(envPath);
+}
+
 builder.Services.AddHostedService<TimerNotifyWorker>(); //registro del worker para que se ejecute en segundo plano
 
 builder.Host.UseSerilog();
 
 await builder.Services.AddCore(builder.Configuration);
-
-// Add services to the container.
-
-//builder.Services.AddControllers();
-//builder.Services.AddOpenApi();
-
-
-//services
-//builder.Services.AddScoped<IPostService, PostService>();
-//builder.Services.AddScoped<IUserService, UserService>();
-
-//Cache
-//builder.Services.AddSingleton<Cache<PostDto>>();
-//builder.Services.AddSingleton<Cache<UserDto>>();
-
-//Database
-//builder.Services.AddSqlServer<XcloneContext>(builder.Configuration.GetConnectionString("Database"));
-
-//Database - Repositories
-//builder.Services.AddTransient<IPostRepository, PostRepository>();
-
-//Extensiones
-//builder.Services.AddServices();
-//builder.Services.AddRepositories();
-
-
-//
 
 var app = builder.Build();
 
@@ -60,5 +44,7 @@ app.UseAuthentication(); //va antes de authorization para validar el token antes
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<XClone.WebApi.Hubs.ChatHub>("/hubs/chat");
+app.MapHub<XClone.WebApi.Hubs.NotificationHub>("/hubs/notifications");
 
 app.Run();

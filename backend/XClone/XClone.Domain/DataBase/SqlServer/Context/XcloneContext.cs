@@ -36,6 +36,10 @@ public partial class XcloneContext : DbContext
 
     public virtual DbSet<MenuPermission> MenuPermissions { get; set; }
 
+    public virtual DbSet<Chat> Chats { get; set; }
+
+    public virtual DbSet<MediaFile> MediaFiles { get; set; }
+
     public virtual DbSet<Message> Messages { get; set; }
 
     public virtual DbSet<Permission> Permissions { get; set; }
@@ -282,6 +286,50 @@ public partial class XcloneContext : DbContext
                 .HasConstraintName("FK_MenuPermissions_Permission");
         });
 
+        modelBuilder.Entity<Chat>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Chat__3214EC0776BB5929");
+
+            entity.ToTable("Chat");
+
+            entity.HasIndex(e => new { e.UserLowId, e.UserHighId }, "UQ_Chat").IsUnique();
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.HasOne(d => d.UserLow).WithMany(p => p.ChatsAsUserLow)
+                .HasForeignKey(d => d.UserLowId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_UserLow");
+
+            entity.HasOne(d => d.UserHigh).WithMany(p => p.ChatsAsUserHigh)
+                .HasForeignKey(d => d.UserHighId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Chat_UserHigh");
+        });
+
+        modelBuilder.Entity<MediaFile>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__MediaFil__3214EC07A6F47867");
+
+            entity.ToTable("MediaFile");
+
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Url).HasMaxLength(500);
+            entity.Property(e => e.PublicId).HasMaxLength(200);
+            entity.Property(e => e.Format).HasMaxLength(20);
+            entity.Property(e => e.ResourceType).HasMaxLength(20);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+
+            entity.HasOne(d => d.User).WithMany(p => p.MediaFiles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_MediaFile_User");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.MediaFiles)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK_MediaFile_Post");
+        });
+
         modelBuilder.Entity<Message>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Message__3214EC07A6F47866");
@@ -289,10 +337,13 @@ public partial class XcloneContext : DbContext
             entity.ToTable("Message");
 
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.Texto).HasMaxLength(1000);
 
-            entity.HasOne(d => d.Post).WithMany(p => p.Messages)
-                .HasForeignKey(d => d.PostId)
-                .HasConstraintName("FK_Message_Post");
+            entity.HasOne(d => d.Chat).WithMany(p => p.Messages)
+                .HasForeignKey(d => d.ChatId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_Message_Chat");
 
             entity.HasOne(d => d.Sender).WithMany(p => p.Messages)
                 .HasForeignKey(d => d.SenderId)
@@ -328,6 +379,10 @@ public partial class XcloneContext : DbContext
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.JoinedAt).HasDefaultValueSql("(sysutcdatetime())");
             entity.Property(e => e.UpdatedAt).HasDefaultValueSql("(sysutcdatetime())");
+            entity.Property(e => e.MediaUrl).HasMaxLength(500);
+            entity.Property(e => e.Visibility)
+                .HasMaxLength(20)
+                .HasDefaultValue("Public");
 
             entity.HasOne(d => d.Author).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.AuthorId)
@@ -484,6 +539,8 @@ public partial class XcloneContext : DbContext
             entity.Property(e => e.Password).HasMaxLength(255);
             entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Position).HasMaxLength(100);
+            entity.Property(e => e.ProfilePictureUrl).HasMaxLength(500);
+            entity.Property(e => e.BannerPictureUrl).HasMaxLength(500);
             entity.Property(e => e.UserName).HasMaxLength(50);
 
             entity.HasOne(d => d.City).WithMany(p => p.Users)

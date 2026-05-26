@@ -19,6 +19,10 @@ public partial class User
 
     public string? PhoneNumber { get; set; }
 
+    public string? ProfilePictureUrl { get; set; }
+
+    public string? BannerPictureUrl { get; set; }
+
     public bool IsVerified { get; set; }
 
     public Guid? PinnedPostId { get; set; }
@@ -55,6 +59,8 @@ public partial class User
 
     public virtual ICollection<Like> Likes { get; set; } = new List<Like>();
 
+    public virtual ICollection<MediaFile> MediaFiles { get; set; } = new List<MediaFile>();
+
     public virtual ICollection<Mention> Mentions { get; set; } = new List<Mention>();
 
     public virtual ICollection<Message> Messages { get; set; } = new List<Message>();
@@ -78,4 +84,8 @@ public partial class User
     public virtual ICollection<UserRole> UserRoleAssignedByNavigations { get; set; } = new List<UserRole>();
 
     public virtual ICollection<UserRole> UserRoleUsers { get; set; } = new List<UserRole>();
+
+    public virtual ICollection<Chat> ChatsAsUserLow { get; set; } = new List<Chat>();
+
+    public virtual ICollection<Chat> ChatsAsUserHigh { get; set; } = new List<Chat>();
 }

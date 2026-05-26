@@ -16,35 +16,14 @@ using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
-    //public class UserService(IUserRepository repository, IConfiguration configuration, SMTP smtp) : IUserService
     public class UserService(IUnitOfWork uow, IConfiguration configuration, SMTP smtp, IEmailTemplateService emailTemplateService) : IUserService
     {
 
         //crear un usuario
         public async Task<GenericResponse<UserDto>> Create(CreateUserRequest model, Claim? claim)
         {
-            /*
-            //si es mayor de edad, se puede crear el usuario
-            if (model.Edad < 18)
-            {
-                return ResponseHelper.Create<UserDto>(null, ValidationConstants.INVALID_AGE);
-            }
-
-            cache.Add(user.UserId.ToString(), user);
-            return ResponseHelper.Create(user, "Usuario creado");
-            */
-
-            //throw new Exception("La base de datos, no e pudo conectar con el servicio");
-
             Role? roleToAssign = null;
             User? executor = null;
-
-            //var userExist = await uow.userRepository.GetUserName(model.UserName, model.Email);
-
-            //if (userExist != null)
-            //{
-            //    return ResponseHelper.Create<UserDto>(null!, null, null, ValidationConstants.DUPLICATE);
-            //}
 
             //
             // Normal use
@@ -67,23 +46,15 @@ namespace XClone.Application.Services
                 roleToAssign = await uow.roleRepository.Get(x => x.Name == RoleConstants.User);
             }
 
-            /*Para validar
-             * if (await uow.userRepository.IfExists(model.Email))
-            //{
-            //    throw new BadRequestException(ResponseConstants.USER_EMAIL_TAKED);
-            }
-            */
-
-            //await ValidateEmailIfExists(model.Email); //Validar si el email ya está registrado
-
             if (roleToAssign is null)
             {
                 throw new BadRequestException("Imposible obtener el rol para asignarle al usuario");
             }
 
-            var password = Generate.RandomText(32);
-
-            //var roleToAssign = await ValidateRole(executor, model.RoleId); //Validar que el rol existe y que el executor tiene permisos para asignarlo
+            var defaultProfile = configuration[ConfigurationConstants.DEFAULT_PROFILE_PICTURE_URL]
+                ?? "https://res.cloudinary.com/dm2sj1l7n/image/upload/v1/defaults/profile_default.png";
+            var defaultBanner = configuration[ConfigurationConstants.DEFAULT_BANNER_PICTURE_URL]
+                ?? "https://res.cloudinary.com/dm2sj1l7n/image/upload/v1/defaults/banner_default.png";
 
             var create = await uow.userRepository.Create(new User
             {
@@ -93,8 +64,9 @@ namespace XClone.Application.Services
                 PhoneNumber = model.PhoneNumber,
                 Position = model.Position,
                 Email = model.Email,
-                // encriptar luego la contraseña antes de guardarla en la base de datos
-                Password = Hasher.HashPassword(password),
+                ProfilePictureUrl = model.ProfilePictureUrl ?? defaultProfile,
+                BannerPictureUrl = model.BannerPictureUrl ?? defaultBanner,
+                Password = Hasher.HashPassword(model.Password),
                 UserRoleUsers = [
                     new UserRole {
                         RoleId = roleToAssign.Id,
@@ -102,13 +74,6 @@ namespace XClone.Application.Services
                     }
                 ]
             });
-
-            //await smtp.Send(model.Email, "Registro de usuario - TalentInsights", $"Su contraseña es: {password}");
-            var template = await emailTemplateService.Get(EmailTemplateNameConstants.USER_REGISTER, new Dictionary<string, string>
-            {
-                { "password", password }
-            });
-            await smtp.Send(model.Email, template.Subject, template.Body);
 
             await uow.SaveChangesAsync();
             return ResponseHelper.Create(Map(create));
@@ -119,19 +84,6 @@ namespace XClone.Application.Services
         //borrar
         public async Task<GenericResponse<bool>> Delete(Guid userId)
         {
-            /*cache
-             * 
-            var isDeleted = cache.Get(userId.ToString());
-
-            if (isDeleted is null)
-            {
-                return ResponseHelper.Create(false);
-            }
-            cache.Delete(userId.ToString());
-
-            return ResponseHelper.Create(true, "Usuario eliminado");
-            */
-
             var user = await GetUser(userId);
 
             user.DeletedAt = DateTimeHelper.UtcNow();
@@ -147,32 +99,6 @@ namespace XClone.Application.Services
         public GenericResponse<List<UserDto>> Get(FilterUserRequest model)
         {
             var queryable = uow.userRepository.Queryable();
-
-            //// Solo traer usuarios que NO estén eliminados
-            //queryable = queryable.Where(x => x.IsActive == true);
-
-            //// Filtrado por UserName (ejemplo de búsqueda)
-            //if (!string.IsNullOrWhiteSpace(model.UserName))
-            //{
-            //    queryable = queryable.Where(x => x.UserName.Contains(model.UserName ?? ""));
-            //}
-
-            //if (!string.IsNullOrWhiteSpace(model.DisplayName))
-            //{
-            //    queryable = queryable.Where(x => x.DisplayName.Contains(model.DisplayName ?? ""));
-            //}
-
-            //// Realizar paginación y consulta
-            //var users = queryable.Skip(model.Offset).Take(model.Limit).ToList();
-
-            //// Mapear a DTOs
-            //List<UserDto> mapped = [];
-            //foreach (var user in users)
-            //{
-            //    mapped.Add(Map(user));
-            //}
-
-            //return ResponseHelper.Create(mapped);
 
             var users = queryable
                 .Include(user => user.UserRoleUsers)
@@ -190,12 +116,6 @@ namespace XClone.Application.Services
         //get user por id
         public async Task<GenericResponse<UserDto>> Get(Guid userId)
         {
-            /* cache
-             * 
-            var user = cache.Get(userId.ToString());
-
-            return ResponseHelper.Create(user, "Usuario encontrado");
-            */
             var user = await GetUser(userId);
 
             return ResponseHelper.Create(Map(user));
@@ -204,25 +124,6 @@ namespace XClone.Application.Services
 
         public async Task<GenericResponse<UserDto>> Update(Guid userId, UpdateUserRequest model, Claim claim)
         {
-            /* cache
-             * 
-            var exist = cache.Get(userId.ToString());
-
-            if (exist is null)
-            {
-                return ResponseHelper.Create<UserDto>(null!, ValidationConstants.USER_NOT_FOUND);
-            }
-
-            exist.UserName = model.UserName;
-            exist.DisplayName = model.UserName;
-            exist.Edad = model.Edad;
-            exist.Email = model.Email;
-            exist.PhoneNumber = model.PhoneNumber;
-
-            cache.Update(userId.ToString(), exist);
-
-            return ResponseHelper.Create(exist, "Usuario actualizado");
-            */
             var user = await GetUser(userId);
             var executor = await GetExecutor(claim.Value);
 
@@ -267,21 +168,6 @@ namespace XClone.Application.Services
                 ?? throw new NotFoundException(ResponseConstants.USER_NOT_EXIST); // Asegúrate de tener esta constante
         }
 
-        //obtener por username
-        //private async Task<User> GetUser(string userName)
-        //{
-        //    //var user = repository.Queryable().FirstOrDefault(x => x.UserName == userName);
-        //    //if (user is null)
-        //    //{
-        //    //    throw new NotFoundException(ResponseConstans.USER_NOT_EXIST);
-        //    //}
-        //    //return user;
-
-        //    return await repository.GetUserName(userName)
-        //        ?? throw new NotFoundException(ResponseConstans.USER_NOT_EXIST); // Asegúrate de tener esta constante   
-        //}
-
-
         //map
         private static UserDto Map(User user)
         {
@@ -294,6 +180,8 @@ namespace XClone.Application.Services
                 Email = user.Email,
                 Age = user.Age,
                 PhoneNumber = user.PhoneNumber,
+                ProfilePictureUrl = user.ProfilePictureUrl,
+                BannerPictureUrl = user.BannerPictureUrl,
                 IsVerified = user.IsVerified,
                 PinnedPostId = user.PinnedPostId,
                 TimezoneId = user.TimezoneId,
@@ -313,7 +201,29 @@ namespace XClone.Application.Services
         }
 
 
-        public async Task CreateFristUser()
+        public async Task<GenericResponse<UserDto>> UpdateProfilePicture(UpdatePictureRequest model, Claim claim)
+        {
+            var executor = await GetExecutor(claim.Value);
+            executor.ProfilePictureUrl = model.Url;
+            executor.UpdatedAt = DateTimeHelper.UtcNow();
+
+            await uow.userRepository.Update(executor);
+            await uow.SaveChangesAsync();
+            return ResponseHelper.Create(Map(executor));
+        }
+
+        public async Task<GenericResponse<UserDto>> UpdateBannerPicture(UpdatePictureRequest model, Claim claim)
+        {
+            var executor = await GetExecutor(claim.Value);
+            executor.BannerPictureUrl = model.Url;
+            executor.UpdatedAt = DateTimeHelper.UtcNow();
+
+            await uow.userRepository.Update(executor);
+            await uow.SaveChangesAsync();
+            return ResponseHelper.Create(Map(executor));
+        }
+
+        public async Task CreateFirstUser()
         {
             var hasCreated = await uow.userRepository.HasCreated();
             if (hasCreated) return;
@@ -334,15 +244,6 @@ namespace XClone.Application.Services
             var password = configuration[ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.FIRST_APP_TIME_USER_PASSWORD));
 
-            //var user = new User
-            //{
-            //    UserName = userName,
-            //    Email = email,
-            //    Position = position,
-            //    Password = Hasher.HashPassword(password),
-            //};
-
-            //var adminRole = await uow.userRepository.GetRole(RoleConstants.Admin)
             var adminRole = await uow.roleRepository.Get(x => x.Name == RoleConstants.Admin)
                 ?? throw new Exception(ResponseConstants.RoleNotFound(RoleConstants.Admin));
 
@@ -382,8 +283,6 @@ namespace XClone.Application.Services
         {
             var roleToAssign = await uow.roleRepository.Get(roleId)
                 ?? throw new NotFoundException(ResponseConstants.RoleNotFound(roleId));
-
-            //if (executor.UserRoleUsers.First().Role.Name == RoleConstants.HR && roleToAssign.Name == RoleConstants.Admin)
 
             //si un moderador intenta asignar el rol de admin, se lanza una excepción porque no tiene permisos para asignar ese rol
             if (executor.UserRoleUsers.First().Role.Name == RoleConstants.Moderator && roleToAssign.Name == RoleConstants.Admin)

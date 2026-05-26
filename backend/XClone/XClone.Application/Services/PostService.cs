@@ -11,39 +11,18 @@ using XClone.Shared.Helpers;
 
 namespace XClone.Application.Services
 {
-    //Guardado en cache
-    //public class PostService(Cache<PostDto> cache, XcloneContext xcloneContext) : IPostService
     public class PostService(IPostRepository repository) : IPostService
 
     {
         //Crear post
         public async Task<GenericResponse<PostDto>> Create(CreatePostRequest model)
         {
-
-            /*Guardado cache
-            //var post = new PostDto
-            //{
-            //    PostId = Guid.NewGuid(),
-            //    AutorId = model.AutorId,
-            //    Comunidad = model.Comunidad,
-            //    Texto = model.Texto,
-            //    CreatedAt = DateTimeHelper.UtcNow(),
-            //    JoinedAt = DateTimeHelper.UtcNow()
-            //};
-            //cache.Add(post.PostId.ToString(), post);
-            */
-
             var create = await repository.Create(new Post
             {
-                //PostId = Guid.NewGuid(),
-                //AuthorId = Guid.Parse(model.AutorId),
                 AuthorId = model.AuthorId,
                 CommunityId = model.CommunityId,
                 Texto = model.Texto,
                 IsSensitive = model.IsSensitive
-
-                //CommunityId = post.CommunityId,
-
             });
 
 
@@ -54,20 +33,6 @@ namespace XClone.Application.Services
         //borrar post
         public async Task<GenericResponse<bool>> Delete(Guid postId)
         {
-            /*por cache
-            //var isDeleted = cache.Get(postId.ToString());
-
-            //if (isDeleted is null)
-            //{
-            //    return ResponseHelper.Create(false);
-            //}
-
-            //cache.Delete(postId.ToString());
-
-            //return ResponseHelper.Create(true, "Post eliminado");
-            */
-
-            //var fPost = repository.Get(post) ?? throw new Exception("Post no encontrado");
             var post = await GetPost(postId);
 
             post.DeletedAt = DateTimeHelper.UtcNow();
@@ -81,17 +46,10 @@ namespace XClone.Application.Services
         //public GenericResponse<List<PostDto>> Get(int limit, int offset)
         public GenericResponse<List<PostDto>> Get(FilterPostRequest model)
         {
-            /*por cache
-            //var posts = cache.Get();
-            //return ResponseHelper.Create(posts);
-            */
-
-            // Filtrado de texto
             var queryble = repository.Queryable();
 
             if (!string.IsNullOrWhiteSpace(model.Texto))
             {
-                //queryble = queryble.Where(x => x.Author == model.Author);
                 queryble = queryble.Where(x => x.Texto != null && x.Texto.Contains(model.Texto ?? ""));
 
             }
@@ -112,8 +70,6 @@ namespace XClone.Application.Services
         //obtener un post por id
         public async Task<GenericResponse<PostDto>> Get(Guid postId)
         {
-            //var post = cache.Get(postId.ToString());
-            //return ResponseHelper.Create(post, "Usuario encontrado");
             var post = await GetPost(postId);
 
             return ResponseHelper.Create(Map(post));
@@ -123,22 +79,6 @@ namespace XClone.Application.Services
         //editar un post
         public async Task<GenericResponse<PostDto>> Update(Guid postId, UpdatePostRequest model)
         {
-            /*por cache
-            //var exist = cache.Get(postId.ToString());
-
-            //if (exist is null)
-            //{
-            //    return ResponseHelper.Create<PostDto>(null!, ValidationConstants.POST_NOT_FOUND);
-            //}
-
-            //exist.AutorId = model.AutorId;
-            //exist.Comunidad = model.Comunidad;
-            //exist.Texto = model.Texto;
-
-            //cache.Update(postId.ToString(), exist);
-
-            //return ResponseHelper.Create(exist, "Post actualizado");
-            */
             var post = await GetPost(postId);
 
             post.Texto = model.Texto ?? post.Texto;
@@ -153,7 +93,6 @@ namespace XClone.Application.Services
         private async Task<Post> GetPost(Guid postId)
         {
             return await repository.Get(postId)
-                //?? throw new Exception("Post no encontrado");
                 ?? throw new NotFoundException(ResponseConstants.POST_NOT_EXIST);
         }
 

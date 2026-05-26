@@ -38,5 +38,17 @@
         // Client
         public const string CLIENT_ORIGIN = "ClientOrigin";
 
+        // Redis
+        public const string REDIS_CONNECTION_STRING = "Redis:ConnectionString";
+
+        // Cloudinary
+        public const string CLOUDINARY_CLOUD_NAME = "Cloudinary:CloudName";
+        public const string CLOUDINARY_API_KEY = "Cloudinary:ApiKey";
+        public const string CLOUDINARY_API_SECRET = "Cloudinary:ApiSecret";
+
+        // Default images
+        public const string DEFAULT_PROFILE_PICTURE_URL = "Default:ProfilePictureUrl";
+        public const string DEFAULT_BANNER_PICTURE_URL = "Default:BannerPictureUrl";
+
     }
 }

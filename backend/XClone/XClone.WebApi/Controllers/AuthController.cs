@@ -77,7 +77,7 @@ namespace XClone.WebApi.Controllers
         [ProducesResponseType<GenericResponse<string>>(StatusCodes.Status404NotFound)]
         [ProducesResponseType<GenericResponse<string>>(StatusCodes.Status200OK)]
         [Tags("auth", "users", "register", "complete")]
-        public async Task<GenericResponse<UserDto>> RegisterValidateToken([FromBody] CreateUserRequest model, string token)
+        public async Task<GenericResponse<UserDto>> RegisterComplete([FromBody] CreateUserRequest model, string token)
         {
             var srv = await service.RegisterComplete(model, token);
             return ResponseStatus.Created(HttpContext, srv);

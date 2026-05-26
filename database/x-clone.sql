@@ -44,6 +44,7 @@ CREATE TABLE [User] (
     Age         INT              NOT NULL,
     PhoneNumber NVARCHAR(20)     NULL,
     ProfilePictureUrl NVARCHAR(500) NULL,
+    BannerPictureUrl  NVARCHAR(500) NULL,
     IsVerified  BIT              NOT NULL DEFAULT 0, --FALSE
     --IsPrivate BIT NOT NULL DEFAULT 0, --FALSE deberia ir en otra tabla perfil
     PinnedPostId UNIQUEIDENTIFIER NULL, --deberia ir en otra tabla perfil
@@ -355,66 +356,71 @@ VALUES
     (NEWID(), 'COMMUNITIES/DELETE_ANY', 'COMMUNITIES', 'DELETE_ANY',       'Eliminar cualquier comunidad', 'Permite eliminar comunidades desde administraci�n',             'ByAssignment');
 GO
 
--- ============================================================
---  SEED: Roles globales de XClone
--- ============================================================
-DECLARE @RoleAdmin     UNIQUEIDENTIFIER = NEWID();
-DECLARE @RoleModerator UNIQUEIDENTIFIER = NEWID();
-DECLARE @RoleUser      UNIQUEIDENTIFIER = NEWID();
-
 INSERT INTO Roles (Id, Name, Description)
 VALUES
-    (@RoleAdmin,     'Admin',
-     'Control total de la plataforma. Gestiona usuarios, modera contenido, asigna roles y verifica cuentas.'),
-    (@RoleModerator, 'Moderator',
+    (NEWID(), 'Admin',
+     'Acceso total a la plataforma. Gestiona usuarios, contenido, roles y configuración del sistema.'),
+
+    (NEWID(), 'Moderator',
      'Modera contenido de la plataforma. Puede suspender cuentas, eliminar posts/replies y marcar contenido sensible.'),
-    (@RoleUser,      'User',
-     'Usuario est�ndar. Gestiona su propio perfil, publica contenido y se comunica con otros usuarios.');
+
+    (NEWID(), 'User',
+     'Usuario estándar. Gestiona su propio perfil, publica contenido y se comunica con otros usuarios.');
 GO
 
+-- ============================================================
 -- Admin: todos los permisos
+-- ============================================================
+
 INSERT INTO RolePermissions (RoleId, PermissionId)
 SELECT r.Id, p.Id
-FROM   Roles r
+FROM Roles r
 CROSS JOIN Permissions p
-WHERE  r.Name = 'Admin';
+WHERE r.Name = 'Admin';
 GO
 
--- Moderator: modera contenido y cuentas
+-- ============================================================
+-- Moderator: permisos de moderación
+-- ============================================================
+
 INSERT INTO RolePermissions (RoleId, PermissionId)
 SELECT r.Id, p.Id
-FROM   Roles r
-JOIN   Permissions p ON p.Code IN (
-    'USERS/DISABLE',
-    'USERS/VERIFY',
-    'POSTS/DELETE_ANY',
-    'POSTS/MARK_SENSITIVE',
-    'REPLIES/DELETE_ANY',
-    'MESSAGES/DELETE_ANY',
-    'COMMUNITIES/DELETE_ANY'
-)
-WHERE  r.Name = 'Moderator';
+FROM Roles r
+JOIN Permissions p
+    ON p.Code IN (
+        'USERS/DISABLE',
+        'USERS/VERIFY',
+        'POSTS/DELETE_ANY',
+        'POSTS/MARK_SENSITIVE',
+        'REPLIES/DELETE_ANY',
+        'MESSAGES/DELETE_ANY',
+        'COMMUNITIES/DELETE_ANY'
+    )
+WHERE r.Name = 'Moderator';
 GO
 
--- User: acciones sobre su propio contenido �nicamente
+-- ============================================================
+-- User: permisos básicos
+-- ============================================================
+
 INSERT INTO RolePermissions (RoleId, PermissionId)
 SELECT r.Id, p.Id
-FROM   Roles r
-JOIN   Permissions p ON p.Code IN (
-    'USERS/UPDATE_PERSONAL',
-    'POSTS/CREATE',
-    'POSTS/UPDATE',
-    'POSTS/DELETE',
-    'POSTS/PIN',
-    'REPLIES/CREATE',
-    'REPLIES/DELETE',
-    'MESSAGES/SEND',
-    'MESSAGES/DELETE_OWN',
-    'COMMUNITIES/CREATE'
-)
-WHERE  r.Name = 'User';
+FROM Roles r
+JOIN Permissions p
+    ON p.Code IN (
+        'USERS/UPDATE_PERSONAL',
+        'POSTS/CREATE',
+        'POSTS/UPDATE',
+        'POSTS/DELETE',
+        'POSTS/PIN',
+        'REPLIES/CREATE',
+        'REPLIES/DELETE',
+        'MESSAGES/SEND',
+        'MESSAGES/DELETE_OWN',
+        'COMMUNITIES/CREATE'
+    )
+WHERE r.Name = 'User';
 GO
-
 
 -- ====================================================
 

@@ -12,7 +12,7 @@ namespace XClone.Application.Helpers
             {
                 Data = data,
                 Message = message ?? "Solicitud realizada correctamente",
-                Erros = errors ?? [],
+                Errors = errors ?? [],
                 Count = count ?? 0
 
             };

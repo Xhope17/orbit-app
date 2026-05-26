@@ -24,6 +24,10 @@ namespace XClone.Application.Interfaces.Services
         Task<User> GetExecutor(string value);
 
         //CreateFristUser
-        public Task CreateFristUser();
+        public Task CreateFirstUser();
+
+        Task<GenericResponse<UserDto>> UpdateProfilePicture(UpdatePictureRequest model, Claim claim);
+
+        Task<GenericResponse<UserDto>> UpdateBannerPicture(UpdatePictureRequest model, Claim claim);
     }
 }

@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace XClone.Application.Models.DTOs;
 
-namespace XClone.Application.Models.DTOs
+public class MessageDto
 {
-    internal class MessageDto
-    {
-    }
+    public Guid Id { get; set; }
+    public Guid ChatId { get; set; }
+    public Guid SenderId { get; set; }
+    public string Texto { get; set; } = null!;
+    public DateTime CreatedAt { get; set; }
 }

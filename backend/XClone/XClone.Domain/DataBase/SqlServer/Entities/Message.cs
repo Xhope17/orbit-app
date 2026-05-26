@@ -7,15 +7,15 @@ public partial class Message
 {
     public Guid Id { get; set; }
 
-    public string Texto { get; set; } = null!;
+    public Guid ChatId { get; set; }
 
     public Guid SenderId { get; set; }
 
-    public Guid ReceiverId { get; set; }
+    public string Texto { get; set; } = null!;
 
-    public Guid? PostId { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public virtual Post? Post { get; set; }
+    public virtual Chat Chat { get; set; } = null!;
 
     public virtual User Sender { get; set; } = null!;
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using XClone.Application.Helpers;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.Requets.Post;
@@ -13,6 +14,7 @@ namespace XClone.WebApi.Controllers
 
         //Crear
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Create([FromBody] CreatePostRequest model)
         {
             if (model.AuthorId == Guid.Empty)
@@ -39,34 +41,25 @@ namespace XClone.WebApi.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             var rsp = await postService.Get(id);
-            //valida si el post existe
-            if (rsp is null)
-            {
-                return NotFound(ResponseHelper.Create<string>(null, null, null, ValidationConstants.POST_NOT_FOUND));
-            }
-            //return Ok(ResponseHelper.Create(rsp));
             return Ok(rsp);
         }
 
         //Actualizar falta
         [HttpPut("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Update([FromBody] UpdatePostRequest model, Guid id)
         {
             var rsp = await postService.Update(id, model);
 
-            return Ok(ResponseHelper.Create(rsp, null, null, "Post actualizado"));
+            return Ok(rsp);
         }
 
 
         [HttpDelete("{id:guid}")]
+        [Authorize]
         public async Task<IActionResult> Delete(Guid id)
         {
             var rsp = await postService.Delete(id);
-            if (rsp is null)
-            {
-                return NotFound(ResponseHelper.Create<string>(null, null, null, ValidationConstants.POST_NOT_FOUND));
-            }
-
             return Ok(rsp);
         }
     }

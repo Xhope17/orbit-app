@@ -16,5 +16,13 @@
         public const string JWT_PRIVATE_KEY = "JWT_PRIVATE_KEY";
         public const string JWT_AUDIENCE = "JWT_AUDIENCE";
         public const string JWT_ISSUER = "JWT_ISSUER";
+
+        // Redis
+        public const string REDIS_CONNECTION_STRING = "REDIS_CONNECTION_STRING";
+
+        // Cloudinary
+        public const string CLOUDINARY_CLOUD_NAME = "CLOUDINARY_CLOUD_NAME";
+        public const string CLOUDINARY_API_KEY = "CLOUDINARY_API_KEY";
+        public const string CLOUDINARY_API_SECRET = "CLOUDINARY_API_SECRET";
     }
 }

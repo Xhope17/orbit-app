@@ -19,7 +19,6 @@ namespace XClone.WebApi.Controllers
     {
         //Crear
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         [EndpointSummary("Crear un usuario")]
         [EndpointDescription("Este endpoint permite crear un nuevo usuario en el sistema. Requiere que el solicitante tenga el rol de 'Admin'.")]
         [ProducesResponseType<GenericResponse<UserDto>>(StatusCodes.Status201Created)]
@@ -36,9 +35,8 @@ namespace XClone.WebApi.Controllers
         [EndpointSummary("Obtener todos los usuarios")]
         [EndpointDescription("Este endpoint permite obtener todos los usuarios del sistema. Requiere que el solicitante esté autenticado.")]
         [ProducesResponseType<GenericResponse<List<UserDto>>>(StatusCodes.Status200OK)]
-        public async Task<GenericResponse<List<UserDto>>> GetAll([FromQuery] FilterUserRequest model, [FromHeader] string authorization)
+        public async Task<GenericResponse<List<UserDto>>> GetAll([FromQuery] FilterUserRequest model)
         {
-            //var userId = User.FindFirst("id")?.Value;
             var rsp = userService.Get(model);
 
 
@@ -47,7 +45,6 @@ namespace XClone.WebApi.Controllers
 
         //obtener un post
         [HttpGet("{id:guid}")]
-        [Authorize]
         [EndpointSummary("Obtener un usuario por ID")]
         [EndpointDescription("Obtiene un usuario específico por su ID. Requiere que el solicitante esté autenticado.")]
         [ProducesResponseType<GenericResponse<UserDto>>(StatusCodes.Status200OK)]
@@ -92,6 +89,26 @@ namespace XClone.WebApi.Controllers
         {
             var rsp = await userService.Delete(id);
             return ResponseStatus.Ok(HttpContext, rsp);
+        }
+
+        [HttpPut("profile-picture")]
+        [Authorize]
+        [EndpointSummary("Actualizar foto de perfil")]
+        [EndpointDescription("Permite al usuario autenticado actualizar su foto de perfil.")]
+        [ProducesResponseType<GenericResponse<UserDto>>(StatusCodes.Status200OK)]
+        public async Task<GenericResponse<UserDto>> UpdateProfilePicture([FromBody] UpdatePictureRequest model)
+        {
+            return await userService.UpdateProfilePicture(model, UserClaim());
+        }
+
+        [HttpPut("banner-picture")]
+        [Authorize]
+        [EndpointSummary("Actualizar banner")]
+        [EndpointDescription("Permite al usuario autenticado actualizar su imagen de banner.")]
+        [ProducesResponseType<GenericResponse<UserDto>>(StatusCodes.Status200OK)]
+        public async Task<GenericResponse<UserDto>> UpdateBannerPicture([FromBody] UpdatePictureRequest model)
+        {
+            return await userService.UpdateBannerPicture(model, UserClaim());
         }
 
 

@@ -1,50 +1,39 @@
-﻿using Microsoft.Extensions.Caching.Memory;
+﻿using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using XClone.Application.Interfaces.Services;
 
 namespace XClone.Application.Services
 {
-    public class CacheService(IMemoryCache memoryCache) : ICacheService
+    public class CacheService(IDistributedCache distributedCache) : ICacheService
     {
         public T Create<T>(string key, TimeSpan expiration, T value)
         {
-            try
+            var options = new DistributedCacheEntryOptions
             {
-                var create = memoryCache.GetOrCreate(key, (factory) =>
-                {
-                    factory.SlidingExpiration = expiration;
-                    return value;
-                });
+                AbsoluteExpirationRelativeToNow = expiration
+            };
+            var json = JsonSerializer.Serialize(value);
+            distributedCache.SetString(key, json, options);
+            return value;
+        }
 
-                return create is null ? throw new Exception("No se pudo establecer el cache") : create;
-            }
-            catch
-            {
-                throw;
-            }
+        public T? Get<T>(string key)
+        {
+            var json = distributedCache.GetString(key);
+            if (json is null) return default;
+            return JsonSerializer.Deserialize<T>(json);
         }
 
         public bool Delete(string key)
         {
             try
             {
-                memoryCache.Remove(key);
+                distributedCache.Remove(key);
                 return true;
             }
             catch
             {
                 return false;
-            }
-        }
-
-        public T? Get<T>(string key)
-        {
-            try
-            {
-                return memoryCache.Get<T>(key);
-            }
-            catch
-            {
-                throw;
             }
         }
     }

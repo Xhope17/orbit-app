@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
+using CloudinaryDotNet;
+using StackExchange.Redis;
 using XClone.Application.Helpers;
+using XClone.Infrastructure.Services;
 using XClone.Application.Interfaces.Services;
 using XClone.Application.Models.Services;
 using XClone.Application.Services;
@@ -35,7 +38,16 @@ namespace XClone.WebApi.Extensions
             services.AddScoped<ICacheService, CacheService>();
             services.AddScoped<IEmailTemplateService, EmailTemplateService>();
             services.AddScoped<IAppService, AppService>();
-
+            services.AddScoped<IFollowingService, FollowingService>();
+            services.AddScoped<IBlockService, BlockService>();
+            services.AddScoped<IChatService, ChatService>();
+            services.AddScoped<ICommunityService, CommunityService>();
+            services.AddScoped<ILikeService, LikeService>();
+            services.AddScoped<IReplyService, ReplyService>();
+            services.AddScoped<IRepostService, RepostService>();
+            services.AddScoped<IQuoteService, QuoteService>();
+            services.AddScoped<IHashtagService, HashtagService>();
+            services.AddScoped<IFeedService, FeedService>();
         }
 
         /// <summary>
@@ -50,11 +62,23 @@ namespace XClone.WebApi.Extensions
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IEmailTemplateRepository, EmailTemplateRepository>();
             services.AddScoped<IRoleRepository, RoleRepository>();
+            services.AddScoped<IFollowingRepository, FollowingRepository>();
+            services.AddScoped<IBlockRepository, BlockRepository>();
+            services.AddScoped<IChatRepository, ChatRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<ICommunityRepository, CommunityRepository>();
+            services.AddScoped<ICommunityMemberRepository, CommunityMemberRepository>();
+            services.AddScoped<ILikeRepository, LikeRepository>();
+            services.AddScoped<IReplyRepository, ReplyRepository>();
+            services.AddScoped<IRepostRepository, RepostRepository>();
+            services.AddScoped<IQuoteRepository, QuoteRepository>();
+            services.AddScoped<IHashtagRepository, HashtagRepository>();
+            services.AddScoped<IPostHashtagRepository, PostHashtagRepository>();
+            services.AddScoped<IMediaFileRepository, MediaFileRepository>();
         }
 
         public async static Task AddSMTP(this IServiceCollection services, IConfiguration configuration)
         {
-            //var host = configuration[ConfigurationConstants.SMTP_HOST]
             var host = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_HOST) //entonrno de producción
                 ?? configuration[ConfigurationConstants.SMTP_HOST]//entorno de desarrollo
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_HOST)); //si no se encuentra la configuración, se lanza una excepción
@@ -63,7 +87,6 @@ namespace XClone.WebApi.Extensions
                 ?? configuration[ConfigurationConstants.SMTP_FROM]
                 ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.SMTP_FROM));
 
-            //var port = Convert.ToInt32(configuration[ConfigurationConstants.SMTP_PORT] ?? "587");
             var portValue = Environment.GetEnvironmentVariable(EnvironmentConstants.SMTP_PORT) ??
                 configuration[ConfigurationConstants.SMTP_PORT];
 
@@ -95,7 +118,6 @@ namespace XClone.WebApi.Extensions
                 {
                     var errors = errorContext.ModelState.Values.SelectMany(value => value.Errors.Select(error => error.ErrorMessage).ToList()).ToList();
                     var response = ResponseHelper.Create(
-
                         data: ValidationConstants.VALIDATION_MESSAGE,
                         errors: errors,
                         message: ValidationConstants.VALIDATION_MESSAGE
@@ -118,11 +140,15 @@ namespace XClone.WebApi.Extensions
 
             services.AddMiddlleWares();
 
-            services.AddLogging();
+            services.AddLogging(databaseConnetingString);
 
             services.AddAuth(configuration);
 
-            services.AddCache();
+            services.AddCache(configuration);
+
+            services.AddCloudinary(configuration);
+
+            services.AddSignalR();
 
             await Initialize(services);
 
@@ -142,22 +168,16 @@ namespace XClone.WebApi.Extensions
         /// Método para añadir todo lo relacionado con log
         /// </summary>
         /// <param name="services"></param>
-        public static void AddLogging(this IServiceCollection services)
+        public static void AddLogging(this IServiceCollection services, string databaseConnectionString)
         {
-            // Aquí puedes configurar el logging, por ejemplo, usando Serilog, NLog, etc.
             services.AddSerilog();
 
             Log.Logger = new LoggerConfiguration()
-                //.MinimumLevel.Debug()
-                //.WriteTo.Console()
-                //"/logs/log.txt"
                 .WriteTo.File(Path.Combine(Directory.GetCurrentDirectory(), "logs", "log.txt"), rollingInterval: RollingInterval.Day)
-
                 .WriteTo.Console()
                 .WriteTo
                 .MSSqlServer(
-                //"DataBase=XClone;TrustServerCertificate=True"
-                connectionString: "Server=localhost,1433;User=sa,Password=Admin1234@;Database=XClone;TrustServerCertificate=True;",
+                connectionString: databaseConnectionString,
                 sinkOptions: new MSSqlServerSinkOptions { TableName = "LogEvents" })
                 .CreateLogger();
         }
@@ -173,7 +193,7 @@ namespace XClone.WebApi.Extensions
             var scope = provider.CreateAsyncScope();
 
             var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
-            await userService.CreateFristUser();
+            await userService.CreateFirstUser();
 
             var emailTemplateService = scope.ServiceProvider.GetRequiredService<IEmailTemplateService>();
             await emailTemplateService.Init();
@@ -190,22 +210,6 @@ namespace XClone.WebApi.Extensions
 
             }).AddJwtBearer(builder =>
             {
-                //var issuer = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_ISSUER) //produccion y desarrollo
-                //    ?? configuration[ConfigurationConstants.JWT_ISSUER]
-                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_ISSUER));
-
-                //var audience = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_AUDIENCE) //produccion y desarrollo
-                //    ?? configuration[ConfigurationConstants.JWT_AUDIENCE]
-                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_AUDIENCE));
-
-                //var privateKey = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_PRIVATE_KEY) //produccion y desarrollo
-                //    ?? configuration[ConfigurationConstants.JWT_PRIVATE_KEY]
-                //    ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.JWT_PRIVATE_KEY));
-
-                //var expirationInMutes = Environment.GetEnvironmentVariable(ConfigurationConstants.JWT_EXPIRATION_MIN) //produccion y desarrollo
-                //    ?? configuration[ConfigurationConstants.JWT_EXPIRATION_MIN]
-                //    ?? "10";
-
                 var tokenConfiguration = TokenHelper.Configuration(configuration);
 
                 builder.TokenValidationParameters = new TokenValidationParameters
@@ -234,9 +238,43 @@ namespace XClone.WebApi.Extensions
 
         }
 
-        public static void AddCache(this IServiceCollection services)
+        public static void AddCache(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddMemoryCache();
+            var redisConnectionString = Environment.GetEnvironmentVariable(EnvironmentConstants.REDIS_CONNECTION_STRING)
+                ?? configuration[ConfigurationConstants.REDIS_CONNECTION_STRING];
+
+            if (!string.IsNullOrEmpty(redisConnectionString))
+            {
+                services.AddStackExchangeRedisCache(options =>
+                {
+                    options.Configuration = redisConnectionString;
+                });
+                services.AddSingleton(ConnectionMultiplexer.Connect(redisConnectionString));
+            }
+            else
+            {
+                services.AddDistributedMemoryCache();
+            }
+        }
+
+        public static void AddCloudinary(this IServiceCollection services, IConfiguration configuration)
+        {
+            var cloudName = Environment.GetEnvironmentVariable(EnvironmentConstants.CLOUDINARY_CLOUD_NAME)
+                ?? configuration[ConfigurationConstants.CLOUDINARY_CLOUD_NAME]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.CLOUDINARY_CLOUD_NAME));
+
+            var apiKey = Environment.GetEnvironmentVariable(EnvironmentConstants.CLOUDINARY_API_KEY)
+                ?? configuration[ConfigurationConstants.CLOUDINARY_API_KEY]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.CLOUDINARY_API_KEY));
+
+            var apiSecret = Environment.GetEnvironmentVariable(EnvironmentConstants.CLOUDINARY_API_SECRET)
+                ?? configuration[ConfigurationConstants.CLOUDINARY_API_SECRET]
+                ?? throw new Exception(ResponseConstants.ConfigurationPropertyNotFound(ConfigurationConstants.CLOUDINARY_API_SECRET));
+
+            var account = new Account(cloudName, apiKey, apiSecret);
+            var cloudinary = new Cloudinary(account);
+            services.AddSingleton(cloudinary);
+            services.AddScoped<ICloudinaryService, CloudinaryService>();
         }
     }
 }

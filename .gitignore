@@ -319,3 +319,7 @@ XClone.WebApi/logs/
 
 # Ignorar cualquier carpeta de logs en todo el repositorio
 **/logs/
+
+# Environment variables (sensitive config)
+.env
+**/.env
