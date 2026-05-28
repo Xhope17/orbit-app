@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
-import { AuthService } from '../../../../features/services/auth.service';
+import { AuthService } from '../../../../shared/services/auth.service';
 import { Post, PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
 @Component({
   selector: 'app-profile-layout',

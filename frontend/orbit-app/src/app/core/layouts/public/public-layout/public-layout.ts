@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SidebarLeftComponent } from '../../../../shared/components/sidebar-left-component/sidebar-left-component';
 import { SidebarRightComponent } from '../../../../shared/components/sidebar-right-component/sidebar-right-component';
-import { AuthService } from '../../../../features/services/auth.service';
+import { AuthService } from '../../../../shared/services/auth.service';
 @Component({
   selector: 'app-public-layout',
   // standalone: true, // Agregado standalone por si acaso, ya que usas imports

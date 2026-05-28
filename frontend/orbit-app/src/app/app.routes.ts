@@ -26,6 +26,14 @@ export const routes: Routes = [
           ),
       },
       {
+        path: 'premium',
+        // canActivate: [authGuard], // Opcional, si quieres que solo logueados lo vean
+        loadComponent: () =>
+          import('./features/pages/private/premium-page/premium-page').then(
+            (m) => m.PremiumPage
+          ),
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
@@ -40,8 +48,16 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./core/layouts/private/private-layout/private-layout').then((m) => m.PrivateLayout),
     children: [
-      // Aquí irán bookmarks, el perfil privado para editar, etc.
+      {
+        path: 'premium',
+        // canActivate: [authGuard], // Opcional, si quieres que solo logueados lo vean
+        loadComponent: () =>
+          import('./features/pages/private/premium-page/premium-page').then(
+            (m) => m.PremiumPage
+          ),
+      },
     ],
+
   },
 
   // REDIRECCIONES GLOBALES
