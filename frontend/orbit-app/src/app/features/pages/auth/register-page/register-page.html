@@ -1,0 +1,82 @@
+<form
+  class="flex w-full flex-col items-center gap-4"
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+>
+  <fieldset class="fieldset w-full max-w-sm rounded-box border border-base-300 bg-base-200 p-6">
+    <label class="label font-semibold">Nombre completo</label>
+    <input
+      type="text"
+      class="input input-bordered w-full"
+      placeholder="Ej: John Doe"
+      formControlName="fullName"
+    />
+
+    <label class="label mt-2 font-semibold">Nombre de usuario</label>
+    <div class="flex w-full items-center gap-2">
+      <span class="text-base-content/50 font-bold">@</span>
+      <input
+        type="text"
+        class="input input-bordered w-full"
+        placeholder="Ej: john_doe"
+        formControlName="username"
+      />
+    </div>
+
+    <label class="label mt-2 font-semibold">Email</label>
+    <input
+      type="email"
+      class="input input-bordered w-full"
+      placeholder="Correo electrónico"
+      formControlName="email"
+    />
+
+    <label class="label mt-2 font-semibold">Password</label>
+    <input
+      type="password"
+      class="input input-bordered w-full"
+      placeholder="Crea una contraseña segura"
+      formControlName="password"
+    />
+
+    <button type="submit" class="btn btn-secondary mt-6 w-full text-lg" [disabled]="isPosting()">
+      @if (isPosting()) {
+        <span class="loading loading-spinner"></span>
+      } @else {
+        Crear cuenta
+      }
+    </button>
+  </fieldset>
+
+  <p class="mt-2 text-center text-slate-500">
+    ¿Ya tienes cuenta?
+    <a
+      routerLink="/auth/login"
+      class="font-bold text-secondary transition-colors hover:text-secondary-focus hover:underline"
+    >
+      Inicia sesión aquí
+    </a>
+  </p>
+</form>
+
+@if (hasError()) {
+  <div
+    role="alert"
+    class="alert alert-error fixed bottom-5 right-5 z-50 w-auto max-w-sm shadow-xl border border-error/50"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-6 w-6 shrink-0 stroke-current"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <span>Por favor, verifica los campos ingresados.</span>
+  </div>
+}

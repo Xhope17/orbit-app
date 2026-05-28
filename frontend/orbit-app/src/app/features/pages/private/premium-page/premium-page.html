@@ -1,0 +1,84 @@
+<div class="flex flex-col w-full min-h-screen text-base-content pb-20">
+
+  <div class="sticky top-0 z-10 bg-base-100/80 backdrop-blur-md border-b border-base-300 p-3 flex items-center gap-6">
+    <button routerLink="/home" class="btn btn-ghost btn-circle btn-sm">
+      <i class="fa-solid fa-arrow-left text-lg"></i>
+    </button>
+    <h2 class="text-xl font-extrabold leading-tight">Premium</h2>
+  </div>
+
+  <div class="p-8 text-center border-b border-base-300 flex flex-col items-center">
+    <div class="w-16 h-16 bg-base-content text-base-100 rounded-2xl flex items-center justify-center mb-6 shadow-xl">
+      <i class="fa-solid fa-gem text-3xl"></i>
+    </div>
+    <h1 class="text-3xl font-extrabold mb-3">Mejora tu experiencia</h1>
+    <p class="text-base-content/60 text-sm md:text-base px-4">
+      Desbloquea funciones exclusivas, obtén la marca de verificación y destaca en Orbit.
+    </p>
+  </div>
+
+  <div class="p-6 flex flex-col gap-8">
+
+    <div>
+      <h3 class="text-lg font-bold mb-4">Beneficios incluidos</h3>
+      <ul class="flex flex-col gap-4">
+        @for (feature of features; track feature.text) {
+          <li class="flex items-center gap-4 text-base-content/80">
+            <i [class]="feature.icon + ' text-secondary text-xl w-6 text-center'"></i>
+            <span class="font-medium">{{ feature.text }}</span>
+          </li>
+        }
+      </ul>
+    </div>
+
+    <div class="divider">Elige tu plan</div>
+
+    <div class="flex items-center justify-center gap-3">
+      <span class="font-bold cursor-pointer" [class.text-base-content]="!isAnnual()" [class.text-base-content/50]="isAnnual()" (click)="isAnnual.set(false)">
+        Mensual
+      </span>
+      <input
+        type="checkbox"
+        class="toggle toggle-secondary"
+        [checked]="isAnnual()"
+        (change)="isAnnual.set(!isAnnual())"
+      />
+      <span class="font-bold flex items-center gap-2 cursor-pointer" [class.text-base-content]="isAnnual()" [class.text-base-content/50]="!isAnnual()" (click)="isAnnual.set(true)">
+        Anual
+        <span class="badge badge-secondary badge-sm">Ahorra 12%</span>
+      </span>
+    </div>
+
+    <div class="card bg-base-200 border-2 border-secondary shadow-xl">
+      <div class="card-body p-6 text-center">
+        <h2 class="card-title justify-center text-2xl font-extrabold mb-2">Orbit Premium</h2>
+
+        <div class="flex justify-center items-end gap-1 mb-4">
+          <span class="text-4xl font-black">
+            @if (isAnnual()) {
+              $84.00
+            } @else {
+              $8.00
+            }
+          </span>
+          <span class="text-base-content/50 font-bold mb-1">
+            / {{ isAnnual() ? 'año' : 'mes' }}
+          </span>
+        </div>
+
+        <p class="text-sm text-base-content/60 mb-6">
+          @if (isAnnual()) {
+            Facturado anualmente. Cancela en cualquier momento.
+          } @else {
+            Facturado mensualmente. Cancela en cualquier momento.
+          }
+        </p>
+
+        <button class="btn btn-secondary w-full rounded-full text-lg shadow-lg shadow-secondary/30">
+          Suscribirse
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
