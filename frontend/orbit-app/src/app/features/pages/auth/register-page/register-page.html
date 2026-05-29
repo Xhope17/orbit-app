@@ -1,82 +1,86 @@
-<form
-  class="flex w-full flex-col items-center gap-4"
-  [formGroup]="registerForm"
-  (ngSubmit)="onSubmit()"
->
-  <fieldset class="fieldset w-full max-w-sm rounded-box border border-base-300 bg-base-200 p-6">
-    <label class="label font-semibold">Nombre completo</label>
-    <input
-      type="text"
-      class="input input-bordered w-full"
-      placeholder="Ej: John Doe"
-      formControlName="fullName"
-    />
+<form class="flex flex-col gap-2" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
 
-    <label class="label mt-2 font-semibold">Nombre de usuario</label>
-    <div class="flex w-full items-center gap-2">
-      <span class="text-base-content/50 font-bold">@</span>
-      <input
-        type="text"
-        class="input input-bordered w-full"
-        placeholder="Ej: john_doe"
-        formControlName="username"
-      />
-    </div>
-
-    <label class="label mt-2 font-semibold">Email</label>
+    <label class="label">Correo electrónico</label>
     <input
       type="email"
-      class="input input-bordered w-full"
-      placeholder="Correo electrónico"
+      class="input"
+      [class.input-error]="registerForm.controls.email.invalid && registerForm.controls.email.touched"
+      placeholder="correo@ejemplo.com"
       formControlName="email"
     />
+    @if (registerForm.controls.email.touched && registerForm.controls.email.hasError('required')) {
+      <span class="text-error text-xs mt-1">El correo es obligatorio.</span>
+    }
+    @if (registerForm.controls.email.touched && registerForm.controls.email.hasError('email')) {
+      <span class="text-error text-xs mt-1">Ingresa un formato de correo válido.</span>
+    }
 
-    <label class="label mt-2 font-semibold">Password</label>
+    <label class="label mt-2">Usuario</label>
+    <input
+      type="text"
+      class="input"
+      [class.input-error]="registerForm.controls.username.invalid && registerForm.controls.username.touched"
+      placeholder="johndoe"
+      formControlName="username"
+    />
+    @if (registerForm.controls.username.touched && registerForm.controls.username.hasError('required')) {
+      <span class="text-error text-xs mt-1">El usuario es obligatorio.</span>
+    }
+    @if (registerForm.controls.username.touched && registerForm.controls.username.hasError('minlength')) {
+      <span class="text-error text-xs mt-1">Debe tener al menos 3 caracteres.</span>
+    }
+
+    <label class="label mt-2">Nombre para mostrar</label>
+    <input
+      type="text"
+      class="input"
+      [class.input-error]="registerForm.controls.displayName.invalid && registerForm.controls.displayName.touched"
+      placeholder="John Doe"
+      formControlName="displayName"
+    />
+    @if (registerForm.controls.displayName.touched && registerForm.controls.displayName.hasError('required')) {
+      <span class="text-error text-xs mt-1">Tu nombre es obligatorio.</span>
+    }
+    @if (registerForm.controls.displayName.touched && registerForm.controls.displayName.hasError('minlength')) {
+      <span class="text-error text-xs mt-1">Debe tener al menos 3 caracteres.</span>
+    }
+
+    <label class="label mt-2">Contraseña</label>
     <input
       type="password"
-      class="input input-bordered w-full"
-      placeholder="Crea una contraseña segura"
+      class="input"
+      [class.input-error]="registerForm.controls.password.invalid && registerForm.controls.password.touched"
+      placeholder="Contraseña"
       formControlName="password"
     />
+    @if (registerForm.controls.password.touched && registerForm.controls.password.hasError('required')) {
+      <span class="text-error text-xs mt-1">La contraseña es obligatoria.</span>
+    }
+    @if (registerForm.controls.password.touched && registerForm.controls.password.hasError('minlength')) {
+      <span class="text-error text-xs mt-1">Debe tener al menos 8 caracteres.</span>
+    }
+    @if (registerForm.controls.password.touched && registerForm.controls.password.hasError('pattern')) {
+      <span class="text-error text-xs mt-1">La contraseña debe incluir al menos un número.</span>
+    }
 
-    <button type="submit" class="btn btn-secondary mt-6 w-full text-lg" [disabled]="isPosting()">
+    <button type="submit" class="btn btn-secondary mt-6" [disabled]="isPosting()">
       @if (isPosting()) {
         <span class="loading loading-spinner"></span>
       } @else {
-        Crear cuenta
+        Registrarse
       }
     </button>
+
+    @if (hasError()) {
+      <div class="mt-4 text-center text-error font-bold text-sm bg-error/10 p-2 rounded-lg">
+        {{ errorMessage() }}
+      </div>
+    }
   </fieldset>
 
-  <p class="mt-2 text-center text-slate-500">
+  <p class="text-slate-700 mt-2">
     ¿Ya tienes cuenta?
-    <a
-      routerLink="/auth/login"
-      class="font-bold text-secondary transition-colors hover:text-secondary-focus hover:underline"
-    >
-      Inicia sesión aquí
-    </a>
+    <a routerLink="/auth/login" class="text-secondary hover:underline">Inicia sesión aquí</a>
   </p>
 </form>
-
-@if (hasError()) {
-  <div
-    role="alert"
-    class="alert alert-error fixed bottom-5 right-5 z-50 w-auto max-w-sm shadow-xl border border-error/50"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      class="h-6 w-6 shrink-0 stroke-current"
-      fill="none"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-    <span>Por favor, verifica los campos ingresados.</span>
-  </div>
-}

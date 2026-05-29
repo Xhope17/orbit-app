@@ -38,7 +38,6 @@
     }
   </div>
 
-  <!-- datos temporales de prueba -->
   <div class="px-4 pb-4">
     <h1 class="text-2xl font-extrabold leading-tight">{{ usernameUrl() }}</h1>
     <p class="text-base-content/60 text-sm mb-3">@{{ usernameUrl() }}</p>
@@ -70,15 +69,11 @@
     <a class="flex-1 text-center p-4 hover:bg-base-200 transition-colors cursor-pointer">Media</a>
   </div>
 
-  <!-- <div class="p-8 text-center text-base-content/60">
-    <p class="text-xl font-bold text-base-content mb-2">No posts yet</p>
-    <p>When they post, their posts will show up here.</p>
-  </div> -->
   <div class="flex flex-col">
     @for (item of userPosts(); track item.id) {
       <app-post-card
         [post]="item"
-        [currentUserId]="authService.userId()"
+        [currentUserId]="authService.payload()?.profile_id ?? null"
         (onDelete)="handleDeletePost($event)"
         (onLike)="handleLikePost($event)"
       ></app-post-card>

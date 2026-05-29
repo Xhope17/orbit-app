@@ -1,10 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, delay, of, tap, throwError } from 'rxjs';
-// import { environment } from '../../../environments/environment.development';
+import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+
+// Ajusta la ruta si nombraste el archivo de otra manera (ej. auth.interface.ts)
 import { JwtPayload, LoginRequest, LoginResponse } from '../../features/interfaces/login.interface';
+import { ApiResponse } from '../interfaces/apiResponse.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -27,16 +29,15 @@ export class AuthService {
     return t ? this.decodeToken(t) : null;
   });
 
-  // username = computed(() => this.payload()?.user ?? null);
   username = computed(() => this.payload()?.unique_name ?? null);
   userId = computed(() => this.payload()?.sub ?? null);
 
   login(credentials: LoginRequest) {
     return this.http.post<LoginResponse>(`${this.API}/auth/login`, credentials).pipe(
       tap((res) => {
-        // console.log('Respuesta del login:', res);
-        // const tokenToSave = res.token || res.accessToken;
+        // Extraemos el token accediendo a la propiedad data del Wrapper
         const tokenToSave = res.data?.accessToken;
+
         if (tokenToSave) {
           localStorage.setItem(this.TOKEN_KEY, tokenToSave);
           this._token.set(tokenToSave);
@@ -65,10 +66,11 @@ export class AuthService {
 
     const payload = this.decodeToken(token);
 
-    // Verifica si el token tiene fecha de expiración (exp) y si ya pasó
-    if (payload && (payload as any).exp) {
+    // Verificamos si el token tiene fecha de expiración (exp) y si ya pasó.
+    // Al estar tipado en JwtPayload, ya no necesitamos usar "as any".
+    if (payload && payload.exp) {
       const nowInSeconds = Math.floor(Date.now() / 1000);
-      if ((payload as any).exp < nowInSeconds) {
+      if (payload.exp < nowInSeconds) {
         localStorage.removeItem(this.TOKEN_KEY); // Limpia el token caducado
         return null;
       }
@@ -80,18 +82,28 @@ export class AuthService {
   private decodeToken(token: string): JwtPayload | null {
     try {
       const payload = token.split('.')[1];
-      const decoded = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+      let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+
+      // Clean Code: Agregamos padding para evitar que atob() falle por longitud inválida
+      while (base64.length % 4) {
+        base64 += '=';
+      }
+
+      const decoded = atob(base64);
       return JSON.parse(decoded) as JwtPayload;
     } catch {
       return null;
     }
   }
 
-  register(userData: any) {
-    // cuando la api .NET este lista, borras el of() y descomentas la linea de abajo
-    // return this.http.post(`${this.API}/auth/register`, userData);
-
-    // simula una peticion que tarda 1.5 segundos
-    return of({ success: true }).pipe(delay(1500));
+  register(formData: FormData) {
+    // Al enviar un FormData, Angular establece automáticamente Content-Type: multipart/form-data.
+    // Usamos el wrapper ApiResponse genérico para capturar el isSuccess y message del backend.
+    return this.http.post<ApiResponse<any>>(`${this.API}/auth/register`, formData).pipe(
+      catchError((err) => {
+        console.error('Error al registrar usuario', err);
+        return throwError(() => err);
+      }),
+    );
   }
 }

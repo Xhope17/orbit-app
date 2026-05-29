@@ -1,6 +1,16 @@
+import { ApiResponse } from '../../shared/interfaces/apiResponse.interface';
+import { UserProfile } from './user-profile.interface';
+
 export interface LoginRequest {
   EmailOrUsername: string;
   password: string;
+}
+
+export interface LoginData {
+  accessToken: string;
+  refreshToken: string;
+  expiresAt: string;
+  profile: UserProfile;
 }
 
 // export interface LoginResponse {
@@ -9,20 +19,21 @@ export interface LoginRequest {
 //     token: string;
 // }
 
-export interface LoginResponse {
-  isSuccess: boolean;
-  message: string;
-  data: {
-    accessToken: string;
-    refreshToken: string;
-    expiresAt: string;
-    profile: any; // Si tienes una interfaz para el perfil, úsala aquí
-  };
-}
+export type LoginResponse = ApiResponse<LoginData>;
 
+export interface RegisterRequest {
+  email: string;
+  username: string;
+  displayName: string;
+  password: string;
+  bio?: string;
+}
 export interface JwtPayload {
-  sub: number;
-  // user: string;
-  unique_name: string; // Cambiado de 'user' a 'unique_name' para coincidir con el token real
-  iat: number;
+  sub: string;
+  profile_id: string;
+  unique_name: string;
+  jti: string; // Identificador del token
+  exp: number; // Fecha de expiración sirve para el auto-logout
+  iss: string; // Issuer (OrbitApi)
+  aud: string; // Audience (OrbitClient)
 }

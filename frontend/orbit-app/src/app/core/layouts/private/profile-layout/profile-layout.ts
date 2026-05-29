@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../shared/services/auth.service';
-import { Post, PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
+import { PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
+import { Post } from '../../../../features/interfaces/post.interface';
+
 @Component({
   selector: 'app-profile-layout',
   imports: [RouterLink, RouterLinkActive, PostCardComponent],
@@ -28,27 +30,42 @@ export class ProfileLayout {
     if (modal) modal.showModal();
   }
 
+  // Actualizado para cumplir estrictamente con la nueva interfaz Post de tu API
   userPosts = signal<Post[]>([
     {
-      id: 3,
-      userId: 1,
-      name: 'Usuario Actual',
-      username: this.usernameUrl(),
+      id: 'fc1ddb5c-a4d7-4772-8d68-4cadea7d3412', // GUID temporal
+      author: {
+        profileId: this.authService.payload()?.profile_id || 'mock-profile-id',
+        username: this.usernameUrl(),
+        displayName: 'Usuario Actual',
+        avatarUrl: null
+      },
       content: 'Probando mi nuevo perfil en Orbit. ¡Esto se ve genial!',
-      createdAt: new Date(),
-      likes: 10,
-      comments: 2,
-      reposts: 0,
+      media: [],
+      likeCount: 10,
+      commentCount: 2,
+      isLiked: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     },
   ]);
 
-  handleDeletePost(postId: number) {
+  // Modificado para recibir string (GUID)
+  handleDeletePost(postId: string) {
     this.userPosts.update((posts) => posts.filter((p) => p.id !== postId));
   }
 
-  handleLikePost(postId: number) {
+  // Modificado para recibir string (GUID) y actualizar likeCount / isLiked
+  handleLikePost(postId: string) {
     this.userPosts.update((posts) =>
-      posts.map((p) => (p.id === postId ? { ...p, likes: p.likes + 1 } : p)),
+      posts.map((p) => {
+        if (p.id === postId) {
+          // Lógica temporal para alternar el like (dar o quitar like)
+          const increment = p.isLiked ? -1 : 1;
+          return { ...p, likeCount: p.likeCount + increment, isLiked: !p.isLiked };
+        }
+        return p;
+      }),
     );
   }
 }
