@@ -1,22 +1,32 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
 import { Post } from '../../../../features/interfaces/post.interface';
+import { UserService } from '../../../../features/services/user.service';
+import { UserProfile } from '../../../../features/interfaces/user-profile.interface';
+import { UpperCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile-layout',
-  imports: [RouterLink, RouterLinkActive, PostCardComponent],
+  imports: [RouterLink, RouterLinkActive, PostCardComponent, UpperCasePipe],
   templateUrl: './profile-layout.html',
   styleUrl: './profile-layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileLayout {
+export class ProfileLayout implements OnInit {
   route = inject(ActivatedRoute);
   authService = inject(AuthService);
+  userService = inject(UserService);
+
+  userProfile = signal<UserProfile>(null!);
 
   // Lee el parámetro :username de la URL
   usernameUrl = signal<string>(this.route.snapshot.paramMap.get('username') || '');
+
+  // userProfile = signal<UserProfile>(this.authService.getCurrentUser().subscribe({}));
+
+  userProfile2 = this.authService.getCurrentUser();
 
   // Computed: Es true si el usuario logueado está viendo su propio perfil
   isMyProfile = computed(() => {
@@ -24,13 +34,27 @@ export class ProfileLayout {
     return loggedUser === this.usernameUrl();
   });
 
-  // Método para el Modal (Usa la API nativa de los dialogs de HTML5)
+  ngOnInit() {
+    this.loadUserProfile();
+  }
+
+  loadUserProfile() {
+    this.authService.getCurrentUser().subscribe({
+      next: (data) => {
+        // console.log('Usuario actual:', data);
+        this.userProfile.set(data.data);
+      },
+      error: (err) => {
+        console.error('Error al obtener el usuario actual', err);
+      },
+    });
+  }
+
   openEditModal() {
     const modal = document.getElementById('edit_profile_modal') as HTMLDialogElement;
     if (modal) modal.showModal();
   }
 
-  // Actualizado para cumplir estrictamente con la nueva interfaz Post de tu API
   userPosts = signal<Post[]>([
     {
       id: 'fc1ddb5c-a4d7-4772-8d68-4cadea7d3412', // GUID temporal
@@ -38,7 +62,7 @@ export class ProfileLayout {
         profileId: this.authService.payload()?.profile_id || 'mock-profile-id',
         username: this.usernameUrl(),
         displayName: 'Usuario Actual',
-        avatarUrl: null
+        avatarUrl: null,
       },
       content: 'Probando mi nuevo perfil en Orbit. ¡Esto se ve genial!',
       media: [],
@@ -46,7 +70,7 @@ export class ProfileLayout {
       commentCount: 2,
       isLiked: false,
       createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      updatedAt: new Date().toISOString(),
     },
   ]);
 
