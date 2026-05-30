@@ -11,9 +11,9 @@ export class UserService {
   private http = inject(HttpClient);
   private readonly API = environment.apiUrl;
 
-  getCurrentUser() {
-    return this.http.get(`${this.API}/users/me`);
-  }
+  // getCurrentUser() {
+  //   return this.http.get(`${this.API}/users/me`);
+  // }
 
   getUserByUsername(username: string) {
     return this.http.get<ApiResponse<UserProfile>>(`${this.API}/profiles/${username}`);

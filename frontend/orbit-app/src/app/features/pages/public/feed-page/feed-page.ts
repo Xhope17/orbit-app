@@ -7,6 +7,8 @@ import { UpperCasePipe } from '@angular/common';
 import { DialogService } from '../../../../shared/services/dialog.service';
 import { Subject } from 'rxjs';
 import { CreatePostModal } from '../../../../shared/components/create-post-modal/create-post-modal';
+import { UserService } from '../../../services/user.service';
+import { UserProfile } from '../../../interfaces/user-profile.interface';
 
 @Component({
   selector: 'app-feed-page',
@@ -19,14 +21,25 @@ import { CreatePostModal } from '../../../../shared/components/create-post-modal
 export class FeedPage implements OnInit {
   private postService = inject(PostService);
   public authService = inject(AuthService); // Público para usarlo en el HTML
+  public userService = inject(UserService);
 
   private dialogService = inject(DialogService);
 
   public posts = signal<Post[]>([]);
   public isLoading = signal<boolean>(true);
 
+  userProfile = signal<UserProfile | null>(null);
+
   ngOnInit(): void {
     this.loadTimeline();
+    this.authService.getCurrentUser().subscribe({
+      next: (resp) => {
+        if (resp) {
+          this.userProfile.set(resp.data);
+        }
+      },
+      error: (err) => console.error('Error al cargar perfil', err),
+    });
   }
 
   loadTimeline(): void {
@@ -92,14 +105,14 @@ export class FeedPage implements OnInit {
 
     // Escuchamos cuando el modal nos devuelva el post creado con éxito
     successSubject.subscribe((nuevoPost) => {
-      this.posts.update(currentPosts => [nuevoPost, ...currentPosts]);
+      this.posts.update((currentPosts) => [nuevoPost, ...currentPosts]);
     });
     this.dialogService.open({
       title: 'Nuevo Post',
       component: CreatePostModal,
       btnText: 'Postear',
       onSave: saveSubject,
-      onSuccess: successSubject
+      onSuccess: successSubject,
     });
   }
 }

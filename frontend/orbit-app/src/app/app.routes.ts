@@ -42,23 +42,16 @@ export const routes: Routes = [
   },
 
   // ZONA PRIVADA (Para más adelante)
-  {
-    path: 'app', // Un prefijo para separar la zona privada (puedes cambiarlo)
-    // canActivate: [authGuard],
-    loadComponent: () =>
-      import('./core/layouts/private/private-layout/private-layout').then((m) => m.PrivateLayout),
-    children: [
-      {
-        path: 'premium',
-        // canActivate: [authGuard], // Opcional, si quieres que solo logueados lo vean
-        loadComponent: () =>
-          import('./features/pages/private/premium-page/premium-page').then(
-            (m) => m.PremiumPage
-          ),
-      },
-    ],
+  // {
+  //   path: 'app', // Un prefijo para separar la zona privada (puedes cambiarlo)
+  //   // canActivate: [authGuard],
+  //   loadComponent: () =>
+  //     import('./core/layouts/private/private-layout/private-layout').then((m) => m.PrivateLayout),
+  //   children: [
 
-  },
+  //   ],
+
+  // },
 
   // REDIRECCIONES GLOBALES
   {

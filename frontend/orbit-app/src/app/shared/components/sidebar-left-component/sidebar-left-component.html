@@ -1,4 +1,4 @@
-<div class="flex flex-col h-screen p-4 border-r border-base-300 w-full">
+<div class="flex flex-col h-screen p-4 border-r border-base-300 w-full bg-base-100">
   <div class="mb-6 px-2 lg:px-4">
     <a routerLink="/home" class="flex items-center gap-2 hover:opacity-80 transition-opacity w-fit">
       <img
@@ -7,7 +7,12 @@
         class="w-10 h-10 object-contain lg:w-12 lg:h-12"
         onerror="this.style.display = 'none'"
       />
-      <span class="hidden lg:block text-2xl font-extrabold tracking-tighter">Orbit</span>
+      <!-- <span class="hidden lg:block text-2xl font-extrabold tracking-tighter">Orbit</span> -->
+      <span
+        class="block md:hidden lg:block text-3xl font-black tracking-tighter bg-gradient-to-r from-white to-secondary bg-clip-text text-transparent"
+      >
+        Orbit
+      </span>
     </a>
   </div>
 
@@ -15,11 +20,15 @@
     @for (item of publicMenu; track item.label) {
       <a
         [routerLink]="item.route"
-        routerLinkActive="font-bold text-secondary"
-        class="flex items-center gap-4 p-3 lg:px-4 lg:py-3 rounded-full hover:bg-base-200 transition-colors text-xl cursor-pointer text-base-content w-fit lg:w-full"
+        routerLinkActive="bg-primary/10 text-primary font-black shadow-sm ring-1 ring-primary/20"
+        class="group flex items-center md:justify-center lg:justify-start gap-4 p-3 md:px-0 lg:px-4 lg:py-3.5 rounded-2xl hover:bg-base-200 transition-all duration-300 text-lg font-medium cursor-pointer text-base-content w-fit md:mx-auto lg:mx-0 lg:w-full"
       >
-        <i class="{{ item.icon }}"></i>
-        <span class="hidden lg:block">{{ item.label }}</span>
+        <i
+          class="{{
+            item.icon
+          }} text-2xl group-hover:-translate-y-0.5 transition-transform duration-300"
+        ></i>
+        <span class="block md:hidden lg:block">{{ item.label }}</span>
       </a>
     }
 
@@ -27,64 +36,78 @@
       @for (item of privateMenu(); track item.label) {
         <a
           [routerLink]="item.route"
-          routerLinkActive="font-bold text-secondary"
-          class="flex items-center gap-4 p-3 lg:px-4 lg:py-3 rounded-full hover:bg-base-200 transition-colors text-xl cursor-pointer text-base-content w-fit lg:w-full"
+          routerLinkActive="bg-primary/10 text-primary font-black shadow-sm ring-1 ring-primary/20"
+          class="group flex items-center md:justify-center lg:justify-start gap-4 p-3 md:px-0 lg:px-4 lg:py-3.5 rounded-2xl hover:bg-base-200 transition-all duration-300 text-lg font-medium cursor-pointer text-base-content w-fit md:mx-auto lg:mx-0 lg:w-full"
         >
-          <i class="{{ item.icon }}"></i>
-          <span class="hidden lg:block">{{ item.label }}</span>
+          <i
+            class="{{
+              item.icon
+            }} text-2xl group-hover:-translate-y-0.5 transition-transform duration-300"
+          ></i>
+          <span class="block md:hidden lg:block">{{ item.label }}</span>
         </a>
       }
     }
   </nav>
 
   @if (isAuthenticated()) {
-    <button class="btn btn-secondary rounded-full mt-4 w-full text-lg shadow-lg hidden lg:flex">
-      Post
-    </button>
     <button
-      class="btn btn-secondary btn-circle mt-4 shadow-lg flex lg:hidden items-center justify-center mx-auto text-xl"
+      class="btn btn-primary bg-gradient-to-r from-primary to-secondary border-none rounded-2xl mt-4 w-full text-lg font-bold shadow-lg shadow-primary/30 hover:scale-[1.02] transition-all flex md:hidden lg:flex"
+    >Postear</button>
+    <button
+      class="btn btn-primary bg-gradient-to-r from-primary to-secondary border-none btn-square rounded-2xl mt-4 shadow-lg shadow-primary/30 hidden md:flex lg:hidden items-center justify-center mx-auto text-xl hover:scale-105 transition-transform"
     >
-      ✍️
+      <i class="fa-solid fa-feather-pointed"></i>
     </button>
 
-    <div class="mt-auto pt-4 border-t border-base-300 flex flex-col gap-2">
-
+    <div class="mt-auto pt-4 flex flex-col gap-3 border-t border-base-300">
       <a
         [routerLink]="['/i', username()]"
-        class="hidden lg:flex items-center gap-3 px-2 py-2 mb-2 hover:bg-base-200 cursor-pointer rounded-full transition-colors text-left"
+        class="flex md:hidden lg:flex items-center gap-3 p-2 bg-base-200/50 hover:bg-base-300 hover:shadow-sm cursor-pointer rounded-2xl transition-all text-left group"
       >
-        <div class="avatar placeholder">
-          <div class="bg-neutral text-neutral-content rounded-full w-10">
-            <span class="text-lg font-bold">{{ username()?.charAt(0) | uppercase }}</span>
+        <div class="avatar drop-shadow-sm">
+          <div class="bg-neutral text-neutral-content rounded-xl w-10">
+            @if (userProfile()?.avatarUrl) {
+              <img [src]="userProfile()?.avatarUrl" class="w-full h-full object-cover" />
+            } @else {
+              <img src="/images/default.png" class="w-full h-full object-cover" />
+            }
           </div>
         </div>
         <div class="flex flex-col overflow-hidden">
-          <span class="font-bold text-sm truncate">{{ username() }}</span>
+          <span class="font-bold text-sm truncate group-hover:text-primary transition-colors">{{
+            userProfile()?.displayName || username()
+          }}</span>
           <span class="text-xs text-base-content/60 truncate">{{ '@' + username() }}</span>
         </div>
       </a>
+
       <button
-        (click)="onLogout.emit()"
-        class="btn btn-ghost w-fit lg:w-full lg:justify-start text-error hover:bg-error hover:text-error-content transition-colors px-3 lg:px-4 mx-auto lg:mx-0"
+        (click)="handleLogout()"
+        class="btn btn-ghost rounded-2xl w-fit md:w-full md:justify-center lg:justify-start text-base-content/70 hover:bg-error/10 hover:text-error transition-colors px-3 md:px-0 lg:px-4 mx-auto lg:mx-0"
         title="Cerrar sesión"
       >
-        <span class="text-xl">🚪</span>
-        <span class="hidden lg:block">Cerrar sesión</span>
+        <span class="text-xl"><i class="fa-solid fa-arrow-right-from-bracket"></i></span>
+        <span class="block md:hidden lg:block font-medium">Cerrar sesión</span>
       </button>
     </div>
   } @else {
     <div class="mt-auto pt-4 border-t border-base-300">
-      <p class="hidden lg:block text-xs text-base-content/60 px-4 mb-4 text-center">
-        Únete a Orbit para compartir tus ideas.
+      <p
+        class="block md:hidden lg:block text-xs font-medium text-base-content/60 px-4 mb-4 text-center"
+      >
+        El universo digital te espera.
       </p>
 
       <button
         routerLink="/auth/login"
-        class="btn btn-outline btn-secondary rounded-full w-fit lg:w-full lg:justify-center mx-auto flex"
+        class="btn btn-primary btn-outline rounded-2xl w-fit md:w-full lg:w-full md:justify-center lg:justify-center mx-auto flex hover:scale-[1.02] transition-transform"
         title="Iniciar sesión"
       >
-        <span class="text-xl lg:hidden">🔑</span>
-        <span class="hidden lg:block">Iniciar sesión</span>
+        <span class="text-xl md:block lg:hidden"
+          ><i class="fa-solid fa-arrow-right-to-bracket"></i
+        ></span>
+        <span class="block md:hidden lg:block font-bold">Iniciar sesión</span>
       </button>
     </div>
   }
