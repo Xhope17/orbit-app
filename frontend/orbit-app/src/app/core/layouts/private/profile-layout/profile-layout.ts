@@ -6,7 +6,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ActivatedRoute, RouterLinkActive, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLinkActive, RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
 import { Post } from '../../../../features/interfaces/post.interface';
@@ -25,48 +25,62 @@ import { Subject } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProfileLayout implements OnInit {
-  route = inject(ActivatedRoute);
-  authService = inject(AuthService);
-  userService = inject(UserService);
-
-  currentProfile = signal<UserProfile>(null!);
-
-  usernameUrl = signal<string>(this.route.snapshot.paramMap.get('username') || '');
-
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  public authService = inject(AuthService);
+  private userService = inject(UserService);
   private dialogService = inject(DialogService);
-  // Computed: Es true si el usuario logueado está viendo su propio perfil
+
+  currentProfile = signal<UserProfile | null>(null);
+
+  usernameUrl = signal<string>('');
+
+  // si el usuario logueado esta viendo su propio perfil es true, sino false
   isMyProfile = computed(() => {
     const loggedUser = this.authService.username();
-    return loggedUser === this.usernameUrl();
+    const visitingUser = this.usernameUrl();
+    return (
+      !!loggedUser && !!visitingUser && loggedUser.toLowerCase() === visitingUser.toLowerCase()
+    );
   });
 
   ngOnInit() {
-    this.loadUserProfile();
+    this.route.paramMap.subscribe((params) => {
+      const username = params.get('username');
+      if (username) {
+        this.usernameUrl.set(username);
+        this.loadUserProfile(username);
+      }
+    });
   }
 
-  loadUserProfile() {
-    this.authService.getCurrentUser().subscribe({
-      next: (data) => {
-        this.currentProfile.set(data.data);
+  loadUserProfile(username: string) {
+    this.userService.getUserByUsername(username).subscribe({
+      next: (resp) => {
+        if (resp.isSuccess && resp.data) {
+          this.currentProfile.set(resp.data);
+        }
       },
       error: (err) => {
-        console.error('Error al obtener el usuario actual', err);
+        console.error('Error al obtener el usuario actual', username, err);
+        this.router.navigate(['/home']);
       },
     });
   }
 
   openEditModal() {
+    if (!this.isMyProfile()) return;
+
     const saveSubject = new Subject<void>();
     const successSubject = new Subject<boolean>();
 
     successSubject.subscribe(() => {
-      this.loadUserProfile();
+      this.loadUserProfile(this.usernameUrl());
     });
 
     this.dialogService.open({
       title: 'Edit profile',
       component: EditProfileModal,
-      // AQUÍ LE PASAMOS LOS DATOS AL INPUT() DEL MODAL
       componentInputs: {
         currentUser: this.currentProfile(),
       },

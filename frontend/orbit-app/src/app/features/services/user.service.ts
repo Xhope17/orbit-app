@@ -16,7 +16,7 @@ export class UserService {
   }
 
   getUserByUsername(username: string) {
-    return this.http.get(`${this.API}/profiles/${username}`);
+    return this.http.get<ApiResponse<UserProfile>>(`${this.API}/profiles/${username}`);
   }
 
   getUserPosts(username: string, page: number = 1, pageSize: number = 20) {
