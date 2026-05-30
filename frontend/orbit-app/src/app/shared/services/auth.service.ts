@@ -18,6 +18,7 @@ export class AuthService {
 
   private readonly API = environment.apiUrl;
   private readonly TOKEN_KEY = environment.tokenKey;
+  private readonly REFRESH_TOKEN_KEY = environment.refreshTokenKey;
 
   private _token = signal<string | null>(this.getValidToken());
 
@@ -33,16 +34,18 @@ export class AuthService {
   username = computed(() => this.payload()?.unique_name ?? null);
   userId = computed(() => this.payload()?.sub ?? null);
 
-
   login(credentials: LoginRequest) {
     return this.http.post<LoginResponse>(`${this.API}/auth/login`, credentials).pipe(
       tap((res) => {
-        // Extraemos el token accediendo a la propiedad data del Wrapper
         const tokenToSave = res.data?.accessToken;
+        const refreshTokenToSave = res.data?.refreshToken;
 
         if (tokenToSave) {
           localStorage.setItem(this.TOKEN_KEY, tokenToSave);
           this._token.set(tokenToSave);
+        }
+        if (refreshTokenToSave) {
+          localStorage.setItem(this.REFRESH_TOKEN_KEY, refreshTokenToSave);
         }
       }),
       catchError((err) => {
@@ -54,12 +57,35 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem(this.REFRESH_TOKEN_KEY);
+
     this._token.set(null);
     this.router.navigate(['/auth/login']);
   }
 
   getToken(): string | null {
     return this._token();
+  }
+
+  getRefreshToken(): string | null {
+    return localStorage.getItem(this.REFRESH_TOKEN_KEY);
+  }
+
+  refreshToken(accessToken: string, refreshToken: string) {
+    return this.http
+      .post<LoginResponse>(`${this.API}/auth/refresh`, {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+      })
+      .pipe(
+        tap((res) => {
+          if (res.isSuccess && res.data) {
+            localStorage.setItem(this.TOKEN_KEY, res.data.accessToken);
+            localStorage.setItem(this.REFRESH_TOKEN_KEY, res.data.refreshToken);
+            this._token.set(res.data.accessToken);
+          }
+        }),
+      );
   }
 
   private getValidToken(): string | null {
@@ -73,8 +99,11 @@ export class AuthService {
     if (payload && payload.exp) {
       const nowInSeconds = Math.floor(Date.now() / 1000);
       if (payload.exp < nowInSeconds) {
-        localStorage.removeItem(this.TOKEN_KEY); // Limpia el token caducado
-        return null;
+        const hasRefreshToken = !!localStorage.getItem(this.REFRESH_TOKEN_KEY);
+        if (!hasRefreshToken) {
+          localStorage.removeItem(this.TOKEN_KEY);
+          return null;
+        }
       }
     }
 
@@ -86,7 +115,6 @@ export class AuthService {
       const payload = token.split('.')[1];
       let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
 
-      // Clean Code: Agregamos padding para evitar que atob() falle por longitud inválida
       while (base64.length % 4) {
         base64 += '=';
       }
@@ -99,8 +127,6 @@ export class AuthService {
   }
 
   register(formData: FormData) {
-    // Al enviar un FormData, Angular establece automáticamente Content-Type: multipart/form-data.
-    // Usamos el wrapper ApiResponse genérico para capturar el isSuccess y message del backend.
     return this.http.post<ApiResponse<any>>(`${this.API}/auth/register`, formData).pipe(
       catchError((err) => {
         console.error('Error al registrar usuario', err);
