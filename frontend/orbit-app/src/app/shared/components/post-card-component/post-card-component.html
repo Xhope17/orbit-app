@@ -1,10 +1,10 @@
 <article
-  [routerLink]="['/post', post().id]"
+  [routerLink]="['/i/post', post().id]"
   class="bg-base-100 rounded-[2rem] p-5 mb-4 shadow-sm ring-1 ring-base-content/5 hover:shadow-md hover:ring-primary/20 transition-all duration-300 cursor-pointer"
 >
   <header class="flex justify-between items-start mb-3">
     <a
-      [routerLink]="['/i', post().author.username]"
+      [routerLink]="['/', post().author.username]"
       class="flex items-center gap-3 group"
       (click)="$event.stopPropagation()"
     >
@@ -95,7 +95,7 @@
   <footer class="flex items-center justify-between pt-1">
     <div class="flex gap-2 sm:gap-3">
       <button
-        [routerLink]="['/post', post().id]"
+        [routerLink]="['/i/post', post().id]"
         (click)="$event.stopPropagation()"
         class="btn btn-sm h-9 px-3 btn-ghost rounded-full bg-base-200/50 hover:bg-info/10 hover:text-info border-none transition-all font-medium text-base-content/60"
       >

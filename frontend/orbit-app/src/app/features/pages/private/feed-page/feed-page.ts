@@ -20,7 +20,7 @@ import { UserProfile } from '../../../interfaces/user-profile.interface';
 })
 export class FeedPage implements OnInit {
   private postService = inject(PostService);
-  public authService = inject(AuthService); // Público para usarlo en el HTML
+  public authService = inject(AuthService);
   public userService = inject(UserService);
 
   private dialogService = inject(DialogService);
@@ -46,7 +46,6 @@ export class FeedPage implements OnInit {
     this.postService.getTimeline().subscribe({
       next: (res) => {
         if (res.isSuccess && res.data) {
-          // Extraemos directamente los items con total seguridad
           this.posts.set(res.data.items);
         } else {
           this.posts.set([]);
@@ -64,7 +63,6 @@ export class FeedPage implements OnInit {
   handleDeletePost(postId: string): void {
     this.postService.deletePost(postId).subscribe({
       next: () => {
-        // Si el backend lo borró con éxito, lo sacamos del Signal para actualizar la UI al instante
         this.posts.update((currentPosts) => currentPosts.filter((p) => p.id !== postId));
       },
       error: (err) => console.error('Error al eliminar', err),
@@ -86,7 +84,6 @@ export class FeedPage implements OnInit {
     }
   }
 
-  // Método auxiliar para actualizar la tarjeta sin recargar todo el feed
   private toggleLikeUI(postId: string): void {
     this.posts.update((currentPosts) =>
       currentPosts.map((p) => {
@@ -103,7 +100,6 @@ export class FeedPage implements OnInit {
     const saveSubject = new Subject<void>();
     const successSubject = new Subject<Post>();
 
-    // Escuchamos cuando el modal nos devuelva el post creado con éxito
     successSubject.subscribe((nuevoPost) => {
       this.posts.update((currentPosts) => [nuevoPost, ...currentPosts]);
     });

@@ -1,67 +1,94 @@
+import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
+import { AuthService } from './shared/services/auth.service';
+import { authGuard } from './core/guards/auth.guard';
+import { publicGuard } from './core/guards/public.guard';
 
 export const routes: Routes = [
+  // === ROOT: redirige según auth ===
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: () => {
+      const authService = inject(AuthService);
+      return authService.isAuthenticated() ? '/home' : '/public';
+    },
+  },
+
+  // PUBLIC
+  {
+    path: 'public',
+    canActivate: [publicGuard],
+    loadComponent: () =>
+      import('./core/layouts/public/public-layout/public-layout').then((m) => m.PublicLayout),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/pages/public/landing-page/landing-page').then((m) => m.LandingPage),
+      },
+      {
+        path: 'about-us',
+        loadComponent: () =>
+          import('./features/pages/public/about-us-page/about-us-page').then((m) => m.AboutUsPage),
+      },
+      {
+        path: 'contact-us',
+        loadComponent: () =>
+          import('./features/pages/public/contact-us-page/contact-us-page').then(
+            (m) => m.ContactUsPage,
+          ),
+      },
+    ],
+  },
+
+  // AUTH
   {
     path: 'auth',
     loadChildren: () => import('./features/pages/auth/auth.routes'),
   },
 
-  // ZONA PÚBLICA (Por defecto)
+  // PRIVATE
   {
     path: '',
     loadComponent: () =>
-      import('./core/layouts/public/public-layout/public-layout').then((m) => m.PublicLayout),
+      import('./core/layouts/private/main-layout/main-layout').then((m) => m.MainLayout),
+    canActivate: [authGuard],
     children: [
+      {
+        path: '',
+        redirectTo: 'home',
+        pathMatch: 'full',
+      },
       {
         path: 'home',
         loadComponent: () =>
-          import('./features/pages/public/home-page/home-page').then((m) => m.HomePage),
+          import('./features/pages/private/feed-page/feed-page').then((m) => m.FeedPage),
       },
       {
-        path: 'i/:username',
-        // canActivate: [authGuard],
+        path: ':username',
         loadComponent: () =>
           import('./core/layouts/private/profile-layout/profile-layout').then(
             (m) => m.ProfileLayout,
           ),
       },
       {
-        path: 'premium',
-        // canActivate: [authGuard], // Opcional, si quieres que solo logueados lo vean
+        path: 'i/premium',
         loadComponent: () =>
           import('./features/pages/private/premium-page/premium-page').then((m) => m.PremiumPage),
       },
-      // Dentro de tus rutas...
       {
-        path: 'post/:id', // La ruta será tusitio.com/post/11eb80cc-...
+        path: 'i/post/:id',
         loadComponent: () =>
           import('./features/pages/private/post-detail-page/post-detail-page').then(
             (m) => m.PostDetailPage,
           ),
       },
-      {
-        path: '',
-        redirectTo: 'home',
-        pathMatch: 'full',
-      },
     ],
   },
 
-  // ZONA PRIVADA (Para más adelante)
-  // {
-  //   path: 'app', // Un prefijo para separar la zona privada (puedes cambiarlo)
-  //   // canActivate: [authGuard],
-  //   loadComponent: () =>
-  //     import('./core/layouts/private/private-layout/private-layout').then((m) => m.PrivateLayout),
-  //   children: [
-
-  //   ],
-
-  // },
-
-  // REDIRECCIONES GLOBALES
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: '',
   },
 ];

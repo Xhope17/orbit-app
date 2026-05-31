@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../../shared/services/auth.service';
+import { forbiddenUsernameValidator } from '../../../../shared/validators/username.validators';
 
 @Component({
   selector: 'app-register-page',
@@ -21,7 +22,13 @@ export class RegisterPage {
 
   public registerForm = this._fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    username: ['', [Validators.required, Validators.minLength(3)]],
+    username: ['', [
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(20),
+      Validators.pattern(/^[a-z0-9._]+$/),
+      forbiddenUsernameValidator(),
+    ]],
     displayName: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [
       Validators.required,

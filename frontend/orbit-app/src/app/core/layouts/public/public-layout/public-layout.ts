@@ -1,20 +1,13 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SidebarLeftComponent } from '../../../../shared/components/sidebar-left-component/sidebar-left-component';
-import { SidebarRightComponent } from '../../../../shared/components/sidebar-right-component/sidebar-right-component';
-import { AuthService } from '../../../../shared/services/auth.service';
+import { PublicNavbarComponent } from '../components/public-navbar-component/public-navbar-component';
+import { PublicFooterComponent } from '../components/public-footer-component/public-footer-component';
+
 @Component({
   selector: 'app-public-layout',
-  // standalone: true, // Agregado standalone por si acaso, ya que usas imports
-  imports: [RouterOutlet, SidebarLeftComponent, SidebarRightComponent],
+  imports: [RouterOutlet, PublicNavbarComponent, PublicFooterComponent],
   templateUrl: './public-layout.html',
   styleUrl: './public-layout.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PublicLayout {
-  authService = inject(AuthService);
-
-  handleLogout() {
-    this.authService.logout();
-  }
-}
+export class PublicLayout {}

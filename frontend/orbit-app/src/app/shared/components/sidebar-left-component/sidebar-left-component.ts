@@ -38,8 +38,8 @@ export class SidebarLeftComponent implements OnInit {
 
   public privateMenu = computed(() => [
     { icon: 'fa-regular fa-bookmark', label: 'Guardados (falta)', route: '/bookmarks' },
-    { icon: 'fa-regular fa-gem', label: 'Premium (falta)', route: '/premium' },
-    { icon: 'fa-regular fa-user', label: 'Perfil', route: `/i/${this.username()}` },
+    { icon: 'fa-regular fa-gem', label: 'Premium (falta)', route: '/i/premium' },
+    { icon: 'fa-regular fa-user', label: 'Perfil', route: `/${this.username()}` },
   ]);
 
   ngOnInit() {

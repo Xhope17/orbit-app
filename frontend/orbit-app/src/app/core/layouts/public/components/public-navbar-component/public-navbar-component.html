@@ -1,0 +1,23 @@
+<nav class="navbar bg-base-100 border-b border-base-300 px-4 md:px-8">
+  <div class="flex-1">
+    <a routerLink="/" class="flex items-center gap-2">
+      <img src="/images/orbit_logo.png" alt="Orbit" class="w-8 h-8"
+        onerror="this.style.display='none'" />
+      <span class="text-xl font-black tracking-tighter bg-gradient-to-r from-teal-400 to-cyan-500 bg-clip-text text-transparent">
+        Orbit
+      </span>
+    </a>
+  </div>
+
+  <div class="flex items-center gap-4">
+    <a routerLink="/public/about-us" class="link link-hover text-sm font-medium text-base-content/70 hover:text-base-content transition-colors">
+      About
+    </a>
+    <a routerLink="/public/contact-us" class="link link-hover text-sm font-medium text-base-content/70 hover:text-base-content transition-colors">
+      Contact
+    </a>
+    <a routerLink="/auth/login" class="btn btn-sm bg-teal-600 hover:bg-teal-500 text-white border-none rounded-full px-5 shadow-md shadow-teal-900/20">
+      Ingresar
+    </a>
+  </div>
+</nav>
