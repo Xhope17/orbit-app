@@ -73,6 +73,20 @@ export const routes: Routes = [
           ),
       },
       {
+        path: ':username/followers',
+        loadComponent: () =>
+          import('./features/pages/private/follow/followers-page/followers-page').then(
+            (m) => m.FollowersPage,
+          ),
+      },
+      {
+        path: ':username/following',
+        loadComponent: () =>
+          import('./features/pages/private/follow/following-page/following-page').then(
+            (m) => m.FollowingPage,
+          ),
+      },
+      {
         path: 'i/premium',
         loadComponent: () =>
           import('./features/pages/private/premium-page/premium-page').then((m) => m.PremiumPage),

@@ -17,6 +17,7 @@ import { ProfileHeader } from '../components/profile-header-component/profile-he
 import { ProfileTabs } from '../components/profile-tabs-component/profile-tabs-component';
 import { UserPostsList } from '../components/user-posts-list-component/user-posts-list-component';
 import { Subject } from 'rxjs';
+import { FollowService } from '../../../../services/follow.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -31,6 +32,10 @@ export class ProfilePage implements OnInit {
   public authService = inject(AuthService);
   private userService = inject(UserService);
   private dialogService = inject(DialogService);
+  private followService = inject(FollowService);
+
+  //follows
+  public isTogglingFollow = signal<boolean>(false);
 
   currentProfile = signal<UserProfile | null>(null);
 
@@ -88,5 +93,48 @@ export class ProfilePage implements OnInit {
       onSave: saveSubject,
       onSuccess: successSubject,
     });
+  }
+
+  handleToggleFollow() {
+    const profile = this.currentProfile();
+    if (!profile) return;
+
+    this.isTogglingFollow.set(true); // Encendemos el spinner
+
+    if (profile.isFollowing) {
+      // Dejar de seguir (DELETE)
+      this.followService.unfollowUser(profile.username).subscribe({
+        next: () => {
+          // Actualizamos la señal: isFollowing = false, y restamos 1 seguidor
+          this.currentProfile.update(p => p ? {
+            ...p,
+            isFollowing: false,
+            followersCount: p.followersCount > 0 ? p.followersCount - 1 : 0
+          } : null);
+          this.isTogglingFollow.set(false);
+        },
+        error: (err) => {
+          console.error('Error al dejar de seguir', err);
+          this.isTogglingFollow.set(false);
+        }
+      });
+    } else {
+      // Seguir (POST)
+      this.followService.followUser(profile.username).subscribe({
+        next: () => {
+          // Actualizamos la señal: isFollowing = true, y sumamos 1 seguidor
+          this.currentProfile.update(p => p ? {
+            ...p,
+            isFollowing: true,
+            followersCount: p.followersCount + 1
+          } : null);
+          this.isTogglingFollow.set(false);
+        },
+        error: (err) => {
+          console.error('Error al seguir', err);
+          this.isTogglingFollow.set(false);
+        }
+      });
+    }
   }
 }

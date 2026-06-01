@@ -28,7 +28,7 @@
   </div>
 </div>
 
-<div class="flex justify-end p-4 h-20">
+<!-- <div class="flex justify-end p-4 h-20">
   @if (isMyProfile()) {
     <button
       (click)="editProfile.emit()"
@@ -38,6 +38,39 @@
     </button>
   } @else {
     <button class="btn btn-neutral btn-sm rounded-full font-bold">Follow</button>
+  }
+</div> -->
+
+<div class="flex justify-end p-4 h-20">
+  @if (isMyProfile()) {
+    <button
+      (click)="editProfile.emit()"
+      class="btn btn-outline btn-sm rounded-full font-bold transition-all hover:bg-base-200"
+    >
+      Edit profile
+    </button>
+  } @else {
+    <button
+      (click)="toggleFollow.emit()"
+      [disabled]="isTogglingFollow()"
+      class="btn btn-sm rounded-full font-bold w-32 transition-all duration-300"
+      [class]="
+        currentProfile()?.isFollowing
+          ? 'btn-outline hover:btn-error hover:bg-error hover:text-white hover:border-error group'
+          : 'btn-neutral'
+      "
+    >
+      @if (isTogglingFollow()) {
+        <span class="loading loading-spinner loading-xs"></span>
+      } @else {
+        @if (currentProfile()?.isFollowing) {
+          <span class="group-hover:hidden">Following</span>
+          <span class="hidden group-hover:inline">Unfollow</span>
+        } @else {
+          <span>Follow</span>
+        }
+      }
+    </button>
   }
 </div>
 
@@ -53,12 +86,12 @@
     >
   </div>
 
-  <div class="flex gap-4 text-sm">
-    <a href="#" class="hover:underline">
+  <div class="flex gap-4 text-sm mt-4">
+    <a [routerLink]="['/', usernameUrl(), 'following']" class="hover:underline cursor-pointer">
       <strong>{{ currentProfile()?.followingCount || 0 }}</strong>
       <span class="text-base-content/60"> Following </span>
     </a>
-    <a href="#" class="hover:underline">
+    <a [routerLink]="['/', usernameUrl(), 'followers']" class="hover:underline cursor-pointer">
       <strong>{{ currentProfile()?.followersCount || 0 }}</strong>
       <span class="text-base-content/60"> Followers </span>
     </a>

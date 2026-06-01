@@ -11,11 +11,13 @@
     </div>
   </div>
 
-  <app-profile-header
+ <app-profile-header
     [currentProfile]="currentProfile()"
     [usernameUrl]="usernameUrl()"
     [isMyProfile]="isMyProfile()"
+    [isTogglingFollow]="isTogglingFollow()"
     (editProfile)="openEditModal()"
+    (toggleFollow)="handleToggleFollow()"
   />
 
   <app-profile-tabs />
