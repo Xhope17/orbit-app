@@ -1,10 +1,26 @@
 <section class="hero min-h-[calc(100vh-8rem)] bg-base-100">
   <div class="hero-content flex-col lg:flex-row-reverse gap-12 max-w-5xl px-6">
     <div class="flex-shrink-0">
-      <img src="/images/orbit_logo.png" alt="Orbit"
-        class="w-48 h-48 lg:w-64 lg:h-64 object-contain drop-shadow-xl"
-        onerror="this.style.display='none'" />
+      <div
+        class="flex-1 flex justify-center lg:justify-end w-full max-w-xs sm:max-w-md lg:max-w-lg z-10 relative"
+      >
+        <div
+          class="absolute inset-0 bg-teal-500/20 blur-[100px] rounded-full pointer-events-none"
+        ></div>
+
+        <div
+          class="text-[15rem] sm:text-[20rem] text-teal-500/80 drop-shadow-[0_0_30px_rgba(20,184,166,0.4)] animate-[spin_200s_linear_infinite] hover:text-cyan-400 transition-colors duration-500"
+        >
+          <!-- <i class="fa-solid fa-atom"></i> -->
+          <img
+            src="/images/orbit_logo_v2_white.svg"
+            alt="logo"
+            class="flex-1 flex justify-center lg:justify-end w-full max-w-xs sm:max-w-md lg:max-w-lg z-10 relative"
+          />
+        </div>
+      </div>
     </div>
+
 
     <div class="max-w-lg text-center lg:text-left">
       <h1 class="text-5xl lg:text-6xl font-black tracking-tighter mb-4">
@@ -13,20 +29,25 @@
         </span>
       </h1>
 
+      <h2 class="text-2xl sm:text-3xl font-bold text-base-content mb-4 tracking-tight">
+        Tu espacio en el universo tecnológico.
+      </h2>
       <p class="text-lg lg:text-xl text-base-content/70 leading-relaxed mb-8">
-        Connect with developers, share ideas, and build your network.
-        Real conversations, real people, real code.
+        Descubre ideas, comparte conocimientos y conecta con creadores de todo el mundo. Orbit es la
+        red donde la innovación, el código y la comunidad convergen.
       </p>
 
-      <a routerLink="/auth/login"
-        class="btn bg-teal-600 hover:bg-teal-500 text-white border-none rounded-full px-10 py-3 text-lg font-bold shadow-lg shadow-teal-900/30 hover:scale-105 transition-transform">
-        Get started
+      <a
+        routerLink="/auth/login"
+        class="btn bg-teal-600 hover:bg-teal-500 text-white border-none rounded-full px-10 py-3 text-lg font-bold shadow-lg shadow-teal-900/30 hover:scale-105 transition-transform"
+      >
+        Comenzar ahora
       </a>
 
       <p class="mt-4 text-sm text-base-content/50">
-        Don't have an account?
+        ¿Aún no tienes cuenta?
         <a routerLink="/auth/register" class="text-teal-500 hover:underline font-medium">
-          Sign up
+          Regístrate aquí
         </a>
       </p>
     </div>
