@@ -1,2 +1,97 @@
-<h1 class="text-2xl font-bold">FOLLOWERS</h1>
-<en-contruccion-component></en-contruccion-component>
+<div class="flex flex-col min-h-screen bg-base-100 pb-20 w-full">
+  <div
+    class="sticky top-0 z-20 flex items-center gap-4 bg-base-100/80 p-3 sm:p-4 backdrop-blur-md border-b border-base-content/5 shadow-sm"
+  >
+    <button
+      (click)="goBack()"
+      class="btn btn-ghost btn-sm btn-circle hover:bg-base-200 transition-colors"
+    >
+      <i class="fa-solid fa-arrow-left text-lg"></i>
+    </button>
+    <div class="flex flex-col">
+      <h1 class="text-xl font-bold leading-tight tracking-tight">Seguidores</h1>
+      <p class="text-xs text-base-content/60 font-medium">@{{ usernameUrl() }}</p>
+    </div>
+  </div>
+
+  <div class="p-2 sm:p-4">
+    @if (isLoading()) {
+      <div class="flex justify-center p-12">
+        <span class="loading loading-spinner loading-lg text-teal-500"></span>
+      </div>
+    } @else {
+      <div class="flex flex-col gap-1">
+        @for (user of followers(); track user.profileId) {
+          <!-- tarjeta de usuario -->
+          <a
+            [routerLink]="['/', user.username]"
+            class="flex items-center justify-between p-3 hover:bg-base-200/50 rounded-2xl transition-colors cursor-pointer border border-transparent hover:border-base-content/5 group"
+          >
+            <!-- Lado Izquierdo: Foto y Nombres -->
+            <div class="flex items-center gap-3 overflow-hidden">
+              <div class="avatar drop-shadow-sm shrink-0">
+                <div
+                  class="w-12 h-12 rounded-full bg-neutral text-neutral-content ring-1 ring-base-content/10"
+                >
+                  @if (user.avatarUrl) {
+                    <img [src]="user.avatarUrl" class="object-cover" />
+                  } @else {
+                    <span class="text-lg font-bold flex items-center justify-center h-full">
+                      {{ user.displayName.charAt(0) | uppercase }}
+                    </span>
+                  }
+                </div>
+              </div>
+
+              <div class="flex flex-col justify-center min-w-0 pr-2">
+                <h3
+                  class="font-bold text-base-content truncate group-hover:text-teal-500 transition-colors"
+                >
+                  {{ user.displayName }}
+                </h3>
+                <p class="text-[13px] text-base-content/60 truncate">@{{ user.username }}</p>
+              </div>
+            </div>
+
+            <!-- seguir o dejar de seguir y se oculta el botón si es el mismo usuario -->
+            @if (user.username !== authService.username()) {
+              <div class="shrink-0 pl-2">
+                <button
+                  (click)="toggleFollow($event, user)"
+                  [disabled]="loadingFollowIds().has(user.profileId)"
+                  class="btn btn-sm rounded-full font-bold w-24 sm:w-28 transition-all duration-300"
+                  [class]="
+                    user.isFollowing
+                      ? 'btn-outline hover:btn-error hover:bg-error hover:text-white hover:border-error group/btn'
+                      : 'btn-neutral'
+                  "
+                >
+                  @if (loadingFollowIds().has(user.profileId)) {
+                    <span class="loading loading-spinner loading-xs"></span>
+                  } @else {
+                    @if (user.isFollowing) {
+                      <span class="group-hover/btn:hidden">Following</span>
+                      <span class="hidden group-hover/btn:inline">Unfollow</span>
+                    } @else {
+                      <span>Follow</span>
+                    }
+                  }
+                </button>
+              </div>
+            }
+          </a>
+        } @empty {
+          <div
+            class="text-center py-16 text-base-content/50 bg-base-200/20 rounded-[2rem] border border-base-content/5 mt-4 mx-2"
+          >
+            <div class="text-4xl mb-4 opacity-50">
+              <i class="fa-solid fa-users-slash"></i>
+            </div>
+            <h3 class="font-bold text-lg text-base-content">Aún no hay seguidores</h3>
+            <p class="text-sm mt-1">Cuando alguien siga a @{{ usernameUrl() }}, aparecerá aquí.</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

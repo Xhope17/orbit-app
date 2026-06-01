@@ -10,7 +10,7 @@ export interface UserProfile {
   isVerified: boolean;
   prefix: string | null;
   isPrivate: boolean; // falta implementar en el backend
-  isFollowing: boolean;
+  isFollowing?: boolean;
 }
 
 //esto lo traje directamente del postman
@@ -32,3 +32,5 @@ export interface UpdateProfileRequest {
   bio: string;
   isPrivate: boolean;
 }
+
+

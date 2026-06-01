@@ -3,4 +3,5 @@ export interface FollowInterface {
   username: string;
   displayName: string;
   avatarUrl: string | null;
+  isFollowing: boolean;
 }
