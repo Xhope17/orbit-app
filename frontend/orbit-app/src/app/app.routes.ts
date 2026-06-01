@@ -66,6 +66,21 @@ export const routes: Routes = [
           import('./features/pages/private/feed-page/feed-page').then((m) => m.FeedPage),
       },
       {
+        path: 'community',
+        loadComponent: () =>
+          import('./features/pages/private/community/community-page/community-page').then(
+            (m) => m.CommunityPage,
+          ),
+      },
+
+      {
+        path: 'bookmarks',
+        loadComponent: () =>
+          import('./features/pages/private/bookmarks-page/bookmarks-page').then(
+            (m) => m.BookmarksPage,
+          ),
+      },
+      {
         path: ':username',
         loadComponent: () =>
           import('./features/pages/private/profile/profile-page/profile-page').then(
@@ -90,6 +105,11 @@ export const routes: Routes = [
         path: 'i/premium',
         loadComponent: () =>
           import('./features/pages/private/premium-page/premium-page').then((m) => m.PremiumPage),
+      },
+      {
+        path: 'i/chat',
+        loadComponent: () =>
+          import('./features/pages/private/chat/chat-page/chat-page').then((m) => m.ChatPage),
       },
       {
         path: 'i/post/:id',
