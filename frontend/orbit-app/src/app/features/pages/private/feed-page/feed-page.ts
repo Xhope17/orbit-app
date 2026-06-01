@@ -74,7 +74,7 @@ export class FeedPage implements OnInit {
     if (!post) return;
 
     if (post.isLiked) {
-      this.postService.toggleLike(postId).subscribe({
+      this.postService.disLike(postId).subscribe({
         next: () => this.toggleLikeUI(postId),
       });
     } else {

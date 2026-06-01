@@ -42,6 +42,9 @@ export class PostService {
   toggleLike(postId: string) {
     return this.http.post<ApiResponse<LikeResponse>>(`${this.API}/posts/${postId}/like`, {});
   }
+  disLike(postId: string) {
+    return this.http.delete<ApiResponse<LikeResponse>>(`${this.API}/posts/${postId}/like`);
+  }
 
   getComments(postId: string, page: number = 1, pageSize: number = 20) {
     return this.http.get<ApiResponse<PaginatedResponse<PostComment>>>(
