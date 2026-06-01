@@ -8,9 +8,10 @@ import { PostService } from '../../../services/post.service';
 import { Location } from '@angular/common';
 import { UserService } from '../../../services/user.service';
 import { UserProfile } from '../../../interfaces/user-profile.interface';
+import { CommentItemComponent } from '../../../../shared/components/comment-item-component/comment-item-component';
 @Component({
   selector: 'app-post-detail-page',
-  imports: [PostCardComponent, DatePipe, UpperCasePipe],
+  imports: [PostCardComponent, DatePipe, UpperCasePipe, CommentItemComponent],
   templateUrl: './post-detail-page.html',
   styleUrl: './post-detail-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
