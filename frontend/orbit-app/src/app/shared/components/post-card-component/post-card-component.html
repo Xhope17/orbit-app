@@ -72,37 +72,51 @@
 
   @if (post().media && post().media.length > 0) {
     <div class="mb-4 w-full">
-      @if (post().media.length === 1) {
-        <div
-          class="w-full flex justify-center bg-base-200/30 rounded-[1.5rem] overflow-hidden border border-base-content/5 relative"
-        >
-          @if (post().media[0].mediaType.includes('video')) {
-            <video
-              controls
-              preload="metadata"
-              class="max-h-[600px] w-full object-contain bg-black/5"
-              [src]="post().media[0].url"
-            ></video>
-          } @else {
-            <img
-              [src]="post().media[0].url"
-              alt="Post media"
-              class="max-h-[600px] max-w-full object-contain"
-            />
-          }
-        </div>
-      } @else {
-        <div
-          class="grid gap-1.5 grid-cols-2 rounded-[1.5rem] overflow-hidden border border-base-content/5 bg-base-200/30"
-        >
-          @for (mediaItem of post().media; track mediaItem.url) {
+      @if (post().media && post().media.length > 0) {
+        <div class="mb-4 w-full">
+          @if (post().media.length === 1) {
             <div
-              class="relative w-full aspect-[4/4] hover:opacity-95 transition-opacity bg-base-300"
+              class="w-full flex justify-center bg-base-200/30 rounded-[1.5rem] overflow-hidden border border-base-content/5 relative"
             >
-              @if (mediaItem.mediaType.includes('video')) {
-                <video controls class="w-full h-full object-cover" [src]="mediaItem.url"></video>
+              @if (post().media[0].mediaType.includes('video')) {
+                <video
+                  controls
+                  preload="metadata"
+                  class="max-h-[600px] w-full object-contain bg-black/5"
+                  [src]="post().media[0].url"
+                  (click)="$event.stopPropagation()"
+                ></video>
               } @else {
-                <img [src]="mediaItem.url" alt="Post media" class="w-full h-full object-cover" />
+                <img
+                  [src]="post().media[0].url"
+                  alt="Post media"
+                  class="max-h-[600px] max-w-full object-contain"
+                />
+              }
+            </div>
+          } @else {
+            <div
+              class="grid gap-1.5 grid-cols-2 rounded-[1.5rem] overflow-hidden border border-base-content/5 bg-base-200/30"
+            >
+              @for (mediaItem of post().media; track mediaItem.url) {
+                <div
+                  class="relative w-full aspect-[4/4] hover:opacity-95 transition-opacity bg-base-300"
+                >
+                  @if (mediaItem.mediaType.includes('video')) {
+                    <video
+                      controls
+                      class="w-full h-full object-cover"
+                      [src]="mediaItem.url"
+                      (click)="$event.stopPropagation()"
+                    ></video>
+                  } @else {
+                    <img
+                      [src]="mediaItem.url"
+                      alt="Post media"
+                      class="w-full h-full object-cover"
+                    />
+                  }
+                </div>
               }
             </div>
           }
