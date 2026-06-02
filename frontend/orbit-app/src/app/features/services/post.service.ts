@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
-import { LikeResponse, PaginatedResponse, Post, PostComment } from '../interfaces/post.interface'; // Ajusta la ruta
+import { LikeResponse, Post, PostComment } from '../interfaces/post.interface'; // Ajusta la ruta
 import { ApiResponse } from '../../shared/interfaces/apiResponse.interface';
+import { PaginatedResponse } from '../../shared/interfaces/paginatedResult.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -60,5 +61,16 @@ export class PostService {
 
   deleteComment(commentId: string) {
     return this.http.delete<ApiResponse<any>>(`${this.API}/comments/${commentId}`);
+  }
+
+  searchPosts(query: string, page: number = 1, pageSize: number = 20) {
+    let params = new HttpParams()
+      .set('q', query)
+      .set('page', page.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<ApiResponse<PaginatedResponse<Post>>>(`${this.API}/posts/search`, {
+      params,
+    });
   }
 }

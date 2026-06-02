@@ -1,0 +1,76 @@
+<div class="flex flex-col">
+  @if (isLoading()) {
+    <div class="p-12 flex justify-center">
+      <span class="loading loading-spinner loading-lg text-teal-500"></span>
+    </div>
+  } @else {
+    <div class="flex flex-col">
+      @for (profile of profiles(); track profile.profileId) {
+
+        <div
+          class="flex items-center justify-between p-4 bg-base-100 hover:bg-base-200/50 transition-colors border-b border-base-content/5 cursor-pointer group"
+          [routerLink]="['/', profile.username]"
+        >
+
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="avatar shadow-sm">
+              <div class="w-12 h-12 rounded-full ring-1 ring-base-content/10">
+                @if (profile.avatarUrl) {
+                  <img [src]="profile.avatarUrl" [alt]="profile.displayName" class="object-cover w-full h-full" />
+                } @else {
+                  <img src="/images/default.png" alt="Default Avatar" class="object-cover w-full h-full" />
+                }
+              </div>
+            </div>
+
+            <div class="flex flex-col truncate">
+              <span class="font-bold text-[15px] text-base-content truncate group-hover:underline">
+                {{ profile.displayName }}
+              </span>
+              <span class="text-[15px] text-base-content/50 truncate">
+                @{{ profile.username }}
+              </span>
+            </div>
+          </div>
+
+          <button
+            class="btn btn-sm rounded-full px-5 min-w-[6.5rem] transition-all ml-2"
+            [class.bg-base-content]="!profile.isFollowing"
+            [class.text-base-100]="!profile.isFollowing"
+            [class.hover:bg-base-content/80]="!profile.isFollowing"
+            [class.btn-outline]="profile.isFollowing"
+            [class.hover:border-error]="profile.isFollowing"
+            [class.hover:text-error]="profile.isFollowing"
+            [class.hover:bg-error/10]="profile.isFollowing"
+            (click)="$event.stopPropagation(); handleToggleFollow(profile)"
+            [disabled]="isToggling().includes(profile.username)"
+          >
+            @if (isToggling().includes(profile.username)) {
+              <span class="loading loading-spinner loading-xs"></span>
+            } @else {
+              <span class="block group-hover/btn:hidden">{{ profile.isFollowing ? 'Siguiendo' : 'Seguir' }}</span>
+              <span class="hidden group-hover/btn:block">{{ profile.isFollowing ? 'Dejar de seguir' : 'Seguir' }}</span>
+            }
+          </button>
+
+        </div>
+
+      } @empty {
+
+        <div class="flex flex-col items-center justify-center p-12 text-center bg-base-100">
+          <div class="w-20 h-20 mb-6 rounded-full bg-base-200/50 flex items-center justify-center text-base-content/30 text-3xl">
+            <i class="fa-solid fa-users-slash"></i>
+          </div>
+          <h2 class="text-xl font-bold text-base-content mb-2 tracking-tight">
+            No encontramos a nadie
+          </h2>
+          <p class="text-sm text-base-content/60 max-w-sm">
+            No hay personas que coincidan con "<span class="font-bold text-base-content">{{ query() }}</span>".
+            Intenta buscar con otro nombre o usuario.
+          </p>
+        </div>
+
+      }
+    </div>
+  }
+</div>

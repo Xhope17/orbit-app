@@ -1,19 +1,20 @@
 <aside class="hidden w-80 flex-col gap-5 p-4 lg:flex min-h-screen pt-3">
-  <!-- BARRA DE BÚSQUEDA (Estilo Píldora Moderna) -->
-  <div class="sticky top-3 z-20 w-full group">
-    <!-- Ícono absoluto dentro del input -->
-    <div
-      class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40 group-focus-within:text-teal-500 transition-colors"
-    >
-      <i class="fa-solid fa-magnifying-glass"></i>
+  @if (!isSearchRoute()) {
+    <div class="sticky top-3 z-20 w-full group animate-fade-in">
+      <div
+        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40 group-focus-within:text-teal-500 transition-colors"
+      >
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </div>
+      <input
+        #searchInput
+        (keyup.enter)="onSearch(searchInput.value); searchInput.value = ''"
+        type="text"
+        placeholder="Buscar en Orbit..."
+        class="input w-full rounded-full bg-base-200/50 border border-transparent focus:bg-base-100 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 pl-11 transition-all text-[15px] shadow-sm"
+      />
     </div>
-    <input
-      type="text"
-      placeholder="Buscar en Orbit..."
-      class="input w-full rounded-full bg-base-200/50 border border-transparent focus:bg-base-100 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 pl-11 transition-all text-[15px] shadow-sm"
-    />
-  </div>
-
+  }
   <!-- TARJETA: ¿NUEVO USUARIO? -->
   @if (!isAuthenticated()) {
     <div class="card bg-base-200/30 border border-base-content/5 rounded-[2rem] shadow-sm">
@@ -34,10 +35,10 @@
     </div>
   }
 
-  <!-- TARJETA: TENDENCIAS -->
+  <!-- TARJETA: TENDENCIAS (falta)-->
   <div class="card bg-base-200/30 border border-base-content/5 rounded-[2rem] shadow-sm">
     <div class="card-body p-5">
-      <h2 class="card-title text-xl font-black mb-3 tracking-tight">Tendencias</h2>
+      <h2 class="card-title text-xl font-black mb-3 tracking-tight">Tendencias (falta)</h2>
 
       <!-- Item de Tendencia 1 -->
       <div
@@ -102,8 +103,18 @@
 
   <h2 class="text-lg font-bold mb-2">Updates</h2>
   <div class="text-sm text-base-content/60 flex flex-col gap-2">
+    <p class="text-sm leading-relaxed"></p>
     <p class="text-sm leading-relaxed">
-      -Se implemento un apartado para ver seguidores, donde se muestra la lista de seguidores de un usuario.
+      -implementación de buscar posts y perfiles desde la barra de búsqueda, desde la barra de
+      búsqueda lateral o desde el botón explorar
+    </p>
+    <p class="text-sm leading-relaxed">
+      -botón para refrescar el feed, para cargar nuevas publicaciones sin tener que recargar toda la
+      página.
+    </p>
+    <p class="text-sm leading-relaxed">
+      -Se implemento un apartado para ver seguidores, donde se muestra la lista de seguidores de un
+      usuario.
     </p>
     <p class="text-sm leading-relaxed">
       -Se agrego la funcionalidad para seguir y dejar de seguir usuarios.

@@ -1,0 +1,78 @@
+<div
+  class="flex flex-col min-h-screen bg-base-100 border-x border-base-content/5 pb-20 w-full relative"
+>
+  <div
+    class="sticky top-0 z-20 bg-base-100/80 backdrop-blur-lg border-b border-base-content/5 flex flex-col pt-3 shadow-sm"
+  >
+    <div class="px-4 pb-2 w-full">
+      <div class="relative w-full group">
+        <div
+          class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-base-content/40 group-focus-within:text-teal-500 transition-colors"
+        >
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </div>
+        <input
+          #pageSearchInput
+          [value]="query()"
+          (keyup.enter)="onSearch(pageSearchInput.value)"
+          type="text"
+          placeholder="Buscar en Orbit..."
+          class="input w-full rounded-full bg-base-200/50 border border-transparent focus:bg-base-100 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 pl-11 transition-all text-[15px] shadow-sm"
+        />
+      </div>
+    </div>
+
+    <div class="flex w-full mt-1">
+      <button
+        (click)="setTab('posts')"
+        class="flex-1 pb-3 text-sm font-bold relative hover:bg-base-200/50 transition-colors"
+        [class.text-base-content]="activeTab() === 'posts'"
+        [class.text-base-content/50]="activeTab() !== 'posts'"
+      >
+        Publicaciones
+        @if (activeTab() === 'posts') {
+          <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-teal-500 rounded-t-full"
+          ></div>
+        }
+      </button>
+
+      <button
+        (click)="setTab('personas')"
+        class="flex-1 pb-3 text-sm font-bold relative hover:bg-base-200/50 transition-colors"
+        [class.text-base-content]="activeTab() === 'personas'"
+        [class.text-base-content/50]="activeTab() !== 'personas'"
+      >
+        Personas
+        @if (activeTab() === 'personas') {
+          <div
+            class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-1 bg-teal-500 rounded-t-full"
+          ></div>
+        }
+      </button>
+    </div>
+  </div>
+
+  <div class="bg-base-200/10 min-h-screen pt-2">
+    @if (query()) {
+      @if (activeTab() === 'posts') {
+        <search-post-component [query]="query()"></search-post-component>
+      } @else {
+        <search-profile-component [query]="query()"></search-profile-component>
+      }
+    } @else {
+      <div class="flex flex-col items-center justify-center p-12 text-center mt-8">
+        <div
+          class="w-24 h-24 mb-6 rounded-full bg-base-200/50 flex items-center justify-center text-base-content/30 text-4xl shadow-sm"
+        >
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <h2 class="text-2xl font-black text-base-content mb-3 tracking-tight">Explora Orbit</h2>
+        <p class="text-[15px] text-base-content/60 max-w-sm leading-relaxed">
+          Encuentra publicaciones, descubre nuevas personas y mantente al día. Escribe algo en la
+          barra superior para empezar.
+        </p>
+      </div>
+    }
+  </div>
+</div>

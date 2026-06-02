@@ -72,12 +72,35 @@ export const routes: Routes = [
             (m) => m.CommunityPage,
           ),
       },
-
       {
         path: 'bookmarks',
         loadComponent: () =>
           import('./features/pages/private/bookmarks-page/bookmarks-page').then(
             (m) => m.BookmarksPage,
+          ),
+      },
+      {
+        path: 'search',
+        loadComponent: () =>
+          import('./features/pages/private/search/search-page/search-page').then(
+            (m) => m.SearchPage,
+          ),
+      },
+      {
+        path: 'i/premium',
+        loadComponent: () =>
+          import('./features/pages/private/premium-page/premium-page').then((m) => m.PremiumPage),
+      },
+      {
+        path: 'i/chat',
+        loadComponent: () =>
+          import('./features/pages/private/chat/chat-page/chat-page').then((m) => m.ChatPage),
+      },
+      {
+        path: 'i/post/:id',
+        loadComponent: () =>
+          import('./features/pages/private/post-detail-page/post-detail-page').then(
+            (m) => m.PostDetailPage,
           ),
       },
       {
@@ -101,23 +124,6 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./features/pages/private/follow/follow-list-page/follow-list-page').then(
             (m) => m.FollowListPage,
-          ),
-      },
-      {
-        path: 'i/premium',
-        loadComponent: () =>
-          import('./features/pages/private/premium-page/premium-page').then((m) => m.PremiumPage),
-      },
-      {
-        path: 'i/chat',
-        loadComponent: () =>
-          import('./features/pages/private/chat/chat-page/chat-page').then((m) => m.ChatPage),
-      },
-      {
-        path: 'i/post/:id',
-        loadComponent: () =>
-          import('./features/pages/private/post-detail-page/post-detail-page').then(
-            (m) => m.PostDetailPage,
           ),
       },
     ],

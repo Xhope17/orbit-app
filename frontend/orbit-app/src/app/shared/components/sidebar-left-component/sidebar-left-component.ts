@@ -33,7 +33,7 @@ export class SidebarLeftComponent implements OnInit {
 
   public publicMenu = [
     { icon: 'fa-regular fa-house', label: 'Inicio', route: '/home' },
-    { icon: 'fa-solid fa-magnifying-glass', label: 'Explorar (falta', route: '/explore' },
+    { icon: 'fa-solid fa-magnifying-glass', label: 'Explorar', route: '/search' },
   ];
 
   public privateMenu = computed(() => [
