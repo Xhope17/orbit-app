@@ -18,4 +18,7 @@ export class PostCardComponent {
 
   onDelete = output<string>();
   onLike = output<string>();
+
+  //guardar en favoritos
+  onSave = output<string>();
 }

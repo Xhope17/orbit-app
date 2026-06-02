@@ -1,4 +1,45 @@
-<h1>Guardados</h1>
-<h2>Aquí se mostrarán los posts guardados</h2>
-<br>
-<en-contruccion-component></en-contruccion-component>
+<div class="flex flex-col min-h-screen bg-base-100 border-x border-base-content/5 pb-20 w-full relative">
+
+  <div class="sticky top-0 z-20 bg-base-100/80 backdrop-blur-lg border-b border-base-content/5 px-4 py-3 shadow-sm">
+    <h1 class="text-xl font-bold leading-tight tracking-tight">Guardados</h1>
+    <p class="text-xs text-base-content/60 font-medium">@{{ authService.username() }}</p>
+  </div>
+
+  <div class="bg-base-200/10 min-h-screen">
+    @if (isLoading()) {
+      <div class="p-12 flex justify-center">
+        <span class="loading loading-spinner loading-lg text-teal-500"></span>
+      </div>
+    } @else {
+
+      <div class="flex flex-col gap-px bg-base-content/5">
+        @for (item of posts(); track item.id) {
+          <div class="bg-base-100">
+            <app-post-card
+              [post]="item"
+              [currentUserId]="authService.payload()?.profile_id ?? null"
+              (onLike)="handleLikePost($event)"
+              (onDelete)="handleDeletePost($event)"
+              (onSave)="handleSavePost($event)"
+            ></app-post-card>
+          </div>
+        } @empty {
+
+          <div class="flex flex-col items-center justify-center p-12 text-center bg-base-100 mt-10">
+            <div class="w-24 h-24 mb-6 rounded-full bg-base-200/50 flex items-center justify-center text-base-content/30 text-4xl shadow-sm">
+              <i class="fa-regular fa-bookmark"></i>
+            </div>
+            <h2 class="text-2xl font-black text-base-content mb-3 tracking-tight">
+              Guarda posts para más tarde
+            </h2>
+            <p class="text-[15px] text-base-content/60 max-w-sm leading-relaxed">
+              Guarda las publicaciones para encontrarlas fácilmente en el futuro.
+            </p>
+          </div>
+
+        }
+      </div>
+
+    }
+  </div>
+</div>

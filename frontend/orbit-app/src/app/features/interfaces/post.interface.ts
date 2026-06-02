@@ -10,21 +10,23 @@ export interface Media {
   url: string;
   mediaType: string;
   order: number;
-  width: number;
-  height: number;
-  sizeBytes: number;
-  format: string;
-  durationSeconds: null | null;
+  width: number | null;
+  height: number | null;
+  sizeBytes: number | null;
+  format: string | null;
+  durationSeconds: number | null;
 }
 
 export interface Post {
   id: string;
   author: PostAuthor;
   content: string;
-  media: Media[]; // Ajusta el tipo si tu backend devuelve objetos en lugar de strings de URLs
+  media: Media[];
   likeCount: number;
   commentCount: number;
+  saveCount: number;
   isLiked: boolean;
+  isSaved: boolean;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,7 +39,7 @@ export interface PostComment {
   replyCount: number;
   likeCount: number;
   isLiked: boolean;
-  createdAt: Date;
+  createdAt: string;
 }
 
 export interface LikeResponse {
@@ -54,4 +56,10 @@ export interface PaginatedComments {
   totalPages: number;
   hasPreviousPage: boolean;
   hasNextPage: boolean;
+}
+
+
+export interface BookmarkResponse {
+  postId: string;
+  isSaved: boolean;
 }

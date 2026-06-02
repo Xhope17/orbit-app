@@ -37,7 +37,7 @@ export class SidebarLeftComponent implements OnInit {
   ];
 
   public privateMenu = computed(() => [
-    { icon: 'fa-regular fa-bookmark', label: 'Guardados (falta)', route: '/bookmarks' },
+    { icon: 'fa-regular fa-bookmark', label: 'Guardados', route: '/bookmarks' },
     // { icon: 'fa-regular fa-follow', label: 'Siguiendo', route: `/${this.username()}/following` },
     // {
     //   icon: 'fa-solid fa-users', label: 'Comunidades (falta)', route: `/${this.username()}/community`,

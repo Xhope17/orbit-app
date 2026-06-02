@@ -9,6 +9,7 @@ import { Subject, take } from 'rxjs';
 import { CreatePostModal } from '../../../../shared/components/create-post-modal/create-post-modal';
 import { UserService } from '../../../services/user.service';
 import { UserProfile } from '../../../interfaces/user-profile.interface';
+import { BookmarkService } from '../../../services/bookmark.service';
 
 @Component({
   selector: 'app-feed-page',
@@ -24,6 +25,8 @@ export class FeedPage implements OnInit {
   public userService = inject(UserService);
 
   private dialogService = inject(DialogService);
+  //guardados
+  private bookmarkService = inject(BookmarkService);
 
   public posts = signal<Post[]>([]);
   public isLoading = signal<boolean>(true);
@@ -172,5 +175,45 @@ export class FeedPage implements OnInit {
       onSave: saveSubject,
       onSuccess: successSubject,
     });
+  }
+
+  //guardados | bookmarks
+  handleSavePost(postId: string): void {
+    const post = this.posts().find((p) => p.id === postId);
+    if (!post) return;
+
+    if (post.isSaved) {
+      // Si ya está guardado, lo quitamos
+      this.bookmarkService.unSavePost(postId).subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.toggleSaveUI(postId, false);
+          }
+        },
+        error: (err) => console.error('Error al quitar guardado', err),
+      });
+    } else {
+      // Si no está guardado, lo guardamos
+      this.bookmarkService.savePost(postId).subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.toggleSaveUI(postId, true);
+          }
+        },
+        error: (err) => console.error('Error al guardar post', err),
+      });
+    }
+  }
+
+  private toggleSaveUI(postId: string, isSaved: boolean): void {
+    this.posts.update((currentPosts) =>
+      currentPosts.map((p) => {
+        if (p.id === postId) {
+          const increment = isSaved ? 1 : -1;
+          return { ...p, isSaved, saveCount: p.saveCount + increment };
+        }
+        return p;
+      }),
+    );
   }
 }

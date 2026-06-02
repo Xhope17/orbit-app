@@ -131,15 +131,27 @@
     </div>
 
     <div class="flex gap-1">
+
       <button
-        class="btn btn-sm btn-square btn-ghost rounded-full text-base-content/50 hover:bg-secondary/10 hover:text-secondary transition-colors"
-        (click)="$event.stopPropagation()"
+        class="btn btn-sm btn-square btn-ghost rounded-full transition-colors group"
+        (click)="onSave.emit(post().id); $event.stopPropagation()"
+        [class.text-secondary]="post().isSaved"
+        [class.text-base-content/50]="!post().isSaved"
+        [title]="post().isSaved ? 'Quitar de guardados' : 'Guardar'"
+
       >
-        <i class="fa-regular fa-bookmark text-[15px]"></i>
+        <div class="p-2 rounded-full group-hover:bg-secondary/10 transition-colors flex items-center justify-center">
+          <i
+            class="fa-bookmark text-[15px]"
+            [class]="post().isSaved ? 'fa-solid scale-110' : 'fa-regular'"
+          ></i>
+        </div>
       </button>
+
       <button
         class="btn btn-sm btn-square btn-ghost rounded-full text-base-content/50 hover:bg-primary/10 hover:text-primary transition-colors"
         (click)="$event.stopPropagation()"
+        [title]="post().isSaved ? 'Quitar de compartidos' : 'Compartir'"
       >
         <i class="fa-solid fa-arrow-up-from-bracket text-[15px]"></i>
       </button>
