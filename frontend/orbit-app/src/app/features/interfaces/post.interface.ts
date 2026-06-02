@@ -20,7 +20,7 @@ export interface Media {
 export interface Post {
   id: string;
   author: PostAuthor;
-  content: string;
+  content?: string; //revisar
   media: Media[];
   likeCount: number;
   commentCount: number;
@@ -34,7 +34,7 @@ export interface Post {
 export interface PostComment {
   id: string;
   author: PostAuthor;
-  content: string;
+  content?: string; //revisar
   parentCommentId: string | null;
   replyCount: number;
   likeCount: number;

@@ -74,21 +74,36 @@
     <div class="mb-4 w-full">
       @if (post().media.length === 1) {
         <div
-          class="w-full flex justify-center bg-base-200/30 rounded-[1.5rem] overflow-hidden border border-base-content/5"
+          class="w-full flex justify-center bg-base-200/30 rounded-[1.5rem] overflow-hidden border border-base-content/5 relative"
         >
-          <img
-            [src]="post().media[0].url"
-            alt="Post media"
-            class="max-h-[600px] max-w-full object-contain"
-          />
+          @if (post().media[0].mediaType.includes('video')) {
+            <video
+              controls
+              preload="metadata"
+              class="max-h-[600px] w-full object-contain bg-black/5"
+              [src]="post().media[0].url"
+            ></video>
+          } @else {
+            <img
+              [src]="post().media[0].url"
+              alt="Post media"
+              class="max-h-[600px] max-w-full object-contain"
+            />
+          }
         </div>
       } @else {
         <div
           class="grid gap-1.5 grid-cols-2 rounded-[1.5rem] overflow-hidden border border-base-content/5 bg-base-200/30"
         >
           @for (mediaItem of post().media; track mediaItem.url) {
-            <div class="relative w-full aspect-[4/4] hover:opacity-95 transition-opacity">
-              <img [src]="mediaItem.url" alt="Post media" class="w-full h-full object-cover" />
+            <div
+              class="relative w-full aspect-[4/4] hover:opacity-95 transition-opacity bg-base-300"
+            >
+              @if (mediaItem.mediaType.includes('video')) {
+                <video controls class="w-full h-full object-cover" [src]="mediaItem.url"></video>
+              } @else {
+                <img [src]="mediaItem.url" alt="Post media" class="w-full h-full object-cover" />
+              }
             </div>
           }
         </div>
@@ -131,16 +146,16 @@
     </div>
 
     <div class="flex gap-1">
-
       <button
         class="btn btn-sm btn-square btn-ghost rounded-full transition-colors group"
         (click)="onSave.emit(post().id); $event.stopPropagation()"
         [class.text-secondary]="post().isSaved"
         [class.text-base-content/50]="!post().isSaved"
         [title]="post().isSaved ? 'Quitar de guardados' : 'Guardar'"
-
       >
-        <div class="p-2 rounded-full group-hover:bg-secondary/10 transition-colors flex items-center justify-center">
+        <div
+          class="p-2 rounded-full group-hover:bg-secondary/10 transition-colors flex items-center justify-center"
+        >
           <i
             class="fa-bookmark text-[15px]"
             [class]="post().isSaved ? 'fa-solid scale-110' : 'fa-regular'"

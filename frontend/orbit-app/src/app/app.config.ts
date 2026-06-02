@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
 import { routes } from './app.routes';
 import { provideHttpClient, withFetch, withInterceptors } from '@angular/common/http';
@@ -11,11 +11,17 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    //provide para las rutas de despliegue de componentes
     provideHttpClient(withInterceptors([authInterceptor, errorInterceptor])),
+    //provide para solucionar error en las rutas al desplegar
     {
       provide: LocationStrategy,
       useClass: HashLocationStrategy,
     },
+    provideRouter(
+      routes,
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'top', // Fuerza a subir al cambiar de ruta
+      }),
+    ),
   ],
 };

@@ -1,5 +1,4 @@
 <form [formGroup]="postForm" class="flex flex-col gap-2 h-full flex-1 min-h-[400px]">
-
   <textarea
     class="textarea w-full flex-1 text-xl resize-none bg-transparent focus:outline-none px-0"
     placeholder="¿Qué está pasando?"
@@ -7,15 +6,22 @@
     (paste)="onPaste($event)"
   ></textarea>
 
-  @if (imagePreviews().length > 0) {
+  @if (mediaPreviews().length > 0) {
     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 mt-2">
-      @for (preview of imagePreviews(); track $index) {
-        <div class="relative group rounded-xl overflow-hidden border border-base-300 aspect-video">
-          <img [src]="preview" class="w-full h-full object-cover" alt="Vista previa">
+      @for (preview of mediaPreviews(); track $index) {
+        <div
+          class="relative group rounded-xl overflow-hidden border border-base-300 aspect-video bg-base-200"
+        >
+          @if (preview.type.startsWith('video/')) {
+            <video [src]="preview.url" class="w-full h-full object-cover" controls></video>
+          } @else {
+            <img [src]="preview.url" class="w-full h-full object-cover" alt="Vista previa" />
+          }
+
           <button
             type="button"
             class="absolute top-1 right-1 btn btn-xs btn-circle btn-error opacity-80 hover:opacity-100"
-            (click)="removeImage($index)"
+            (click)="removeMedia($index)"
           >
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -29,7 +35,6 @@
   }
 
   <div class="flex items-center justify-between mt-auto pt-2 border-t border-base-300">
-
     <div class="flex gap-2">
       <button
         type="button"
@@ -39,14 +44,23 @@
         <i class="fa-regular fa-image"></i>
       </button>
 
-      <input
+      <!-- <input
         #fileInput
         type="file"
         multiple
         accept="image/png, image/jpeg, image/webp"
         class="hidden"
         (change)="onFilesSelected($event)"
-      >
+      > -->
+
+      <input
+        type="file"
+        class="hidden"
+        #fileInput
+        multiple
+        accept="image/*, video/mp4, video/webm, video/ogg"
+        (change)="onFilesSelected($event)"
+      />
     </div>
 
     @if (isPosting()) {

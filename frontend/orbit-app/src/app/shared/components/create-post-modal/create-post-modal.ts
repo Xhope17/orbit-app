@@ -21,12 +21,12 @@ export class CreatePostModal implements OnInit {
   public isPosting = signal(false);
   public errorMessage = signal('');
 
-  // para manejar los archivos y sus vistas previas
+  // archivos y sus vistas previas
   public selectedFiles = signal<File[]>([]);
-  public imagePreviews = signal<string[]>([]);
+  public mediaPreviews = signal<{ url: string; type: string }[]>([]);
 
   public postForm = this.fb.nonNullable.group({
-    content: ['', [Validators.required, Validators.maxLength(1000)]]
+    content: ['', Validators.maxLength(1000)],
   });
 
   ngOnInit() {
@@ -38,13 +38,44 @@ export class CreatePostModal implements OnInit {
     }
   }
 
-  // Para archivos seleccionados por el input
+  // const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+  // const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB
   onFilesSelected(event: Event) {
     const input = event.target as HTMLInputElement;
+
     if (input.files && input.files.length > 0) {
       const filesArray = Array.from(input.files);
-      this.addFiles(filesArray);
+      const validFiles: File[] = [];
+
+      // 7 mb máximo por archivo
+      const MAX_FILE_SIZE = 7 * 1024 * 1024;
+
+      for (const file of filesArray) {
+        const isImage = file.type.startsWith('image/');
+        const isVideo = file.type.startsWith('video/');
+
+        // valida el formato
+        if (!isImage && !isVideo) {
+          alert(`El archivo "${file.name}" no es válido. Solo imágenes, GIFs o videos.`);
+          continue;
+        }
+
+        // valida el peso
+        if (file.size > MAX_FILE_SIZE) {
+          alert(`El archivo "${file.name}" supera el límite permitido de 7MB.`);
+          continue;
+        }
+
+        // Si pasa todas las pruebas, lo agregamos a los válidos
+        validFiles.push(file);
+      }
+
+      // si todo esta bien, los agregamos
+      if (validFiles.length > 0) {
+        this.addFiles(validFiles);
+      }
     }
+
     input.value = '';
   }
 
@@ -52,45 +83,64 @@ export class CreatePostModal implements OnInit {
     const items = event.clipboardData?.items;
     if (!items) return;
 
-    const imageFiles: File[] = [];
+    const mediaFiles: File[] = [];
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
-      if (item.type.startsWith('image/')) {
+
+      // pegar videos o imágenes
+      if (item.type.startsWith('image/') || item.type.startsWith('video/')) {
         const file = item.getAsFile();
-        if (file) {
-          imageFiles.push(file);
-        }
+        if (file) mediaFiles.push(file);
       }
     }
 
-    if (imageFiles.length > 0) {
+    if (mediaFiles.length > 0) {
       event.preventDefault();
-      this.addFiles(imageFiles);
+      this.addFiles(mediaFiles);
     }
   }
 
   private addFiles(files: File[]) {
-    const validFiles = files.filter(f =>
-      ['image/png', 'image/jpeg', 'image/webp'].includes(f.type)
+    // acepta imágenes y videos
+    const validFiles = files.filter(
+      (f) => f.type.startsWith('image/') || f.type.startsWith('video/'),
     );
+
     if (validFiles.length === 0) return;
 
-    this.selectedFiles.update(current => [...current, ...validFiles]);
-    const newPreviews = validFiles.map(file => URL.createObjectURL(file));
-    this.imagePreviews.update(current => [...current, ...newPreviews]);
+    this.selectedFiles.update((current) => [...current, ...validFiles]);
+
+    // vista previa de los archivos
+    const newPreviews = validFiles.map((file) => ({
+      url: URL.createObjectURL(file),
+      type: file.type,
+    }));
+
+    this.mediaPreviews.update((current) => [...current, ...newPreviews]);
   }
 
-  removeImage(index: number) {
-    // Removemos el archivo y su vista previa usando su índice
-    this.selectedFiles.update(files => files.filter((_, i) => i !== index));
-    this.imagePreviews.update(previews => previews.filter((_, i) => i !== index));
+  removeMedia(index: number) {
+    // se remueve usando su indice
+    this.selectedFiles.update((files) => files.filter((_, i) => i !== index));
+    this.mediaPreviews.update((previews) => previews.filter((_, i) => i !== index));
   }
 
   // subir post
   guardarPost() {
     if (this.isPosting()) return;
-    if (this.postForm.invalid || !this.postForm.value.content?.trim()) {
-      this.errorMessage.set('El post no puede estar vacío.');
+
+    const contentText = this.postForm.value.content?.trim() || '';
+    const hasMedia = this.selectedFiles().length > 0;
+
+    // validar que haya algo que publicar
+    if (!contentText && !hasMedia) {
+      this.errorMessage.set('Agrega texto o un archivo multimedia para publicar.');
+      return;
+    }
+
+    // Si  es inválido
+    if (this.postForm.invalid) {
+      this.errorMessage.set('El post excede el límite de caracteres.');
       return;
     }
 
@@ -98,10 +148,14 @@ export class CreatePostModal implements OnInit {
     this.errorMessage.set('');
 
     const formData = new FormData();
-    formData.append('Content', this.postForm.value.content.trim());
 
-    // Agregamos cada archivo al FormData
-    this.selectedFiles().forEach(file => {
+    // envía content si el usuario escribió algo
+    if (contentText) {
+      formData.append('Content', contentText);
+    }
+
+    // Agregamos los archivos si existen
+    this.selectedFiles().forEach((file) => {
       formData.append('Media', file);
     });
 
