@@ -63,7 +63,7 @@ export const routes: Routes = [
       {
         path: 'home',
         loadComponent: () =>
-          import('./features/pages/private/feed-page/feed-page').then((m) => m.FeedPage),
+          import('./features/pages/private/feed/feed-page/feed-page').then((m) => m.FeedPage),
       },
       {
         path: 'community',

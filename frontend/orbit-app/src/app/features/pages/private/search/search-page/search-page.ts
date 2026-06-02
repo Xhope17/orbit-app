@@ -22,6 +22,8 @@ export class SearchPage implements OnInit {
       const q = params['q'] || '';
       this.query.set(q);
     });
+
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }
 
   setTab(tab: 'posts' | 'personas') {

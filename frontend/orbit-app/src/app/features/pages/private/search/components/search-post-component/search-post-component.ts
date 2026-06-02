@@ -38,6 +38,8 @@ export class SearchPostComponent {
   }
 
   loadPosts(searchQuery: string): void {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     this.isLoading.set(true);
     this.postService.searchPosts(searchQuery).subscribe({
       next: (res) => {
@@ -55,7 +57,6 @@ export class SearchPostComponent {
       },
     });
   }
-
 
   handleDeletePost(postId: string): void {
     if (this.dialogService.data()) return;

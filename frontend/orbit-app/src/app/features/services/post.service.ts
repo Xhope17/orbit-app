@@ -14,7 +14,7 @@ export class PostService {
 
   getTimeline(page: number = 1, pageSize: number = 20) {
     return this.http.get<ApiResponse<PaginatedResponse<Post>>>(
-      `${this.API}/posts/timeline?page=${page}&pageSize=${pageSize}`,
+      `${this.API}/posts/general?page=${page}&pageSize=${pageSize}`,
     );
   }
   createPost(formData: FormData) {
@@ -81,5 +81,13 @@ export class PostService {
 
   disLikeComment(commentId: string) {
     return this.http.delete<ApiResponse<LikeResponse>>(`${this.API}/comments/${commentId}/like`);
+  }
+
+  getFollowingTimeline(page: number = 1, pageSize: number = 20) {
+    let params = new HttpParams().set('page', page.toString()).set('pageSize', pageSize.toString());
+
+    return this.http.get<ApiResponse<PaginatedResponse<Post>>>(`${this.API}/posts/following`, {
+      params,
+    });
   }
 }

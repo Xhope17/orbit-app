@@ -36,6 +36,8 @@ export class SearchProfileComponent {
   }
 
   loadProfiles(searchQuery: string): void {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+
     this.isLoading.set(true);
 
     this.profileService.searchProfiles(searchQuery).subscribe({

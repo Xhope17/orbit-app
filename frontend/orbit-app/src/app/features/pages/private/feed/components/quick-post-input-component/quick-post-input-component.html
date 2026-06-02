@@ -1,0 +1,29 @@
+<div class="hidden sm:block px-4 py-4 border-b border-base-content/5 bg-base-100">
+  <div
+    class="flex items-center gap-3 bg-base-200/50 p-2.5 rounded-[2rem] ring-1 ring-base-content/5 hover:ring-teal-500/30 transition-all duration-300"
+  >
+    <div class="avatar shadow-sm ml-1">
+      <div class="bg-neutral text-neutral-content rounded-full w-10 ring-2 ring-base-100">
+        @if (userProfile()?.avatarUrl) {
+          <img [src]="userProfile()?.avatarUrl" class="w-full h-full object-cover" />
+        } @else {
+          <img src="/images/default.png" class="w-full h-full object-cover" />
+        }
+      </div>
+    </div>
+
+    <button
+      class="flex-1 text-left text-base-content/50 bg-transparent px-3 py-2 text-[15px] font-medium hover:text-base-content/80 outline-none transition-colors"
+      (click)="onOpenModal.emit()"
+    >
+      Escribe algo...
+    </button>
+
+    <button
+      class="btn bg-teal-600 hover:bg-teal-500 text-white border-none rounded-full px-6 btn-sm h-10 shadow-md shadow-teal-900/20 hover:scale-105 transition-transform mr-1"
+      (click)="onOpenModal.emit()"
+    >
+      Publicar
+    </button>
+  </div>
+</div>

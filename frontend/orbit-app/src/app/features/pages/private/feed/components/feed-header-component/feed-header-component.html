@@ -1,0 +1,60 @@
+<div
+  class="w-full bg-base-100/80 backdrop-blur-lg border-b border-base-content/5 flex flex-col pt-2 shadow-sm"
+>
+  <div class="flex w-full px-4 relative">
+    <button
+      (click)="onTabChange.emit('foryou')"
+      class="flex-1 pb-3 pt-2 text-[15px] font-bold relative hover:bg-base-200/50 transition-colors"
+      [class.text-base-content]="activeTab() === 'foryou'"
+      [class.text-base-content/50]="activeTab() !== 'foryou'"
+    >
+      Para ti
+      @if (activeTab() === 'foryou') {
+        <div
+          class="absolute bottom-0 left-1/2 -translate-x-1/2 w-14 h-1 bg-teal-500 rounded-t-full"
+        ></div>
+      }
+    </button>
+
+    <button
+      (click)="onTabChange.emit('following')"
+      class="flex-1 pb-3 pt-2 text-[15px] font-bold relative hover:bg-base-200/50 transition-colors"
+      [class.text-base-content]="activeTab() === 'following'"
+      [class.text-base-content/50]="activeTab() !== 'following'"
+    >
+      Siguiendo
+      @if (activeTab() === 'following') {
+        <div
+          class="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-1 bg-teal-500 rounded-t-full"
+        ></div>
+      }
+    </button>
+
+    <div class="absolute right-2 top-0">
+      <button
+        (click)="onRefresh.emit()"
+        class="btn btn-ghost btn-sm btn-circle text-base-content/50 transition-colors relative"
+        [class.cursor-not-allowed]="!canRefresh()"
+        [class.hover:text-teal-400]="!isLoading() && canRefresh()"
+        [class.hover:bg-teal-500/10]="!isLoading() && canRefresh()"
+        [class.opacity-50]="isLoading() || !canRefresh()"
+        title="Recargar feed"
+      >
+        <i class="fa-solid fa-arrows-rotate text-[13px]" [class.fa-spin]="isLoading()"></i>
+      </button>
+    </div>
+  </div>
+
+  @if (showCooldownWarning()) {
+    <div class="absolute top-14 left-1/2 -translate-x-1/2 z-50 pointer-events-none animate-fade-in">
+      <div
+        class="shadow-sm rounded-full py-1 px-3 border border-error/30 bg-base-100/95 backdrop-blur-md text-error flex items-center gap-1.5"
+      >
+        <i class="fa-solid fa-clock text-[11px]"></i>
+        <span class="font-bold text-[11px] whitespace-nowrap tracking-tight"
+          >Espera un momento</span
+        >
+      </div>
+    </div>
+  }
+</div>
