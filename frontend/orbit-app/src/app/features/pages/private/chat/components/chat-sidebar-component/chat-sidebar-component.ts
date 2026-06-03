@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { ChatResponse } from '../../../../../interfaces/chat.interface';
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ChatAreaComponent } from '../chat-area-component/chat-area-component';
+import { LocalDatePipe } from '../../../../../../shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'chat-sidebar-component',
-  imports: [DatePipe, UpperCasePipe, FormsModule],
+  imports: [UpperCasePipe, FormsModule, LocalDatePipe],
   templateUrl: './chat-sidebar-component.html',
   styleUrl: './chat-sidebar-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -43,7 +43,7 @@
             @for (msg of messages(); track msg.id) {
               <div class="chat" [class.chat-end]="isOwn(msg)" [class.chat-start]="!isOwn(msg)">
                 <div class="chat-header opacity-50 text-[11px] mb-1">
-                  {{ msg.createdAt | date:'shortTime' }}
+                  {{ msg.createdAt | localDate:'shortTime' }}
                 </div>
                 <div
                   class="chat-bubble shadow-sm text-[15px]"

@@ -1,4 +1,4 @@
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { LocalDatePipe } from '../../../../../../shared/pipes/local-date.pipe';
 import {
   ChatResponse,
   MessageResponse,
@@ -18,7 +19,7 @@ import {
 
 @Component({
   selector: 'chat-area-component',
-  imports: [DatePipe, UpperCasePipe, FormsModule],
+  imports: [UpperCasePipe, FormsModule, LocalDatePipe],
   templateUrl: './chat-area-component.html',
   styleUrl: './chat-area-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

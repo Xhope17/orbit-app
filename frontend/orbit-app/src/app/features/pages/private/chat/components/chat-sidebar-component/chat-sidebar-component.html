@@ -60,7 +60,7 @@
                 </span>
                 @if (conv.lastMessage) {
                   <span class="text-[11px] font-medium text-base-content/40 shrink-0 ml-2">
-                    {{ conv.lastMessage.createdAt | date: 'shortTime' }}
+                    {{ conv.lastMessage.createdAt | localDate:'shortTime' }}
                   </span>
                 }
               </div>

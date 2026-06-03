@@ -8,10 +8,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { UpperCasePipe } from '@angular/common';
 import { ChatService } from '../../../../services/chat.service';
-import { LocalDatePipe } from '../../../../../shared/pipes/local-date.pipe';
 import { SignalrService } from '../../../../../shared/services/signalr.service';
 import { AuthService } from '../../../../../shared/services/auth.service';
 import {
@@ -26,7 +23,7 @@ import { ChatAreaComponent } from '../components/chat-area-component/chat-area-c
 
 @Component({
   selector: 'app-chat-page',
-  imports: [FormsModule, UpperCasePipe, LocalDatePipe,ChatSidebarComponent, ChatAreaComponent],
+  imports: [ChatSidebarComponent, ChatAreaComponent],
   templateUrl: './chat-page.html',
   styleUrl: './chat-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
