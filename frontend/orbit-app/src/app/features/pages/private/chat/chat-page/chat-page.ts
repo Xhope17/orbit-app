@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UpperCasePipe } from '@angular/common';
 import { ChatService } from '../../../../services/chat.service';
@@ -12,10 +21,12 @@ import {
   MessageResponse,
 } from '../../../../interfaces/chat.interface';
 import { DialogService } from '../../../../../shared/services/dialog.service';
+import { ChatSidebarComponent } from '../components/chat-sidebar-component/chat-sidebar-component';
+import { ChatAreaComponent } from '../components/chat-area-component/chat-area-component';
 
 @Component({
   selector: 'app-chat-page',
-  imports: [FormsModule, UpperCasePipe, LocalDatePipe],
+  imports: [FormsModule, UpperCasePipe, LocalDatePipe,ChatSidebarComponent, ChatAreaComponent],
   templateUrl: './chat-page.html',
   styleUrl: './chat-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -32,10 +43,8 @@ export class ChatPage implements OnInit {
   readonly activeConversation = signal<ChatResponse | null>(null);
   readonly loadingConversations = signal(false);
   readonly loadingMessages = signal(false);
-  readonly messageInput = signal('');
   readonly showMobileList = signal(true);
   readonly typingProfile = signal<ChatProfileInfo | null>(null);
-  readonly newMessageUsername = signal('');
   readonly currentProfileId = computed(() => this.authService.payload()?.profile_id ?? null);
 
   private typingTimeout: ReturnType<typeof setTimeout> | null = null;
@@ -74,15 +83,11 @@ export class ChatPage implements OnInit {
       if (event) {
         this.messages.update((list) =>
           list.map((m) =>
-            m.senderProfileId !== this.currentProfileId()
-              ? { ...m, isSeen: true }
-              : m,
+            m.senderProfileId !== this.currentProfileId() ? { ...m, isSeen: true } : m,
           ),
         );
         this.conversations.update((list) =>
-          list.map((c) =>
-            c.id === event.conversationId ? { ...c, unreadCount: 0 } : c,
-          ),
+          list.map((c) => (c.id === event.conversationId ? { ...c, unreadCount: 0 } : c)),
         );
       }
     });
@@ -90,9 +95,7 @@ export class ChatPage implements OnInit {
     effect(() => {
       const event = this.signalrService.onUserTyping();
       if (event && event.conversationId === this.joinedConversationId) {
-        const conv = this.conversations().find(
-          (c) => c.id === event.conversationId,
-        );
+        const conv = this.conversations().find((c) => c.id === event.conversationId);
         if (conv && conv.otherParticipant.profileId === event.profileId) {
           this.typingProfile.set(conv.otherParticipant);
         }
@@ -129,8 +132,7 @@ export class ChatPage implements OnInit {
                 deletedAt: msg.deletedAt,
                 isFromCurrentUser: msg.sender.profileId === this.currentProfileId(),
               },
-              isLastMessageFromCurrentUser:
-                msg.sender.profileId === this.currentProfileId(),
+              isLastMessageFromCurrentUser: msg.sender.profileId === this.currentProfileId(),
             }
           : c,
       ),
@@ -154,7 +156,6 @@ export class ChatPage implements OnInit {
     if (this.joinedConversationId) {
       this.signalrService.leaveConversation(this.joinedConversationId);
     }
-
     this.activeConversation.set(conversation);
     this.showMobileList.set(false);
     this.joinedConversationId = conversation.id;
@@ -176,24 +177,16 @@ export class ChatPage implements OnInit {
     });
   }
 
-  sendMessage(): void {
-    const content = this.messageInput().trim();
+  sendMessage(content: string): void {
     if (!content || !this.activeConversation()) return;
-
     const conversationId = this.activeConversation()!.id;
     this.signalrService.sendMessage(conversationId, content);
-    this.messageInput.set('');
   }
 
   onTyping(): void {
     if (!this.activeConversation()) return;
-
-    if (this.typingTimeout) {
-      clearTimeout(this.typingTimeout);
-    }
-
+    if (this.typingTimeout) clearTimeout(this.typingTimeout);
     this.signalrService.typing(this.activeConversation()!.id);
-
     this.typingTimeout = setTimeout(() => {
       this.typingTimeout = null;
     }, 2000);
@@ -209,10 +202,8 @@ export class ChatPage implements OnInit {
     this.showMobileList.set(true);
   }
 
-  createNewConversation(): void {
-    const username = this.newMessageUsername().trim();
+  createNewConversation(username: string): void {
     if (!username) return;
-
     this.chatService.createConversation({ username }).subscribe({
       next: (res) => {
         if (res.isSuccess && res.data) {
@@ -221,21 +212,16 @@ export class ChatPage implements OnInit {
             return exists ? list : [res.data!, ...list];
           });
           this.selectConversation(res.data);
-          this.newMessageUsername.set('');
         }
       },
       error: () => {
         this.dialogService.open({
           title: 'Error',
           message:
-            'No se pudo crear la conversación. Verifica que el usuario exista y os sigáis mutuamente.',
+            'No se pudo crear la conversación. Verifica que el usuario exista y se sigan mutuamente.',
         });
       },
     });
-  }
-
-  isOwnMessage(message: MessageResponse): boolean {
-    return message.senderProfileId === this.currentProfileId();
   }
 
   private toMessageResponse(msg: ChatMessageBroadcast): MessageResponse {
@@ -251,13 +237,5 @@ export class ChatPage implements OnInit {
       deletedAt: msg.deletedAt,
       isFromCurrentUser: msg.sender.profileId === this.currentProfileId(),
     };
-  }
-
-  trackByConversationId(index: number, item: ChatResponse): string {
-    return item.id;
-  }
-
-  trackByMessageId(index: number, item: MessageResponse): string {
-    return item.id;
   }
 }

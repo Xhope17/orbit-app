@@ -168,5 +168,28 @@
         <p class="text-lg">Selecciona una conversación</p>
       </div>
     </div>
+<div
+  class="flex h-[calc(100vh-60px)] w-full max-w-3xl mx-auto bg-base-100 md:border-x border-base-content/5 overflow-hidden"
+>
+  @if (!activeConversation()) {
+    <chat-sidebar-component
+      class="w-full h-full"
+      [conversations]="conversations()"
+      [loading]="loadingConversations()"
+      (onSelect)="selectConversation($event)"
+      (onCreateConv)="createNewConversation($event)"
+    ></chat-sidebar-component>
+  } @else {
+    <chat-area-component
+      class="w-full h-full"
+      [conversation]="activeConversation()!"
+      [messages]="messages()"
+      [currentProfileId]="currentProfileId()"
+      [loading]="loadingMessages()"
+      [typingProfile]="typingProfile()"
+      (onSendMessage)="sendMessage($event)"
+      (onTyping)="onTyping()"
+      (onGoBack)="goBackToList()"
+    ></chat-area-component>
   }
 </div>
