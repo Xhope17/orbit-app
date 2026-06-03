@@ -8,11 +8,15 @@ import {
   signal,
 } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Subject } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 import { UserService } from '../../../features/services/user.service';
 import { SignalrService } from '../../services/signalr.service';
 import { NotificationService } from '../../../features/services/notification.service';
 import { UserProfile } from '../../../features/interfaces/user-profile.interface';
+import { Post } from '../../../features/interfaces/post.interface';
+import { DialogService } from '../../services/dialog.service';
+import { CreatePostModal } from '../create-post-modal/create-post-modal';
 
 interface MenuItem {
   icon: string;
@@ -34,6 +38,8 @@ export class SidebarLeftComponent implements OnInit {
   public userService = inject(UserService);
   private readonly signalrService = inject(SignalrService);
   private readonly notificationService = inject(NotificationService);
+
+  private readonly dialogService = inject(DialogService);
 
   public userProfile = signal<UserProfile | null>(null);
   public isAuthenticated = this.authService.isAuthenticated;
@@ -90,6 +96,19 @@ export class SidebarLeftComponent implements OnInit {
           this.notificationCount.set(res.data);
         }
       },
+    });
+  }
+
+  abrirModalPost() {
+    const saveSubject = new Subject<void>();
+    const successSubject = new Subject<Post>();
+
+    this.dialogService.open({
+      title: 'Nuevo Post',
+      component: CreatePostModal,
+      btnText: 'Postear',
+      onSave: saveSubject,
+      onSuccess: successSubject,
     });
   }
 
