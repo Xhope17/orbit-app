@@ -35,57 +35,31 @@
     </div>
   }
 
-  <!-- TARJETA: TENDENCIAS (falta)-->
+  <!-- TARJETA: TENDENCIAS -->
   <div class="card bg-base-200/30 border border-base-content/5 rounded-[2rem] shadow-sm">
     <div class="card-body p-5">
-      <h2 class="card-title text-xl font-black mb-3 tracking-tight">Tendencias (falta)</h2>
+      <h2 class="card-title text-xl font-black mb-3 tracking-tight">Tendencias</h2>
 
-      <!-- Item de Tendencia 1 -->
-      <div
-        class="mb-1 flex cursor-pointer flex-col rounded-2xl p-3 -mx-3 transition-colors hover:bg-base-200/80 group"
-      >
-        <div class="flex justify-between items-start">
-          <span
-            class="text-[11px] font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-wider"
-          >
-            Tecnología
+      @for (topic of visibleTopics(); track topic.name) {
+        <div
+          (click)="onTrendClick(topic.name)"
+          class="mb-1 flex cursor-pointer flex-col rounded-2xl p-3 -mx-3 transition-colors hover:bg-base-200/80 group"
+        >
+          <span class="font-bold text-[15px] group-hover:text-teal-500 transition-colors">
+            {{ topic.name }}
           </span>
-          <button class="text-base-content/30 group-hover:text-teal-500 transition-colors">
-            <i class="fa-solid fa-ellipsis"></i>
-          </button>
+          <span class="text-xs text-base-content/50 mt-0.5">{{ topic.postCount }} posts</span>
         </div>
-        <span class="font-bold text-[15px] mt-0.5 group-hover:text-teal-500 transition-colors">
-          Angular 19
-        </span>
-        <span class="text-xs text-base-content/50 mt-1">15.4 mil posts</span>
-      </div>
+      }
 
-      <!-- Item de Tendencia 2 -->
-      <div
-        class="mb-1 flex cursor-pointer flex-col rounded-2xl p-3 -mx-3 transition-colors hover:bg-base-200/80 group"
-      >
-        <div class="flex justify-between items-start">
-          <span
-            class="text-[11px] font-bold text-teal-600/80 dark:text-teal-400/80 uppercase tracking-wider"
-          >
-            Educación
-          </span>
-          <button class="text-base-content/30 group-hover:text-teal-500 transition-colors">
-            <i class="fa-solid fa-ellipsis"></i>
-          </button>
-        </div>
-        <span class="font-bold text-[15px] mt-0.5 group-hover:text-teal-500 transition-colors">
-          Bootcamp Full Stack
-        </span>
-        <span class="text-xs text-base-content/50 mt-1">2.1 mil posts</span>
-      </div>
-
-      <!-- Botón -->
-      <button
-        class="text-teal-500 hover:text-teal-400 text-sm font-medium text-left mt-2 p-2 -mx-2 rounded-xl hover:bg-teal-500/10 transition-colors w-fit"
-      >
-        Mostrar más
-      </button>
+      @if (hasMore() && displayLimit() === 3) {
+        <button
+          (click)="showMore()"
+          class="text-teal-500 hover:text-teal-400 text-sm font-medium text-left mt-2 p-2 -mx-2 rounded-xl hover:bg-teal-500/10 transition-colors w-fit"
+        >
+          Mostrar más
+        </button>
+      }
     </div>
   </div>
 
@@ -101,36 +75,13 @@
     <span>© 2026 Orbit Corp.</span>
   </div>
 
+  <!--
   <h2 class="text-lg font-bold mb-2">Updates</h2>
   <div class="text-sm text-base-content/60 flex flex-col gap-2">
     <p class="text-sm leading-relaxed">
       -Se implementó un apartado para comunidades aun en desarrollo, donde se pueden crear
       comunidades, editar su información y ver un listado de las comunidades creadas.
     </p>
-
-    <!-- <p class="text-sm leading-relaxed">
-      -Se implementó un apartado "Siguiendo" para ver las publicaciones de los usuarios que sigues
-    </p> -->
-    <!-- <p class="text-sm leading-relaxed">
-      -Se habilitó la funcionalidad de guardar posts y una sección para verlos (guardados)
-    </p>
-    <p class="text-sm leading-relaxed">
-      -En comentarios se agregaron los likes y botones de eliminar
-    </p>
-    <p class="text-sm leading-relaxed">
-      -implementación de buscar posts y perfiles desde la barra de búsqueda, desde la barra de
-      búsqueda lateral o desde el botón explorar
-    </p>
-    <p class="text-sm leading-relaxed">
-      -botón para refrescar el feed, para cargar nuevas publicaciones sin tener que recargar toda la
-      página.
-    </p>
-    <p class="text-sm leading-relaxed">
-      -Se implemento un apartado para ver seguidores, donde se muestra la lista de seguidores de un
-      usuario.
-    </p>
-    <p class="text-sm leading-relaxed">
-      -Se agrego la funcionalidad para seguir y dejar de seguir usuarios.
-    </p> -->
   </div>
+  -->
 </aside>
