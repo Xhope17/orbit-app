@@ -1,14 +1,14 @@
 import { ChangeDetectionStrategy, Component, effect, inject, OnInit, signal } from '@angular/core';
-import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { NotificationService } from '../../../services/notification.service';
 import { SignalrService } from '../../../../shared/services/signalr.service';
 import { AuthService } from '../../../../shared/services/auth.service';
 import { NotificationResponse } from '../../../interfaces/notification.interface';
+import { LocalDatePipe } from '../../../../shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'app-notifications-page',
-  imports: [DatePipe, RouterLink],
+  imports: [RouterLink, LocalDatePipe],
   templateUrl: './notifications-page.html',
   styleUrl: './notifications-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

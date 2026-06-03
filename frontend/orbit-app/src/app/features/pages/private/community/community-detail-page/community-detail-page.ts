@@ -1,4 +1,4 @@
-import { UpperCasePipe, DatePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostCardComponent } from '../../../../../shared/components/post-card-component/post-card-component';
@@ -13,10 +13,11 @@ import { BookmarkService } from '../../../../services/bookmark.service';
 import { PostService } from '../../../../services/post.service';
 import { AuthService } from '../../../../../shared/services/auth.service';
 import { CreateCommunityModalComponent } from '../components/create-community-modal-component/create-community-modal-component';
+import { LocalDatePipe } from '../../../../../shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'app-community-detail-page',
-  imports: [PostCardComponent, UpperCasePipe, DatePipe, RouterLink],
+  imports: [PostCardComponent, UpperCasePipe, RouterLink, LocalDatePipe],
   templateUrl: './community-detail-page.html',
   styleUrl: './community-detail-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

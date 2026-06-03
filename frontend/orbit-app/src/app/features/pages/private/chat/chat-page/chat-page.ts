@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { ChatService } from '../../../../services/chat.service';
+import { LocalDatePipe } from '../../../../../shared/pipes/local-date.pipe';
 import { SignalrService } from '../../../../../shared/services/signalr.service';
 import { AuthService } from '../../../../../shared/services/auth.service';
 import {
@@ -14,7 +15,7 @@ import { DialogService } from '../../../../../shared/services/dialog.service';
 
 @Component({
   selector: 'app-chat-page',
-  imports: [FormsModule, DatePipe, UpperCasePipe],
+  imports: [FormsModule, UpperCasePipe, LocalDatePipe],
   templateUrl: './chat-page.html',
   styleUrl: './chat-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,4 @@
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PostCardComponent } from '../../../../shared/components/post-card-component/post-card-component';
@@ -10,10 +10,11 @@ import { UserService } from '../../../services/user.service';
 import { UserProfile } from '../../../interfaces/user-profile.interface';
 import { CommentItemComponent } from '../../../../shared/components/comment-item-component/comment-item-component';
 import { LinkifyPipe } from '../../../../shared/pipes/LinkifyPipe-pipe';
+import { LocalDatePipe } from '../../../../shared/pipes/local-date.pipe';
 
 @Component({
   selector: 'app-post-detail-page',
-  imports: [PostCardComponent, DatePipe, UpperCasePipe, CommentItemComponent, RouterLink, LinkifyPipe],
+  imports: [PostCardComponent, UpperCasePipe, CommentItemComponent, RouterLink, LinkifyPipe, LocalDatePipe],
   templateUrl: './post-detail-page.html',
   styleUrl: './post-detail-page.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

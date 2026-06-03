@@ -10,17 +10,18 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { UpperCasePipe, DatePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Post } from '../../../features/interfaces/post.interface';
 import { LinkifyPipe } from '../../pipes/LinkifyPipe-pipe';
+import { LocalDatePipe } from '../../pipes/local-date.pipe';
 import { PostService } from '../../../features/services/post.service';
 import { BookmarkService } from '../../../features/services/bookmark.service';
 
 @Component({
   selector: 'app-post-card',
   standalone: true,
-  imports: [UpperCasePipe, DatePipe, RouterLink, LinkifyPipe],
+  imports: [UpperCasePipe, RouterLink, LinkifyPipe, LocalDatePipe],
   templateUrl: './post-card-component.html',
   styleUrl: './post-card-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
