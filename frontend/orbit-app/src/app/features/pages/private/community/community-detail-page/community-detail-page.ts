@@ -12,6 +12,7 @@ import { CreatePostModal } from '../../../../../shared/components/create-post-mo
 import { BookmarkService } from '../../../../services/bookmark.service';
 import { PostService } from '../../../../services/post.service';
 import { AuthService } from '../../../../../shared/services/auth.service';
+import { CreateCommunityModalComponent } from '../components/create-community-modal-component/create-community-modal-component';
 
 @Component({
   selector: 'app-community-detail-page',
@@ -38,6 +39,8 @@ export class CommunityDetailPage implements OnInit {
 
   public errorState = signal<'not-found' | 'forbidden' | 'server-error' | null>(null);
 
+  //para el botón salirse
+  public hoverMember = signal(false);
   ngOnInit() {
     this.authService.getCurrentUser().subscribe({
       next: (resp) => {
@@ -232,6 +235,63 @@ export class CommunityDetailPage implements OnInit {
       btnText: 'Eliminar',
       btnClass: 'btn-error text-white',
       onSave: confirmSubject,
+    });
+  }
+
+  confirmLeave() {
+    const slug = this.currentSlug();
+    if (!slug) return;
+
+    const confirmSubject = new Subject<void>();
+
+    confirmSubject.subscribe(() => {
+      this.communityService.leaveCommunity(slug).subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            // Actualizamos la UI quitando al usuario y restando 1 al contador
+            this.community.update((c) =>
+              c ? { ...c, isMember: false, memberCount: Math.max(0, c.memberCount - 1) } : c,
+            );
+            this.hoverMember.set(false);
+            this.dialogService.close();
+          }
+        },
+        error: (err) => {
+          alert('Error al abandonar la comunidad.');
+          this.dialogService.close();
+        },
+      });
+    });
+
+    this.dialogService.open({
+      title: '¿Abandonar comunidad?',
+      message: 'Dejarás de ser miembro y, si es privada, perderás el acceso a sus publicaciones.',
+      btnText: 'Abandonar',
+      btnClass: 'btn-error text-white',
+      onSave: confirmSubject,
+    });
+  }
+
+  openSettingsModal() {
+    const currentCommunity = this.community();
+    if (!currentCommunity) return;
+
+    const onSaveTrigger = new Subject<void>();
+    const onSuccess = new Subject<Community>();
+
+    onSuccess.subscribe((updatedCommunity) => {
+      this.community.set(updatedCommunity);
+    });
+
+    this.dialogService.open({
+      title: 'Ajustes de comunidad',
+      btnText: 'Guardar',
+      component: CreateCommunityModalComponent,
+      onSave: onSaveTrigger,
+      onSuccess: onSuccess,
+      componentInputs: {
+        communityToEdit: currentCommunity,
+      },
     });
   }
 }

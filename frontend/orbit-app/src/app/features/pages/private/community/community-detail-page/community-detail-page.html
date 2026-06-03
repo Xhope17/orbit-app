@@ -61,18 +61,34 @@
             </div>
           </div>
 
-          <div class="pt-3 flex gap-2">
+          <div class="pt-3 flex gap-2 items-center">
+            @if (currentUserId() === community()?.owner?.profileId) {
+              <button
+                class="btn btn-sm btn-circle btn-ghost text-base-content/50 hover:text-base-content bg-base-200/50 hover:bg-base-200"
+                (click)="openSettingsModal()"
+                title="Ajustes de comunidad"
+              >
+                <i class="fa-solid fa-gear"></i>
+              </button>
+            }
             <button
-              class="btn btn-sm sm:btn-md rounded-full font-bold px-6 border-none"
+              class="btn btn-sm sm:btn-md rounded-full font-bold px-6 border-none transition-all duration-200"
               [class.bg-teal-600]="!community()?.isMember"
               [class.text-white]="!community()?.isMember"
               [class.hover:bg-teal-500]="!community()?.isMember"
               [class.bg-base-200]="community()?.isMember"
               [class.hover:bg-error/20]="community()?.isMember"
               [class.hover:text-error]="community()?.isMember"
-              (click)="toggleJoin()"
+              [class.text-error]="community()?.isMember && hoverMember()"
+              (mouseenter)="hoverMember.set(true)"
+              (mouseleave)="hoverMember.set(false)"
+              (click)="community()?.isMember ? confirmLeave() : toggleJoin()"
             >
-              {{ community()?.isMember ? 'Miembro' : 'Unirse' }}
+              @if (community()?.isMember) {
+                {{ hoverMember() ? 'Abandonar' : 'Miembro' }}
+              } @else {
+                Unirse
+              }
             </button>
           </div>
         </div>

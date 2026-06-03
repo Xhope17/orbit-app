@@ -1,6 +1,6 @@
 import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Community } from '../../../../../interfaces/community-interface';
 
 @Component({
@@ -36,7 +36,9 @@ export class CommunityCardComponent {
     if (comm.isMember) {
       this.router.navigate(['/c', comm.slug]);
     } else if (comm.hasPendingJoinRequest) {
-      alert('Ya enviaste una solicitud para unirte a esta comunidad. Espera a que un moderador la revise.');
+      alert(
+        'Ya enviaste una solicitud para unirte a esta comunidad. Espera a que un moderador la revise.',
+      );
     } else {
       this.onJoinClick.emit(comm.slug);
     }

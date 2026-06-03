@@ -1,54 +1,69 @@
-<form [formGroup]="communityForm" class="flex flex-col gap-4">
+<form [formGroup]="communityForm" class="flex flex-col gap-6 relative">
   @if (isSubmitting()) {
     <div
-      class="absolute inset-0 z-10 bg-base-100/50 backdrop-blur-[1px] flex items-center justify-center rounded-b-3xl"
+      class="absolute inset-0 z-10 bg-base-100/60 backdrop-blur-sm flex items-center justify-center rounded-b-3xl"
     >
-      <span class="loading loading-spinner text-primary"></span>
+      <span class="loading loading-spinner loading-lg text-primary"></span>
     </div>
   }
 
-  <label class="form-control w-full">
-    <div class="label pt-0">
-      <span class="label-text font-bold text-base-content/80">Nombre</span>
-    </div>
-    <label
-      class="input input-bordered flex items-center gap-2 bg-base-200/50 focus-within:bg-base-100 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all"
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-bold text-base-content/90 ml-1"> Nombre de la comunidad </label>
+
+    <div
+      class="input input-bordered flex items-center gap-2 bg-base-200/30 focus-within:bg-base-100 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all shadow-sm"
+      [class.opacity-60]="communityToEdit()"
+      [class.cursor-not-allowed]="communityToEdit()"
+      [class.bg-base-200]="communityToEdit()"
     >
-      <span class="text-base-content/50 font-bold">c/</span>
+      <span class="text-base-content/40 font-black select-none">c/</span>
       <input
         type="text"
         formControlName="name"
         placeholder="desarrolladores"
-        class="grow bg-transparent"
+        class="grow bg-transparent text-base-content outline-none disabled:text-base-content/60 disabled:cursor-not-allowed font-medium"
       />
-    </label>
-    <div class="label pb-0">
-      <span class="label-text-alt text-base-content/50"
-        >El nombre no se puede cambiar después.</span
-      >
     </div>
-  </label>
 
-  <label class="form-control w-full">
-    <div class="label pt-0">
-      <span class="label-text font-bold text-base-content/80">Descripción (Opcional)</span>
-    </div>
+    @if (!communityToEdit()) {
+      <span class="text-xs text-base-content/50 ml-2 flex items-center gap-1.5 font-medium">
+        <i class="fa-solid fa-circle-info text-[10px]"></i>
+        El nombre no se podrá cambiar después.
+      </span>
+    }
+  </div>
+
+  <div class="flex flex-col gap-2">
+    <label class="text-sm font-bold text-base-content/90 ml-1">
+      Descripción <span class="text-base-content/40 font-normal ml-1">(Opcional)</span>
+    </label>
+
     <textarea
       formControlName="description"
-      class="textarea textarea-bordered bg-base-200/50 focus:bg-base-100 focus:ring-1 focus:ring-primary focus:border-primary resize-none h-24"
-      placeholder="¿Cuál es el propósito de esta comunidad?"
+      class="textarea textarea-bordered bg-base-200/30 focus:bg-base-100 focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none h-28 text-[15px] transition-all shadow-sm leading-relaxed"
+      placeholder="¿Cuál es el propósito principal de esta comunidad?"
     ></textarea>
-  </label>
+  </div>
 
-  <div class="form-control bg-base-200/50 rounded-2xl p-4 border border-base-content/5 mt-2">
-    <label class="cursor-pointer flex items-start gap-4">
-      <input type="checkbox" formControlName="isPrivate" class="toggle toggle-primary mt-1" />
+  <div class="flex flex-col gap-2">
+    <span class="text-sm font-bold text-base-content/90 ml-1">Privacidad</span>
+
+    <label
+      class="cursor-pointer group flex items-start gap-4 p-4 rounded-2xl border border-base-content/10 bg-base-100 hover:border-primary/40 hover:bg-base-200/30 transition-all shadow-sm"
+    >
+      <div class="flex-shrink-0 mt-1">
+        <input type="checkbox" formControlName="isPrivate" class="toggle toggle-primary" />
+      </div>
       <div class="flex flex-col">
-        <span class="font-bold text-base-content flex items-center gap-2">
-          <i class="fa-solid fa-lock text-[13px]"></i> Privada
+        <span class="font-bold text-base-content flex items-center gap-2 text-[15px]">
+          <i
+            class="fa-solid fa-lock text-base-content/50 group-hover:text-primary transition-colors"
+          ></i>
+          Comunidad Privada
         </span>
-        <span class="text-sm text-base-content/60 mt-1 leading-relaxed">
-          Solo los miembros podrán ver y participar en las publicaciones de esta comunidad.
+        <span class="text-sm text-base-content/60 mt-1.5 leading-relaxed pr-2">
+          Solo los miembros aprobados podrán ver el contenido y participar en las publicaciones de
+          esta comunidad.
         </span>
       </div>
     </label>
@@ -56,10 +71,10 @@
 
   @if (errorMessage()) {
     <div
-      class="p-3 bg-error/10 text-error text-sm font-semibold rounded-xl flex items-center gap-2"
+      class="p-4 bg-error/10 text-error text-sm font-bold rounded-2xl flex items-start gap-3 mt-2 border border-error/20"
     >
-      <i class="fa-solid fa-triangle-exclamation"></i>
-      {{ errorMessage() }}
+      <i class="fa-solid fa-triangle-exclamation mt-0.5 text-base"></i>
+      <span>{{ errorMessage() }}</span>
     </div>
   }
 </form>
