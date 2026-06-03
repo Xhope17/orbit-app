@@ -47,11 +47,11 @@
   <div class="shrink-0 flex flex-col mt-auto pt-2 bg-base-100 z-10">
     @if (isAuthenticated()) {
 
-      <button class="btn btn-sm h-9 min-h-[2.25rem] bg-teal-600 hover:bg-teal-500 text-white border-none rounded-2xl w-full text-sm font-bold shadow-lg shadow-teal-900/20 hover:scale-[1.02] transition-all flex md:hidden lg:flex mb-2.5">
+      <button (click)="abrirModalPost()" class="btn btn-sm h-9 min-h-[2.25rem] bg-teal-600 hover:bg-teal-500 text-white border-none rounded-2xl w-full text-sm font-bold shadow-lg shadow-teal-900/20 hover:scale-[1.02] transition-all flex md:hidden lg:flex mb-2.5">
         Publicar
       </button>
 
-      <button class="btn btn-sm btn-square h-9 w-9 min-h-[2.25rem] bg-teal-600 hover:bg-teal-500 text-white border-none rounded-2xl shadow-lg shadow-teal-900/20 hidden md:flex lg:hidden items-center justify-center mx-auto text-base hover:scale-105 transition-transform mb-2.5">
+      <button (click)="abrirModalPost()" class="btn btn-sm btn-square h-9 w-9 min-h-[2.25rem] bg-teal-600 hover:bg-teal-500 text-white border-none rounded-2xl shadow-lg shadow-teal-900/20 hidden md:flex lg:hidden items-center justify-center mx-auto text-base hover:scale-105 transition-transform mb-2.5">
         <i class="fa-solid fa-feather-pointed"></i>
       </button>
 

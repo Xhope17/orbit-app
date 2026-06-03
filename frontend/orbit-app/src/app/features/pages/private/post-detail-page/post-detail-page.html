@@ -68,7 +68,7 @@
                   <span class="font-semibold text-sm text-base-content">{{ ancestor.author.displayName }}</span>
                   <span class="text-xs text-base-content/50">@{{ ancestor.author.username }}</span>
                   <span class="text-xs text-base-content/40">•</span>
-                  <span class="text-xs text-base-content/40">{{ ancestor.createdAt | date: 'd MMM, h:mm a' }}</span>
+                  <span class="text-xs text-base-content/40">{{ ancestor.createdAt | localDate: 'd MMM, h:mm a' }}</span>
                 </div>
 
                 @if (ancestor.content) {

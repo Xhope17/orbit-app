@@ -1,13 +1,14 @@
-import { DatePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LocalDatePipe } from '../../pipes/local-date.pipe';
 import { PostComment } from '../../../features/interfaces/post.interface';
 import { DialogService } from '../../services/dialog.service';
 import { Subject, take } from 'rxjs';
 
 @Component({
   selector: 'comment-item-component',
-  imports: [RouterLink, DatePipe, UpperCasePipe],
+  imports: [RouterLink, UpperCasePipe, LocalDatePipe],
   templateUrl: './comment-item-component.html',
   styleUrl: './comment-item-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

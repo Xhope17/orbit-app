@@ -38,7 +38,7 @@
         <div class="flex items-center gap-1 text-xs text-base-content/50 mt-0.5">
           <span>@{{ displayAuthor().username }}</span>
           <span>•</span>
-          <span class="hover:underline">{{ displayCreatedAt() | date: 'd MMM, h:mm a' }}</span>
+          <span class="hover:underline">{{ displayCreatedAt() | localDate: 'd MMM, h:mm a' }}</span>
         </div>
       </div>
     </a>
@@ -155,7 +155,7 @@
           <div class="flex items-center gap-1 text-xs text-base-content/50 mt-0.5">
             <span>@{{ orig.author.username }}</span>
             <span>•</span>
-            <span class="hover:underline">{{ orig.createdAt | date: 'd MMM, h:mm a' }}</span>
+            <span class="hover:underline">{{ orig.createdAt | localDate: 'd MMM, h:mm a' }}</span>
           </div>
         </div>
       </div>
