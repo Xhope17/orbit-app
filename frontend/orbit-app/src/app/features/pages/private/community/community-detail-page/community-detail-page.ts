@@ -14,6 +14,7 @@ import { PostService } from '../../../../services/post.service';
 import { AuthService } from '../../../../../shared/services/auth.service';
 import { CreateCommunityModalComponent } from '../components/create-community-modal-component/create-community-modal-component';
 import { LocalDatePipe } from '../../../../../shared/pipes/local-date.pipe';
+import { CreateQuoteModal } from '../../feed/components/create-quote-modal/create-quote-modal';
 
 @Component({
   selector: 'app-community-detail-page',
@@ -271,6 +272,21 @@ export class CommunityDetailPage implements OnInit {
       btnClass: 'btn-error text-white',
       onSave: confirmSubject,
     });
+  }
+
+  handleQuotePost(post: Post): void {
+    const saveSubject = new Subject<void>();
+    this.dialogService.open({
+      title: 'Citar publicación',
+      component: CreateQuoteModal,
+      btnText: 'Citar',
+      onSave: saveSubject,
+      componentInputs: { originalPost: post },
+    });
+  }
+
+  handleRepostPost(_postId: string): void {
+    // handled internally by PostCardComponent + RepostStateService
   }
 
   openSettingsModal() {

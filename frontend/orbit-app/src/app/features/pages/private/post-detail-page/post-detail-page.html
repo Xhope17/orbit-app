@@ -33,6 +33,9 @@
         [currentUserId]="authService.userId()"
         (onLike)="handleLikePost($event)"
         (onDelete)="handleDeletePost($event)"
+        (onSave)="handleSavePost($event)"
+        (onQuote)="handleQuotePost($event)"
+        (onRepost)="handleRepostPost($event)"
       ></app-post-card>
 
       @if (threadChain().length > 0) {

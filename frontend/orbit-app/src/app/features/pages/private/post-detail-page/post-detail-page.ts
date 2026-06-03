@@ -11,6 +11,10 @@ import { UserProfile } from '../../../interfaces/user-profile.interface';
 import { CommentItemComponent } from '../../../../shared/components/comment-item-component/comment-item-component';
 import { LinkifyPipe } from '../../../../shared/pipes/LinkifyPipe-pipe';
 import { LocalDatePipe } from '../../../../shared/pipes/local-date.pipe';
+import { DialogService } from '../../../../shared/services/dialog.service';
+import { BookmarkService } from '../../../services/bookmark.service';
+import { Subject } from 'rxjs';
+import { CreateQuoteModal } from '../feed/components/create-quote-modal/create-quote-modal';
 
 @Component({
   selector: 'app-post-detail-page',
@@ -27,6 +31,8 @@ export class PostDetailPage implements OnInit {
   private postService = inject(PostService);
   public authService = inject(AuthService);
   public userService = inject(UserService);
+  private dialogService = inject(DialogService);
+  private bookmarkService = inject(BookmarkService);
   currentUserProfile = signal<UserProfile | null>(null);
 
   public post = signal<Post | null>(null);
@@ -210,5 +216,41 @@ export class PostDetailPage implements OnInit {
         return c;
       }),
     );
+  }
+
+  handleSavePost(postId: string) {
+    const p = this.post();
+    if (!p) return;
+
+    if (p.isSaved) {
+      this.bookmarkService.unSavePost(postId).subscribe({
+        next: () => {
+          this.post.update((curr) => (curr ? { ...curr, isSaved: false, saveCount: curr.saveCount - 1 } : null));
+        },
+        error: (err) => console.error('Error al quitar de guardados', err),
+      });
+    } else {
+      this.bookmarkService.savePost(postId).subscribe({
+        next: () => {
+          this.post.update((curr) => (curr ? { ...curr, isSaved: true, saveCount: curr.saveCount + 1 } : null));
+        },
+        error: (err) => console.error('Error al guardar', err),
+      });
+    }
+  }
+
+  handleQuotePost(post: Post): void {
+    const saveSubject = new Subject<void>();
+    this.dialogService.open({
+      title: 'Citar publicación',
+      component: CreateQuoteModal,
+      btnText: 'Citar',
+      onSave: saveSubject,
+      componentInputs: { originalPost: post },
+    });
+  }
+
+  handleRepostPost(_postId: string): void {
+    // handled internally by PostCardComponent + RepostStateService
   }
 }

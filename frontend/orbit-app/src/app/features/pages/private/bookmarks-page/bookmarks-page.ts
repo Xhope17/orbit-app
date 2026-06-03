@@ -6,6 +6,7 @@ import { DialogService } from '../../../../shared/services/dialog.service';
 import { Post } from '../../../interfaces/post.interface';
 import { BookmarkService } from '../../../services/bookmark.service';
 import { PostService } from '../../../services/post.service';
+import { CreateQuoteModal } from '../feed/components/create-quote-modal/create-quote-modal';
 
 @Component({
   selector: 'app-bookmarks-page',
@@ -132,5 +133,23 @@ export class BookmarksPage implements OnInit {
         return p;
       }),
     );
+  }
+
+  handleQuotePost(post: Post): void {
+    const saveSubject = new Subject<void>();
+    const successSubject = new Subject<Post>();
+
+    this.dialogService.open({
+      title: 'Citar publicación',
+      component: CreateQuoteModal,
+      btnText: 'Citar',
+      onSave: saveSubject,
+      onSuccess: successSubject,
+      componentInputs: { originalPost: post },
+    });
+  }
+
+  handleRepostPost(_postId: string): void {
+    // repost handled by PostCardComponent + RepostStateService internally
   }
 }

@@ -270,6 +270,7 @@ export class FeedPage implements OnInit {
   }
 
   handleQuotePost(post: Post): void {
+    const saveSubject = new Subject<void>();
     const successSubject = new Subject<Post>();
 
     successSubject.subscribe((newPost) => {
@@ -280,6 +281,7 @@ export class FeedPage implements OnInit {
       title: 'Citar publicación',
       component: CreateQuoteModal,
       btnText: 'Citar',
+      onSave: saveSubject,
       onSuccess: successSubject,
       componentInputs: { originalPost: post },
     });

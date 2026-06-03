@@ -16,6 +16,9 @@ import { DialogService } from '../../../../../../shared/services/dialog.service'
 import { AuthService } from '../../../../../../shared/services/auth.service';
 import { UserProfile } from '../../../../../interfaces/user-profile.interface';
 import { ActivatedRoute, Router } from '@angular/router';
+import { BookmarkService } from '../../../../../services/bookmark.service';
+import { Subject } from 'rxjs';
+import { CreateQuoteModal } from '../../../feed/components/create-quote-modal/create-quote-modal';
 
 @Component({
   selector: 'app-user-posts-list',
@@ -35,6 +38,7 @@ export class UserPostsList implements OnInit {
   private router = inject(Router);
 
   private dialogService = inject(DialogService);
+  private bookmarkService = inject(BookmarkService);
 
   public posts = signal<Post[]>([]);
   public isLoading = signal<boolean>(true);
@@ -91,6 +95,54 @@ export class UserPostsList implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  handleSavePost(postId: string): void {
+    const post = this.posts().find((p) => p.id === postId);
+    if (!post) return;
+
+    if (post.isSaved) {
+      this.bookmarkService.unSavePost(postId).subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.posts.update((currentPosts) =>
+              currentPosts.map((p) =>
+                p.id === postId ? { ...p, isSaved: false, saveCount: p.saveCount - 1 } : p,
+              ),
+            );
+          }
+        },
+        error: (err) => console.error('Error al quitar guardado', err),
+      });
+    } else {
+      this.bookmarkService.savePost(postId).subscribe({
+        next: (res) => {
+          if (res.isSuccess) {
+            this.posts.update((currentPosts) =>
+              currentPosts.map((p) =>
+                p.id === postId ? { ...p, isSaved: true, saveCount: p.saveCount + 1 } : p,
+              ),
+            );
+          }
+        },
+        error: (err) => console.error('Error al guardar post', err),
+      });
+    }
+  }
+
+  handleQuotePost(post: Post): void {
+    const saveSubject = new Subject<void>();
+    this.dialogService.open({
+      title: 'Citar publicación',
+      component: CreateQuoteModal,
+      btnText: 'Citar',
+      onSave: saveSubject,
+      componentInputs: { originalPost: post },
+    });
+  }
+
+  handleRepostPost(_postId: string): void {
+    // handled internally by PostCardComponent + RepostStateService
   }
 
   handleDeletePost(postId: string): void {
