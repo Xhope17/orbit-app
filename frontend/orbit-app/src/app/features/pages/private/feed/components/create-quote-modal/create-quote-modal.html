@@ -1,0 +1,70 @@
+<div class="flex flex-col gap-4 h-full flex-1 min-h-[300px]">
+  <form [formGroup]="quoteForm" class="flex flex-col gap-2 flex-[2]">
+    <textarea
+      class="textarea w-full flex-1 text-xl resize-none bg-transparent focus:outline-none px-0"
+      placeholder="Agrega un comentario..."
+      formControlName="content"
+    ></textarea>
+  </form>
+
+  <div class="pl-4 border-l-4 border-base-content/20 max-h-[200px] overflow-y-auto">
+    <div class="flex items-start gap-2.5 p-2.5 rounded-xl bg-base-200/40 ring-1 ring-base-content/5">
+      <div class="avatar shadow-sm rounded-full shrink-0">
+        <div class="w-7 h-7 rounded-full bg-neutral text-neutral-content overflow-hidden">
+          @if (originalPost().author.avatarUrl) {
+            <img [src]="originalPost().author.avatarUrl" alt="Avatar" class="w-full h-full object-cover" />
+          } @else {
+            <span class="text-xs font-bold flex items-center justify-center h-full">{{
+              originalPost().author.displayName.charAt(0) | uppercase
+            }}</span>
+          }
+        </div>
+      </div>
+      <div class="flex flex-col min-w-0 gap-0.5">
+        <div class="flex items-center gap-1">
+          <span class="font-bold text-xs">{{ originalPost().author.displayName }}</span>
+          <span class="text-[11px] text-base-content/50">&#64;{{ originalPost().author.username }}</span>
+        </div>
+        @if (originalPost().content) {
+          <p class="text-xs text-base-content/80 whitespace-pre-wrap">{{ originalPost().content }}</p>
+        }
+        @if (originalPost().media.length > 0) {
+          <div class="mt-1">
+            @if (originalPost().media.length === 1) {
+              <div class="w-full max-w-[200px] rounded-lg overflow-hidden border border-base-content/10 bg-base-300/30">
+                @if (originalPost().media[0].mediaType.includes('video')) {
+                  <video [src]="originalPost().media[0].url" class="w-full max-h-[100px] object-contain" preload="metadata"></video>
+                } @else {
+                  <img [src]="originalPost().media[0].url" class="w-full max-h-[100px] object-contain" alt="" />
+                }
+              </div>
+            } @else {
+              <div class="flex gap-1 max-w-[200px]">
+                @for (m of originalPost().media; track $index) {
+                  <div class="flex-1 aspect-square rounded-lg overflow-hidden border border-base-content/10 bg-base-300/30">
+                    @if (m.mediaType.includes('video')) {
+                      <video [src]="m.url" class="w-full h-full object-cover" preload="metadata"></video>
+                    } @else {
+                      <img [src]="m.url" class="w-full h-full object-cover" alt="" />
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  @if (errorMessage()) {
+    <span class="text-error text-sm font-semibold">{{ errorMessage() }}</span>
+  }
+
+  @if (isPosting()) {
+    <div class="flex items-center gap-2 text-secondary text-sm">
+      <span class="loading loading-spinner loading-xs"></span>
+      Publicando...
+    </div>
+  }
+</div>

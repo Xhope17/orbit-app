@@ -7,6 +7,7 @@ import { UpperCasePipe } from '@angular/common';
 import { DialogService } from '../../../../../shared/services/dialog.service';
 import { Subject, take } from 'rxjs';
 import { CreatePostModal } from '../../../../../shared/components/create-post-modal/create-post-modal';
+import { CreateQuoteModal } from '../components/create-quote-modal/create-quote-modal';
 import { UserService } from '../../../../services/user.service';
 import { UserProfile } from '../../../../interfaces/user-profile.interface';
 import { BookmarkService } from '../../../../services/bookmark.service';
@@ -266,5 +267,25 @@ export class FeedPage implements OnInit {
         return p;
       }),
     );
+  }
+
+  handleQuotePost(post: Post): void {
+    const successSubject = new Subject<Post>();
+
+    successSubject.subscribe((newPost) => {
+      this.posts.update((currentPosts) => [newPost, ...currentPosts]);
+    });
+
+    this.dialogService.open({
+      title: 'Citar publicación',
+      component: CreateQuoteModal,
+      btnText: 'Citar',
+      onSuccess: successSubject,
+      componentInputs: { originalPost: post },
+    });
+  }
+
+  handleRepostPost(_postId: string): void {
+    // repost is handled by PostCardComponent + RepostStateService internally
   }
 }

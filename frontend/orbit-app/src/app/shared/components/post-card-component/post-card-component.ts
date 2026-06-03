@@ -17,6 +17,7 @@ import { LinkifyPipe } from '../../pipes/LinkifyPipe-pipe';
 import { LocalDatePipe } from '../../pipes/local-date.pipe';
 import { PostService } from '../../../features/services/post.service';
 import { BookmarkService } from '../../../features/services/bookmark.service';
+import { RepostStateService } from '../../services/repost-state.service';
 
 @Component({
   selector: 'app-post-card',
@@ -30,6 +31,7 @@ export class PostCardComponent implements OnDestroy {
   private el = inject(ElementRef);
   private postService = inject(PostService);
   private bookmarkService = inject(BookmarkService);
+  private repostState = inject(RepostStateService);
 
   post = input.required<Post>();
   currentUserId = input<string | null>(null);
@@ -37,6 +39,8 @@ export class PostCardComponent implements OnDestroy {
   onDelete = output<string>();
   onLike = output<string>();
   onSave = output<string>();
+  onQuote = output<Post>();
+  onRepost = output<string>();
 
   fetchedOriginalPost = signal<Post | null>(null);
 
@@ -155,6 +159,16 @@ export class PostCardComponent implements OnDestroy {
     return p.isSaved;
   });
 
+  targetForActions = computed(() => {
+    const p = this.post();
+    const orig = this.displayOriginalPost();
+    return (p.isRepost && orig) ? orig : p;
+  });
+
+  isRepostedByCurrentUser = computed(() => {
+    return this.repostState.isReposted(this.targetForActions().id);
+  });
+
   handleLike() {
     const p = this.post();
     const orig = this.displayOriginalPost();
@@ -215,5 +229,46 @@ export class PostCardComponent implements OnDestroy {
       return;
     }
     this.onSave.emit(p.id);
+  }
+
+  handleRepost() {
+    const target = this.targetForActions();
+    const targetId = target.id;
+
+    if (this.isRepostedByCurrentUser()) {
+      const repostId = this.repostState.getRepostId(targetId);
+      if (repostId) {
+        this.postService.deletePost(repostId).subscribe({
+          next: (res) => {
+            if (res.isSuccess) {
+              this.repostState.removeRepost(targetId);
+              this.onRepost.emit(targetId);
+            }
+          },
+          error: () => {
+            this.repostState.removeRepost(targetId);
+          },
+        });
+      }
+    } else {
+      this.postService.repostPost(targetId).subscribe({
+        next: (res) => {
+          if (res.isSuccess && res.data) {
+            this.repostState.markReposted(targetId, res.data.id);
+            this.onRepost.emit(targetId);
+          }
+        },
+        error: (err) => {
+          const msg = err.error?.message || '';
+          if (msg.includes('AlreadyReposted')) {
+            this.repostState.markReposted(targetId, '');
+          }
+        },
+      });
+    }
+  }
+
+  handleQuote() {
+    this.onQuote.emit(this.targetForActions());
   }
 }

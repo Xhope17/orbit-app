@@ -90,4 +90,12 @@ export class PostService {
       params,
     });
   }
+
+  repostPost(postId: string) {
+    return this.http.post<ApiResponse<Post>>(`${this.API}/posts/${postId}/repost`, {});
+  }
+
+  threadPost(postId: string, content: string) {
+    return this.http.post<ApiResponse<Post>>(`${this.API}/posts/${postId}/thread`, { content });
+  }
 }
