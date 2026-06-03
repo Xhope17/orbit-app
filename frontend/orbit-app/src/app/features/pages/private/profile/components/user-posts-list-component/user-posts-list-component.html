@@ -5,15 +5,17 @@
     </div>
   } @else {
     @for (item of posts(); track item.id) {
-      <!-- [currentUserId]="authService.payload()?.profile_id ?? null" -->
-      <!-- [currentUserId]="authService.userId() ?? null" -->
-      <!-- <p>{{ authService.userId() ?? null }}</p> -->
+      <div class="border-b border-base-content/10 last:border-b-0">
       <app-post-card
         [post]="item"
         [currentUserId]="authService.payload()?.profile_id ?? null"
         (onDelete)="handleDeletePost($event)"
         (onLike)="handleLikePost($event)"
+        (onSave)="handleSavePost($event)"
+        (onQuote)="handleQuotePost($event)"
+        (onRepost)="handleRepostPost($event)"
       ></app-post-card>
+      </div>
     } @empty {
       @if (isMyProfile()) {
         <h2 class="text-xl font-bold text-base-content mb-2 tracking-tight">

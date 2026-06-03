@@ -5,14 +5,17 @@
     </div>
   } @else {
 
-    <div class="flex flex-col gap-px bg-base-content/5">
+    <div class="flex flex-col">
       @for (item of posts(); track item.id) {
-        <div class="bg-base-100">
+        <div class="bg-base-100 border-b border-base-content/10 last:border-b-0">
           <app-post-card
             [post]="item"
             [currentUserId]="authService.payload()?.profile_id ?? null"
             (onDelete)="handleDeletePost($event)"
             (onLike)="handleLikePost($event)"
+            (onSave)="handleSavePost($event)"
+            (onQuote)="handleQuotePost($event)"
+            (onRepost)="handleRepostPost($event)"
           ></app-post-card>
         </div>
       } @empty {

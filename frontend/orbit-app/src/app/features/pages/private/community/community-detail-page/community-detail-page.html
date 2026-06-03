@@ -168,13 +168,17 @@
         </div>
       } @else {
         @for (post of posts(); track post.id) {
+          <div class="border-b border-base-content/10 last:border-b-0">
           <app-post-card
             [post]="post"
             [currentUserId]="currentUserId()"
             (onLike)="handleLikePost($event)"
             (onSave)="handleSavePost($event)"
             (onDelete)="handleDeletePost($event)"
+            (onQuote)="handleQuotePost($event)"
+            (onRepost)="handleRepostPost($event)"
           ></app-post-card>
+          </div>
         } @empty {
           <div class="flex flex-col items-center justify-center p-10 text-center mt-6">
             <div
