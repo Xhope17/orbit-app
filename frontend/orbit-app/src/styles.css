@@ -1,4 +1,8 @@
-@import "tailwindcss";
- @plugin "daisyui" {
-   themes: black --default;
- }
+@import 'tailwindcss';
+@plugin "daisyui" {
+  themes: black --default;
+}
+
+html {
+  overflow-y: scroll;
+}

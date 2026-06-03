@@ -52,11 +52,14 @@ export class SidebarLeftComponent implements OnInit {
       label: 'Notificaciones',
       route: '/i/notifications',
       badge: this.notificationCount(),
-
     },
     { icon: 'fa-regular fa-comment', label: 'Chat', route: '/i/chat' },
     { icon: 'fa-solid fa-users', label: 'Comunidades', route: '/community' },
-    { icon: 'fa-regular fa-address-book', label: 'Seguidores', route: `/${this.username()}/followers` },
+    {
+      icon: 'fa-regular fa-address-book',
+      label: 'Seguidores',
+      route: `/${this.username()}/followers`,
+    },
     { icon: 'fa-regular fa-gem', label: 'Premium', route: '/i/premium' },
     { icon: 'fa-regular fa-user', label: 'Perfil', route: `/${this.username()}` },
   ]);
