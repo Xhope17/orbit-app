@@ -1,0 +1,15 @@
+<div class="avatar shadow-sm rounded-full">
+  <div
+    class="rounded-full bg-neutral text-neutral-content overflow-hidden flex items-center justify-center"
+    [style.width.px]="size() * 4"
+    [style.height.px]="size() * 4"
+  >
+    @if (avatarUrl(); as url) {
+      <img [src]="url" alt="Avatar" class="w-full h-full object-cover" />
+    } @else {
+      <span class="font-bold flex items-center justify-center h-full" [style.fontSize.px]="size() * 1.5">
+        {{ displayName().charAt(0) | uppercase }}
+      </span>
+    }
+  </div>
+</div>

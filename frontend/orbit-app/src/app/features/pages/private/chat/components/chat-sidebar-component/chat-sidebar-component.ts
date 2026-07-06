@@ -3,10 +3,11 @@ import { ChatResponse } from '../../../../../interfaces/chat.interface';
 import { UpperCasePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LocalDatePipe } from '../../../../../../shared/pipes/local-date.pipe';
+import { UserAvatarComponent } from '../../../../../../shared/components/user-avatar-component/user-avatar-component';
 
 @Component({
   selector: 'chat-sidebar-component',
-  imports: [UpperCasePipe, FormsModule, LocalDatePipe],
+  imports: [UpperCasePipe, FormsModule, LocalDatePipe, UserAvatarComponent],
   templateUrl: './chat-sidebar-component.html',
   styleUrl: './chat-sidebar-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

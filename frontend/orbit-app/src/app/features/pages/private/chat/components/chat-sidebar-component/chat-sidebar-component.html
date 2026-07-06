@@ -39,17 +39,11 @@
             class="w-full p-3 rounded-2xl flex gap-3 items-center hover:bg-base-200 transition-colors text-left group"
             (click)="onSelect.emit(conv)"
           >
-            <div class="avatar">
-              <div class="w-12 h-12 rounded-full bg-neutral text-neutral-content shadow-sm">
-                @if (conv.otherParticipant.avatarUrl) {
-                  <img [src]="conv.otherParticipant.avatarUrl" alt="avatar" class="object-cover" />
-                } @else {
-                  <span class="text-lg font-bold flex items-center justify-center h-full w-full">
-                    {{ conv.otherParticipant.displayName.charAt(0) | uppercase }}
-                  </span>
-                }
-              </div>
-            </div>
+            <user-avatar-component
+              [avatarUrl]="conv.otherParticipant.avatarUrl"
+              [displayName]="conv.otherParticipant.displayName"
+              [size]="12"
+            />
 
             <div class="flex-1 min-w-0">
               <div class="flex justify-between items-baseline mb-0.5">

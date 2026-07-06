@@ -16,10 +16,11 @@ import {
   MessageResponse,
   ChatProfileInfo,
 } from '../../../../../interfaces/chat.interface';
+import { UserAvatarComponent } from '../../../../../../shared/components/user-avatar-component/user-avatar-component';
 
 @Component({
   selector: 'chat-area-component',
-  imports: [UpperCasePipe, FormsModule, LocalDatePipe],
+  imports: [UpperCasePipe, FormsModule, LocalDatePipe, UserAvatarComponent],
   templateUrl: './chat-area-component.html',
   styleUrl: './chat-area-component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

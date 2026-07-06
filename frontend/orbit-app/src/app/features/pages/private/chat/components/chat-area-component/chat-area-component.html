@@ -5,17 +5,11 @@
           <i class="fa-solid fa-arrow-left text-lg"></i>
         </button>
 
-        <div class="avatar">
-          <div class="w-10 h-10 rounded-full bg-neutral text-neutral-content shadow-sm">
-            @if (conversation().otherParticipant.avatarUrl) {
-              <img [src]="conversation().otherParticipant.avatarUrl" alt="avatar" />
-            } @else {
-              <span class="font-bold flex items-center justify-center h-full">
-                {{ conversation().otherParticipant.displayName.charAt(0) | uppercase }}
-              </span>
-            }
-          </div>
-        </div>
+        <user-avatar-component
+          [avatarUrl]="conversation().otherParticipant.avatarUrl"
+          [displayName]="conversation().otherParticipant.displayName"
+          [size]="10"
+        />
 
         <div class="flex flex-col">
           <span class="font-bold text-[15px] leading-tight">{{ conversation().otherParticipant.displayName }}</span>
@@ -42,8 +36,20 @@
           <div class="flex flex-col justify-end min-h-full pb-2">
             @for (msg of messages(); track msg.id) {
               <div class="chat" [class.chat-end]="isOwn(msg)" [class.chat-start]="!isOwn(msg)">
-                <div class="chat-header opacity-50 text-[11px] mb-1">
-                  {{ msg.createdAt | localDate:'shortTime' }}
+                @if (!isOwn(msg)) {
+                  <div class="chat-image avatar">
+                    <user-avatar-component
+                      [avatarUrl]="conversation().otherParticipant.avatarUrl"
+                      [displayName]="conversation().otherParticipant.displayName"
+                      [size]="8"
+                    />
+                  </div>
+                }
+                <div class="chat-header">
+                  @if (!isOwn(msg)) {
+                    {{ conversation().otherParticipant.displayName }}
+                  }
+                  <time class="text-xs opacity-50">{{ msg.createdAt | localDate:'shortTime' }}</time>
                 </div>
                 <div
                   class="chat-bubble shadow-sm text-[15px]"
@@ -54,11 +60,17 @@
                 >
                   {{ msg.content }}
                 </div>
-                @if (isOwn(msg)) {
-                  <div class="chat-footer opacity-50 text-[10px] mt-1 flex items-center gap-1">
-                    <i class="fa-solid" [class.fa-check]="!msg.isSeen" [class.fa-check-double]="msg.isSeen" [class.text-info]="msg.isSeen"></i>
-                  </div>
-                }
+                <div class="chat-footer opacity-50 text-[10px] mt-1 flex items-center gap-1">
+                  @if (isOwn(msg)) {
+                    @if (msg.isSeen) {
+                      <i class="fa-solid fa-check text-info"></i>
+                      <i class="fa-solid fa-check -ml-2 text-info"></i>
+                    } @else {
+                      <i class="fa-solid fa-check"></i>
+                    }
+                    <span>{{ msg.isSeen ? 'Visto' : 'Enviado' }}</span>
+                  }
+                </div>
               </div>
             }
           </div>
