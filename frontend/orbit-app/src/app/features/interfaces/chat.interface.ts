@@ -37,6 +37,7 @@ export interface ChatResponse {
   unreadCount: number;
   createdAt: string;
   isLastMessageFromCurrentUser: boolean;
+  isPlaceholder?: boolean;
 }
 
 export interface CreateChatRequest {

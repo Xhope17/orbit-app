@@ -6,10 +6,7 @@ import {
   LogLevel,
 } from '@microsoft/signalr';
 import { environment } from '../../../environments/environment';
-import {
-  ChatMessageBroadcast,
-  ChatResponse,
-} from '../../features/interfaces/chat.interface';
+import { ChatMessageBroadcast, ChatResponse } from '../../features/interfaces/chat.interface';
 import { NotificationResponse } from '../../features/interfaces/notification.interface';
 
 @Injectable({
@@ -38,10 +35,7 @@ export class SignalrService {
   async startConnections(token: string): Promise<void> {
     if (!token) return;
 
-    await Promise.all([
-      this.startChatHub(token),
-      this.startNotificationHub(token),
-    ]);
+    await Promise.all([this.startChatHub(token), this.startNotificationHub(token)]);
   }
 
   async stopConnections(): Promise<void> {
@@ -78,9 +72,13 @@ export class SignalrService {
     }
   }
 
-  async sendMessage(conversationId: string, content: string): Promise<void> {
+  async sendMessage(
+    conversationId: string,
+    content: string,
+    targetProfileId?: string,
+  ): Promise<void> {
     if (this.chatHub?.state === HubConnectionState.Connected) {
-      await this.chatHub.invoke('SendMessage', conversationId, content);
+      await this.chatHub.invoke('SendMessage', conversationId, content, targetProfileId);
     }
   }
 
@@ -123,19 +121,13 @@ export class SignalrService {
       this.onNewConversation.set(data);
     });
 
-    this.chatHub.on(
-      'MessageRead',
-      (data: { conversationId: string; readByProfileId: string }) => {
-        this.onMessageRead.set(data);
-      },
-    );
+    this.chatHub.on('MessageRead', (data: { conversationId: string; readByProfileId: string }) => {
+      this.onMessageRead.set(data);
+    });
 
-    this.chatHub.on(
-      'UserTyping',
-      (data: { conversationId: string; profileId: string }) => {
-        this.onUserTyping.set(data);
-      },
-    );
+    this.chatHub.on('UserTyping', (data: { conversationId: string; profileId: string }) => {
+      this.onUserTyping.set(data);
+    });
 
     this.chatHub.onreconnecting(() => this.chatConnected.set(false));
     this.chatHub.onreconnected(() => this.chatConnected.set(true));
@@ -160,12 +152,9 @@ export class SignalrService {
       .configureLogging(LogLevel.Warning)
       .build();
 
-    this.notificationHub.on(
-      'ReceiveNotification',
-      (data: NotificationResponse) => {
-        this.onNotification.set(data);
-      },
-    );
+    this.notificationHub.on('ReceiveNotification', (data: NotificationResponse) => {
+      this.onNotification.set(data);
+    });
 
     this.notificationHub.onreconnecting(() => this.notificationConnected.set(false));
     this.notificationHub.onreconnected(() => this.notificationConnected.set(true));

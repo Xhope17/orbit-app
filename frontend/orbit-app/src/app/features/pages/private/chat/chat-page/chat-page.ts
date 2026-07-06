@@ -50,18 +50,56 @@ export class ChatPage implements OnInit {
   constructor() {
     effect(() => {
       const msg = this.signalrService.onReceiveMessage();
-      if (msg && msg.conversationId === this.joinedConversationId) {
+      if (!msg) return;
+      if (msg.conversationId === this.joinedConversationId) {
         this.messages.update((list) => [...list, this.toMessageResponse(msg)]);
         this.updateConversationLastMessage(msg);
         this.signalrService.markAsRead(msg.conversationId);
+      } else {
+        this.conversations.update((list) =>
+          list.map((c) =>
+            c.id === msg.conversationId
+              ? {
+                  ...c,
+                  lastMessage: {
+                    id: msg.id,
+                    conversationId: msg.conversationId,
+                    senderProfileId: msg.sender.profileId,
+                    content: msg.content,
+                    isSeen: msg.isSeen,
+                    isEdited: msg.isEdited,
+                    editedAt: msg.editedAt,
+                    createdAt: msg.createdAt,
+                    deletedAt: msg.deletedAt,
+                    isFromCurrentUser: false,
+                  },
+                  unreadCount: c.unreadCount + 1,
+                  isLastMessageFromCurrentUser: false,
+                }
+              : c,
+          ),
+        );
       }
     });
 
     effect(() => {
       const msg = this.signalrService.onReceiveOwnMessage();
-      if (msg && msg.conversationId === this.joinedConversationId) {
+      if (!msg) return;
+      if (msg.conversationId === this.joinedConversationId) {
         this.messages.update((list) => [...list, this.toMessageResponse(msg)]);
         this.updateConversationLastMessage(msg);
+      } else if (this.activeConversation()?.isPlaceholder) {
+        const realId = msg.conversationId;
+        this.joinedConversationId = realId;
+        this.activeConversation.update((c) =>
+          c ? { ...c, id: realId, isPlaceholder: false } : null,
+        );
+        this.messages.update((list) => [...list, this.toMessageResponse(msg)]);
+        this.conversations.update((list) =>
+          list.map((c) => (c.isPlaceholder ? { ...c, id: realId, isPlaceholder: false } : c)),
+        );
+        this.updateConversationLastMessage(msg);
+        this.signalrService.joinConversation(realId);
       }
     });
 
@@ -156,6 +194,7 @@ export class ChatPage implements OnInit {
     this.activeConversation.set(conversation);
     this.showMobileList.set(false);
     this.joinedConversationId = conversation.id;
+    if (conversation.isPlaceholder) return;
     this.signalrService.joinConversation(conversation.id);
     this.signalrService.markAsRead(conversation.id);
     this.loadMessages(conversation.id);
@@ -176,8 +215,9 @@ export class ChatPage implements OnInit {
 
   sendMessage(content: string): void {
     if (!content || !this.activeConversation()) return;
-    const conversationId = this.activeConversation()!.id;
-    this.signalrService.sendMessage(conversationId, content);
+    const conv = this.activeConversation()!;
+    const targetProfileId = conv.isPlaceholder ? conv.otherParticipant.profileId : undefined;
+    this.signalrService.sendMessage(conv.id, content, targetProfileId);
   }
 
   onTyping(): void {
