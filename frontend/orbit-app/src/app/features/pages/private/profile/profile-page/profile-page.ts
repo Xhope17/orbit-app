@@ -81,6 +81,7 @@ export class ProfilePage implements OnInit {
 
     successSubject.subscribe(() => {
       this.loadUserProfile(this.usernameUrl());
+      this.authService.refreshCurrentUser();
     });
 
     this.dialogService.open({

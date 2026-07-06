@@ -10,10 +10,8 @@ import {
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Subject } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
-import { UserService } from '../../../features/services/user.service';
 import { SignalrService } from '../../services/signalr.service';
 import { NotificationService } from '../../../features/services/notification.service';
-import { UserProfile } from '../../../features/interfaces/user-profile.interface';
 import { Post } from '../../../features/interfaces/post.interface';
 import { DialogService } from '../../services/dialog.service';
 import { CreatePostModal } from '../create-post-modal/create-post-modal';
@@ -35,13 +33,10 @@ interface MenuItem {
 })
 export class SidebarLeftComponent implements OnInit {
   public authService = inject(AuthService);
-  public userService = inject(UserService);
   private readonly signalrService = inject(SignalrService);
   private readonly notificationService = inject(NotificationService);
 
   private readonly dialogService = inject(DialogService);
-
-  public userProfile = signal<UserProfile | null>(null);
   public isAuthenticated = this.authService.isAuthenticated;
   public username = this.authService.username;
   public notificationCount = signal(0);
@@ -83,11 +78,6 @@ export class SidebarLeftComponent implements OnInit {
     this.loadNotificationCount();
     if (this.isAuthenticated()) {
       this.authService.getCurrentUser().subscribe({
-        next: (res) => {
-          if (res.isSuccess && res.data) {
-            this.userProfile.set(res.data);
-          }
-        },
         error: (err) => console.error('Error al cargar perfil', err),
       });
     }

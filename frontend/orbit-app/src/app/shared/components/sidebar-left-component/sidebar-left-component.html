@@ -59,8 +59,8 @@
         <a [routerLink]="['/', username()]" class="flex md:hidden lg:flex items-center gap-3 p-2 bg-base-200/50 hover:bg-base-300 hover:shadow-sm cursor-pointer rounded-2xl transition-all text-left group">
           <div class="avatar drop-shadow-sm">
             <div class="bg-neutral text-neutral-content rounded-xl w-10 ring-1 ring-base-content/10">
-              @if (userProfile()?.avatarUrl) {
-                <img [src]="userProfile()?.avatarUrl" class="w-full h-full object-cover" />
+              @if (authService.currentUser()?.avatarUrl) {
+                <img [src]="authService.currentUser()?.avatarUrl" class="w-full h-full object-cover" />
               } @else {
                 <img src="/images/default.png" class="w-full h-full object-cover" />
               }
@@ -68,7 +68,7 @@
           </div>
           <div class="flex flex-col overflow-hidden">
             <span class="font-bold text-sm truncate group-hover:text-teal-400 transition-colors">
-              {{ userProfile()?.displayName || username() }}
+              {{ authService.currentUser()?.displayName || username() }}
             </span>
             <span class="text-xs text-base-content/60 truncate">{{ '@' + username() }}</span>
           </div>

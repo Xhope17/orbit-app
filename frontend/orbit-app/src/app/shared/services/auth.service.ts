@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, map, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 // Ajusta la ruta si nombraste el archivo de otra manera (ej. auth.interface.ts)
@@ -23,6 +23,7 @@ export class AuthService {
   private readonly REFRESH_TOKEN_KEY = environment.refreshTokenKey;
 
   private _token = signal<string | null>(this.getValidToken());
+  readonly currentUser = signal<UserProfile | null>(null);
 
   constructor() {
     const token = this._token();
@@ -149,10 +150,19 @@ export class AuthService {
 
   getCurrentUser() {
     return this.http.get<ApiResponse<UserProfile>>(`${this.API}/auth/me`).pipe(
+      tap((res) => {
+        if (res.isSuccess && res.data) {
+          this.currentUser.set(res.data);
+        }
+      }),
       catchError((err) => {
         console.error('Error al obtener el usuario actual', err);
         return throwError(() => err);
       }),
     );
+  }
+
+  refreshCurrentUser(): void {
+    this.getCurrentUser().subscribe();
   }
 }
