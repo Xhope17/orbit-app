@@ -7,7 +7,7 @@
       [conversations]="conversations()"
       [loading]="loadingConversations()"
       (onSelect)="selectConversation($event)"
-      (onCreateConv)="createNewConversation($event)"
+      (onCreateConv)="createConversation($event)"
     ></chat-sidebar-component>
   } @else {
     <chat-area-component
@@ -16,10 +16,10 @@
       [messages]="messages()"
       [currentProfileId]="currentProfileId()"
       [loading]="loadingMessages()"
-      [typingProfile]="typingProfile()"
+      [typingProfile]="typingUser()"
       (onSendMessage)="sendMessage($event)"
       (onTyping)="onTyping()"
-      (onGoBack)="goBackToList()"
+      (onGoBack)="closeConversation()"
     ></chat-area-component>
   }
 </div>
