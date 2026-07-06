@@ -1,4 +1,8 @@
-<div class="avatar shadow-sm rounded-full">
+<div
+  class="avatar shadow-sm rounded-full"
+  [class.avatar-online]="online()"
+  [class.avatar-offline]="!online()"
+>
   <div
     class="rounded-full bg-neutral text-neutral-content overflow-hidden flex items-center justify-center"
     [style.width.px]="size() * 4"

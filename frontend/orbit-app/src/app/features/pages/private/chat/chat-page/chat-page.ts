@@ -30,7 +30,7 @@ import { ChatAreaComponent } from '../components/chat-area-component/chat-area-c
 })
 export class ChatPage implements OnInit {
   private readonly chatService = inject(ChatService);
-  private readonly signalrService = inject(SignalrService);
+  readonly signalrService = inject(SignalrService);
   private readonly authService = inject(AuthService);
   private readonly dialogService = inject(DialogService);
   private readonly destroyRef = inject(DestroyRef);

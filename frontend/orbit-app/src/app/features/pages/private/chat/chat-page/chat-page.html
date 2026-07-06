@@ -6,6 +6,7 @@
       class="w-full h-full"
       [conversations]="conversations()"
       [loading]="loadingConversations()"
+      [onlineUsers]="signalrService.onlineUsers()"
       (onSelect)="selectConversation($event)"
       (onCreateConv)="createConversation($event)"
     ></chat-sidebar-component>
@@ -17,6 +18,7 @@
       [currentProfileId]="currentProfileId()"
       [loading]="loadingMessages()"
       [typingProfile]="typingUser()"
+      [onlineUsers]="signalrService.onlineUsers()"
       (onSendMessage)="sendMessage($event)"
       (onTyping)="onTyping()"
       (onGoBack)="closeConversation()"

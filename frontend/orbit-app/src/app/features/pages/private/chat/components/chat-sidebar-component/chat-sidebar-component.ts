@@ -15,6 +15,7 @@ import { UserAvatarComponent } from '../../../../../../shared/components/user-av
 export class ChatSidebarComponent {
   conversations = input.required<ChatResponse[]>();
   loading = input<boolean>(false);
+  onlineUsers = input<Set<string>>(new Set());
 
   onSelect = output<ChatResponse>();
   onCreateConv = output<string>();

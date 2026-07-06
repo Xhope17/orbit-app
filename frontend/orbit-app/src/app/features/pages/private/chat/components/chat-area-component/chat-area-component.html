@@ -9,6 +9,7 @@
           [avatarUrl]="conversation().otherParticipant.avatarUrl"
           [displayName]="conversation().otherParticipant.displayName"
           [size]="10"
+          [online]="onlineUsers().has(conversation().otherParticipant.profileId)"
         />
 
         <div class="flex flex-col">
@@ -42,6 +43,7 @@
                       [avatarUrl]="conversation().otherParticipant.avatarUrl"
                       [displayName]="conversation().otherParticipant.displayName"
                       [size]="8"
+                      [online]="onlineUsers().has(conversation().otherParticipant.profileId)"
                     />
                   </div>
                 }

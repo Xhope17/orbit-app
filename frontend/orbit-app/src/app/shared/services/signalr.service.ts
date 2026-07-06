@@ -32,6 +32,12 @@ export class SignalrService {
   } | null>(null);
   readonly onNotification = signal<NotificationResponse | null>(null);
 
+  readonly onlineUsers = signal<Set<string>>(new Set());
+
+  isOnline(profileId: string): boolean {
+    return this.onlineUsers().has(profileId);
+  }
+
   async startConnections(token: string): Promise<void> {
     if (!token) return;
 
@@ -44,6 +50,8 @@ export class SignalrService {
     this.chatHub?.off('NewConversation');
     this.chatHub?.off('MessageRead');
     this.chatHub?.off('UserTyping');
+    this.chatHub?.off('UserConnected');
+    this.chatHub?.off('UserDisconnected');
     this.notificationHub?.off('ReceiveNotification');
 
     await Promise.all([
@@ -127,6 +135,22 @@ export class SignalrService {
 
     this.chatHub.on('UserTyping', (data: { conversationId: string; profileId: string }) => {
       this.onUserTyping.set(data);
+    });
+
+    this.chatHub.on('UserConnected', (profileId: string) => {
+      this.onlineUsers.update((set) => {
+        const next = new Set(set);
+        next.add(profileId);
+        return next;
+      });
+    });
+
+    this.chatHub.on('UserDisconnected', (profileId: string) => {
+      this.onlineUsers.update((set) => {
+        const next = new Set(set);
+        next.delete(profileId);
+        return next;
+      });
     });
 
     this.chatHub.onreconnecting(() => this.chatConnected.set(false));

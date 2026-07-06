@@ -31,6 +31,7 @@ export class ChatAreaComponent {
   currentProfileId = input.required<string | null>();
   loading = input<boolean>(false);
   typingProfile = input<ChatProfileInfo | null>(null);
+  onlineUsers = input<Set<string>>(new Set());
 
   onSendMessage = output<string>();
   onTyping = output<void>();

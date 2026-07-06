@@ -11,4 +11,5 @@ export class UserAvatarComponent {
   avatarUrl = input<string | null>(null);
   displayName = input.required<string>();
   size = input<number>(10);
+  online = input<boolean>(false);
 }

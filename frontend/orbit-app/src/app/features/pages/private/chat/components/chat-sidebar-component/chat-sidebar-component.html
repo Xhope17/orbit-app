@@ -43,6 +43,7 @@
               [avatarUrl]="conv.otherParticipant.avatarUrl"
               [displayName]="conv.otherParticipant.displayName"
               [size]="12"
+              [online]="onlineUsers().has(conv.otherParticipant.profileId)"
             />
 
             <div class="flex-1 min-w-0">
