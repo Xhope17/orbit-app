@@ -111,7 +111,7 @@ export class SignalrService {
 
     this.chatHub = new HubConnectionBuilder()
       .withUrl(`${environment.signalRUrl}/hubs/chat`, {
-        accessTokenFactory: () => this.getToken() ?? '',
+        accessTokenFactory: () => this.getToken() ?? token,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
@@ -170,7 +170,7 @@ export class SignalrService {
 
     this.notificationHub = new HubConnectionBuilder()
       .withUrl(`${environment.signalRUrl}/hubs/notifications`, {
-        accessTokenFactory: () => this.getToken() ?? '',
+        accessTokenFactory: () => this.getToken() ?? token,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
