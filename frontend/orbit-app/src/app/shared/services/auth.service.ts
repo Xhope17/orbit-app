@@ -1,10 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { catchError, map, tap, throwError } from 'rxjs';
+import { catchError, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
-// Ajusta la ruta si nombraste el archivo de otra manera (ej. auth.interface.ts)
 import { JwtPayload, LoginRequest, LoginResponse } from '../../features/interfaces/login.interface';
 import { ApiResponse } from '../interfaces/apiResponse.interface';
 import { UserProfile } from '../../features/interfaces/user-profile.interface';
@@ -26,27 +25,17 @@ export class AuthService {
   readonly currentUser = signal<UserProfile | null>(null);
 
   constructor() {
-    const token = this._token();
-    if (!token) {
-      const savedToken = localStorage.getItem(this.TOKEN_KEY);
-      const savedRefresh = localStorage.getItem(this.REFRESH_TOKEN_KEY);
-      if (savedToken && savedRefresh) {
-        const payload = this.decodeToken(savedToken);
-        if (payload?.exp) {
-          const nowInSeconds = Math.floor(Date.now() / 1000);
-          if (payload.exp < nowInSeconds) {
-            this.refreshToken(savedToken, savedRefresh).subscribe();
-            return;
-          }
-        }
-      }
+    const savedToken = localStorage.getItem(this.TOKEN_KEY);
+    if (savedToken) {
+      this._token.set(savedToken);
     }
-    if (this._token()) {
-      this.signalrService.startConnections(this._token()!);
+
+    const tokenValido = this.getValidToken();
+    if (tokenValido) {
+      this.signalrService.startConnections(tokenValido);
     }
   }
 
-  // para @if del HTML
   isAuthenticated = computed(() => !!this._token());
   token = computed(() => this._token());
 
@@ -93,6 +82,11 @@ export class AuthService {
     return this._token();
   }
 
+  isTokenExpired(token: string): boolean {
+    const payload = this.decodeToken(token);
+    return payload?.exp ? Math.floor(Date.now() / 1000) >= payload.exp : false;
+  }
+
   getRefreshToken(): string | null {
     return localStorage.getItem(this.REFRESH_TOKEN_KEY);
   }
@@ -121,8 +115,6 @@ export class AuthService {
 
     const payload = this.decodeToken(token);
 
-    // Verificamos si el token tiene fecha de expiración (exp) y si ya pasó.
-    // Al estar tipado en JwtPayload, ya no necesitamos usar "as any".
     if (payload && payload.exp) {
       const nowInSeconds = Math.floor(Date.now() / 1000);
       if (payload.exp < nowInSeconds) {
