@@ -15,6 +15,13 @@ import { NotificationResponse } from '../../features/interfaces/notification.int
 export class SignalrService {
   private chatHub: HubConnection | null = null;
   private notificationHub: HubConnection | null = null;
+  private _currentToken = '';
+
+  constructor() {
+    window.addEventListener('beforeunload', () => {
+      this.stopConnections();
+    });
+  }
 
   readonly chatConnected = signal(false);
   readonly notificationConnected = signal(false);
@@ -41,7 +48,27 @@ export class SignalrService {
   async startConnections(token: string): Promise<void> {
     if (!token) return;
 
+    const payload = this.decodeToken(token);
+    if (payload?.exp) {
+      const nowInSeconds = Math.floor(Date.now() / 1000);
+      if (payload.exp < nowInSeconds) {
+        return;
+      }
+    }
+
+    this._currentToken = token;
     await Promise.all([this.startChatHub(token), this.startNotificationHub(token)]);
+  }
+
+  private decodeToken(token: string): { exp?: number } | null {
+    try {
+      const payload = token.split('.')[1];
+      let base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+      while (base64.length % 4) base64 += '=';
+      return JSON.parse(atob(base64));
+    } catch {
+      return null;
+    }
   }
 
   async stopConnections(): Promise<void> {
@@ -102,16 +129,12 @@ export class SignalrService {
     }
   }
 
-  private getToken(): string | null {
-    return localStorage.getItem(environment.tokenKey);
-  }
-
   private async startChatHub(token: string): Promise<void> {
     if (this.chatHub?.state === HubConnectionState.Connected) return;
 
     this.chatHub = new HubConnectionBuilder()
       .withUrl(`${environment.signalRUrl}/hubs/chat`, {
-        accessTokenFactory: () => this.getToken() ?? token,
+        accessTokenFactory: () => this._currentToken,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
@@ -170,7 +193,7 @@ export class SignalrService {
 
     this.notificationHub = new HubConnectionBuilder()
       .withUrl(`${environment.signalRUrl}/hubs/notifications`, {
-        accessTokenFactory: () => this.getToken() ?? token,
+        accessTokenFactory: () => this._currentToken,
       })
       .withAutomaticReconnect()
       .configureLogging(LogLevel.Warning)
