@@ -27,8 +27,22 @@ export class AuthService {
 
   constructor() {
     const token = this._token();
-    if (token) {
-      this.signalrService.startConnections(token);
+    if (!token) {
+      const savedToken = localStorage.getItem(this.TOKEN_KEY);
+      const savedRefresh = localStorage.getItem(this.REFRESH_TOKEN_KEY);
+      if (savedToken && savedRefresh) {
+        const payload = this.decodeToken(savedToken);
+        if (payload?.exp) {
+          const nowInSeconds = Math.floor(Date.now() / 1000);
+          if (payload.exp < nowInSeconds) {
+            this.refreshToken(savedToken, savedRefresh).subscribe();
+            return;
+          }
+        }
+      }
+    }
+    if (this._token()) {
+      this.signalrService.startConnections(this._token()!);
     }
   }
 
@@ -112,11 +126,7 @@ export class AuthService {
     if (payload && payload.exp) {
       const nowInSeconds = Math.floor(Date.now() / 1000);
       if (payload.exp < nowInSeconds) {
-        const hasRefreshToken = !!localStorage.getItem(this.REFRESH_TOKEN_KEY);
-        if (!hasRefreshToken) {
-          localStorage.removeItem(this.TOKEN_KEY);
-          return null;
-        }
+        return null;
       }
     }
 
