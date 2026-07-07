@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment.development';
 import { ApiResponse } from '../../shared/interfaces/apiResponse.interface';
 import { FollowInterface } from '../interfaces/follow.interface';
 import { PaginatedResponse } from '../../shared/interfaces/paginatedResult.interface';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
