@@ -3,7 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UpperCasePipe } from '@angular/common';
 import { DialogService } from '../../../../../../shared/services/dialog.service';
 import { PostService } from '../../../../../services/post.service';
-import { RepostStateService } from '../../../../../../shared/services/repost-state.service';
 import { Post } from '../../../../../interfaces/post.interface';
 
 @Component({
@@ -20,7 +19,6 @@ export class CreateQuoteModal implements OnInit {
   private fb = inject(FormBuilder);
   private postService = inject(PostService);
   private dialogService = inject(DialogService);
-  private repostState = inject(RepostStateService);
 
   public originalPost = input.required<Post>();
 
@@ -66,20 +64,6 @@ export class CreateQuoteModal implements OnInit {
             data.onSuccess.next(res.data);
           }
           this.dialogService.close();
-
-          this.postService.repostPost(this.originalPost().id).subscribe({
-            next: (r) => {
-              if (r.isSuccess && r.data) {
-                this.repostState.markReposted(this.originalPost().id, r.data.id);
-              }
-            },
-            error: (err) => {
-              const msg = err.error?.message || '';
-              if (msg.includes('AlreadyReposted')) {
-                this.repostState.markReposted(this.originalPost().id, '');
-              }
-            },
-          });
         }
       },
       error: (err) => {
