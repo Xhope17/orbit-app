@@ -52,6 +52,7 @@ export class ChatPage implements OnInit {
     effect(() => {
       const msg = this.signalrService.onReceiveMessage();
       if (!msg) return;
+      if (msg.sender.profileId === this.currentProfileId()) return;
       if (msg.conversationId === this.joinedConversationId) {
         this.messages.update((list) => [...list, this.mapToMessage(msg)]);
         this.updateSidebar(msg);
@@ -66,19 +67,25 @@ export class ChatPage implements OnInit {
       const msg = this.signalrService.onReceiveOwnMessage();
       if (!msg) return;
       if (msg.conversationId === this.joinedConversationId) {
-        this.messages.update((list) => [...list, this.mapToMessage(msg)]);
+        this.messages.update((list) => {
+          const exists = list.some((m) => m.id === msg.id);
+          return exists ? list : [...list, this.mapToMessage(msg)];
+        });
         this.updateSidebar(msg);
       } else if (this.activeConversation()?.isPlaceholder) {
         const realId = msg.conversationId;
         this.joinedConversationId = realId;
-        this.activeConversation.update((c) =>
-          c ? { ...c, id: realId, isPlaceholder: false } : null,
-        );
-        this.messages.update((list) => [...list, this.mapToMessage(msg)]);
+        this.messages.update((list) => {
+          const exists = list.some((m) => m.id === msg.id);
+          return exists ? list : [...list, this.mapToMessage(msg)];
+        });
         this.conversations.update((list) =>
           list.map((c) => (c.isPlaceholder ? { ...c, id: realId, isPlaceholder: false } : c)),
         );
         this.updateSidebar(msg);
+        this.activeConversation.update((c) =>
+          c ? { ...c, id: realId, isPlaceholder: false } : null,
+        );
         this.signalrService.joinConversation(realId);
       }
     });
