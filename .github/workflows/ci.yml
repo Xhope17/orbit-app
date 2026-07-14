@@ -1,0 +1,39 @@
+name: Integración continua
+
+on:
+  push:
+    branches-ignore:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: Validar, probar y construir
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generar archivos de entorno
+        run: |
+          mkdir -p src/environments
+          echo "export const environment = { production: true, apiUrl: '${{ secrets.API_URL }}', tokenKey: '${{ secrets.TOKEN_KEY }}', refreshTokenKey: '${{ secrets.REFRESH_TOKEN_KEY }}', signalRUrl: '${{ secrets.SIGNALR_URL }}' };" > src/environments/environment.ts
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir el proyecto
+        run: npm run build

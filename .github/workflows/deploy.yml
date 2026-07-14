@@ -1,0 +1,66 @@
+name: Despliegue continuo en GitHub Pages
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Verificar y construir
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generar archivos de entorno
+        run: |
+          mkdir -p src/environments
+          echo "export const environment = { production: true, apiUrl: '${{ secrets.API_URL }}', tokenKey: '${{ secrets.TOKEN_KEY }}', refreshTokenKey: '${{ secrets.REFRESH_TOKEN_KEY }}', signalRUrl: '${{ secrets.SIGNALR_URL }}' };" > src/environments/environment.ts
+
+      - name: Instalar dependencias
+        run: npm ci
+
+      - name: Construir la carpeta dist
+        run: npm run build -- --base-href=/orbit-app/
+
+      - name: Copiar 404.html para SPA routing
+        run: cp dist/orbit-app/browser/index.html dist/orbit-app/browser/404.html
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Cargar el artefacto
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ./dist/orbit-app/browser
+
+  deploy:
+    name: Publicar en GitHub Pages
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Desplegar el artefacto
+        id: deployment
+        uses: actions/deploy-pages@v4
