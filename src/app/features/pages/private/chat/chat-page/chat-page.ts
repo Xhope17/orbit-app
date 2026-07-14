@@ -1,0 +1,254 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
+import { ChatService } from '../../../../services/chat.service';
+import { SignalrService } from '../../../../../shared/services/signalr.service';
+import { AuthService } from '../../../../../shared/services/auth.service';
+import { DialogService } from '../../../../../shared/services/dialog.service';
+import {
+  ChatMessageBroadcast,
+  ChatProfileInfo,
+  ChatResponse,
+  MessageResponse,
+} from '../../../../interfaces/chat.interface';
+import { ChatSidebarComponent } from '../components/chat-sidebar-component/chat-sidebar-component';
+import { ChatAreaComponent } from '../components/chat-area-component/chat-area-component';
+
+@Component({
+  selector: 'app-chat-page',
+  imports: [ChatSidebarComponent, ChatAreaComponent],
+  templateUrl: './chat-page.html',
+  styleUrl: './chat-page.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ChatPage implements OnInit {
+  private readonly chatService = inject(ChatService);
+  readonly signalrService = inject(SignalrService);
+  private readonly authService = inject(AuthService);
+  private readonly dialogService = inject(DialogService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  readonly conversations = signal<ChatResponse[]>([]);
+  readonly messages = signal<MessageResponse[]>([]);
+  readonly activeConversation = signal<ChatResponse | null>(null);
+  readonly loadingConversations = signal(false);
+  readonly loadingMessages = signal(false);
+  readonly typingUser = signal<ChatProfileInfo | null>(null);
+  readonly currentProfileId = computed(() => this.authService.payload()?.profile_id ?? null);
+  readonly showMobileList = signal(true);
+
+  private joinedConversationId: string | null = null;
+  private typingTimeout: ReturnType<typeof setTimeout> | null = null;
+
+  constructor() {
+    // el otro usuario envió un mensaje en esta conversación
+    effect(() => {
+      const msg = this.signalrService.onReceiveMessage();
+      if (!msg) return;
+      if (msg.sender.profileId === this.currentProfileId()) return;
+      if (msg.conversationId === this.joinedConversationId) {
+        this.messages.update((list) => [...list, this.mapToMessage(msg)]);
+        this.updateSidebar(msg);
+        this.signalrService.markAsRead(msg.conversationId);
+      } else {
+        this.updateSidebar(msg);
+      }
+    });
+
+    // el servidor confirmó que mi mensaje se guardó en la BD
+    effect(() => {
+      const msg = this.signalrService.onReceiveOwnMessage();
+      if (!msg) return;
+      if (msg.conversationId === this.joinedConversationId) {
+        this.messages.update((list) => {
+          const exists = list.some((m) => m.id === msg.id);
+          return exists ? list : [...list, this.mapToMessage(msg)];
+        });
+        this.updateSidebar(msg);
+      } else if (this.activeConversation()?.isPlaceholder) {
+        const realId = msg.conversationId;
+        this.joinedConversationId = realId;
+        this.messages.update((list) => {
+          const exists = list.some((m) => m.id === msg.id);
+          return exists ? list : [...list, this.mapToMessage(msg)];
+        });
+        this.conversations.update((list) =>
+          list.map((c) => (c.isPlaceholder ? { ...c, id: realId, isPlaceholder: false } : c)),
+        );
+        this.updateSidebar(msg);
+        this.activeConversation.update((c) =>
+          c ? { ...c, id: realId, isPlaceholder: false } : null,
+        );
+        this.signalrService.joinConversation(realId);
+      }
+    });
+
+    // alguien creó una conversación conmigo
+    effect(() => {
+      const conv = this.signalrService.onNewConversation();
+      if (!conv) return;
+      this.conversations.update((list) => {
+        const exists = list.find((c) => c.id === conv.id);
+        return exists ? list : [conv, ...list];
+      });
+    });
+
+    // el otro usuario leyó los mensajes
+    effect(() => {
+      const event = this.signalrService.onMessageRead();
+      if (!event) return;
+      this.messages.update((list) =>
+        list.map((m) =>
+          m.senderProfileId !== this.currentProfileId() ? { ...m, isSeen: true } : m,
+        ),
+      );
+      this.conversations.update((list) =>
+        list.map((c) => (c.id === event.conversationId ? { ...c, unreadCount: 0 } : c)),
+      );
+    });
+
+    // el otro usuario está escribiendo
+    effect(() => {
+      const event = this.signalrService.onUserTyping();
+      if (!event || event.conversationId !== this.joinedConversationId) return;
+      const conv = this.conversations().find((c) => c.id === event.conversationId);
+      if (conv && conv.otherParticipant.profileId === event.profileId) {
+        this.typingUser.set(conv.otherParticipant);
+      }
+      setTimeout(() => this.typingUser.set(null), 3000);
+    });
+
+    this.destroyRef.onDestroy(() => {
+      if (this.joinedConversationId) {
+        this.signalrService.leaveConversation(this.joinedConversationId);
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    this.loadConversations();
+  }
+
+  private loadConversations(): void {
+    this.loadingConversations.set(true);
+    this.chatService.loadConversations().subscribe({
+      next: (res) => {
+        if (res.isSuccess && res.data) this.conversations.set(res.data);
+        this.loadingConversations.set(false);
+      },
+      error: () => this.loadingConversations.set(false),
+    });
+  }
+
+  private loadMessages(conversationId: string): void {
+    this.loadingMessages.set(true);
+    this.chatService.getMessages(conversationId).subscribe({
+      next: (res) => {
+        if (res.isSuccess && res.data) this.messages.set(res.data.items);
+        this.loadingMessages.set(false);
+      },
+      error: () => this.loadingMessages.set(false),
+    });
+  }
+
+  selectConversation(conversation: ChatResponse): void {
+    if (this.joinedConversationId) {
+      this.signalrService.leaveConversation(this.joinedConversationId);
+    }
+    this.activeConversation.set(conversation);
+    this.joinedConversationId = conversation.id;
+    if (conversation.isPlaceholder) return;
+    this.signalrService.joinConversation(conversation.id);
+    this.signalrService.markAsRead(conversation.id);
+    this.loadMessages(conversation.id);
+    this.showMobileList.set(false);
+  }
+
+  closeConversation(): void {
+    if (this.joinedConversationId) {
+      this.signalrService.leaveConversation(this.joinedConversationId);
+      this.joinedConversationId = null;
+    }
+    this.activeConversation.set(null);
+    this.messages.set([]);
+    this.showMobileList.set(true);
+  }
+
+  sendMessage(content: string): void {
+    if (!content || !this.activeConversation()) return;
+    const conv = this.activeConversation()!;
+    const targetProfileId = conv.isPlaceholder ? conv.otherParticipant.profileId : undefined;
+    this.signalrService.sendMessage(conv.id, content, targetProfileId);
+  }
+
+  onTyping(): void {
+    if (!this.activeConversation()) return;
+    if (this.typingTimeout) clearTimeout(this.typingTimeout);
+    this.signalrService.typing(this.activeConversation()!.id);
+    this.typingTimeout = setTimeout(() => {
+      this.typingTimeout = null;
+    }, 2000);
+  }
+
+  createConversation(username: string): void {
+    if (!username) return;
+    this.chatService.createConversation(username).subscribe({
+      next: (res) => {
+        if (res.isSuccess && res.data) {
+          this.conversations.update((list) => {
+            const exists = list.find((c) => c.id === res.data!.id);
+            return exists ? list : [res.data!, ...list];
+          });
+          this.selectConversation(res.data);
+        }
+      },
+      error: () => {
+        this.dialogService.open({
+          title: 'Error',
+          message:
+            'No se pudo crear la conversación. Verifica que el usuario exista y se sigan mutuamente.',
+        });
+      },
+    });
+  }
+
+  private updateSidebar(msg: ChatMessageBroadcast): void {
+    this.conversations.update((list) =>
+      list.map((c) =>
+        c.id === msg.conversationId
+          ? {
+              ...c,
+              lastMessage: this.mapToMessage(msg),
+              isLastMessageFromCurrentUser: msg.sender.profileId === this.currentProfileId(),
+              unreadCount:
+                msg.sender.profileId === this.currentProfileId()
+                  ? c.unreadCount
+                  : c.unreadCount + 1,
+            }
+          : c,
+      ),
+    );
+  }
+
+  private mapToMessage(msg: ChatMessageBroadcast): MessageResponse {
+    return {
+      id: msg.id,
+      conversationId: msg.conversationId,
+      senderProfileId: msg.sender.profileId,
+      content: msg.content,
+      isSeen: msg.isSeen,
+      isEdited: msg.isEdited,
+      editedAt: msg.editedAt,
+      createdAt: msg.createdAt,
+      deletedAt: msg.deletedAt,
+      isFromCurrentUser: msg.sender.profileId === this.currentProfileId(),
+    };
+  }
+}
